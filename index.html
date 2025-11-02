@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Muhammad Siddique - Professional Data Engineering Blog & Portfolio showcasing 50+ production projects with real-world solutions, architectures, and best practices">
+    <meta name="keywords" content="Muhammad Siddique, data engineering, Azure, Databricks, Snowflake, ETL, data pipelines, ML pipelines, big data">
+    <meta name="author" content="Muhammad Siddique">
+    <meta property="og:title" content="Muhammad Siddique - Data Engineering Blog & Portfolio">
+    <meta property="og:description" content="Real-world data engineering solutions from 50+ production projects">
+    <meta property="og:type" content="website">
+    <title>Muhammad Siddique - Data Engineering Blog & Portfolio | 50+ Production Projects</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #1abc9c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #7f8c8d;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .logo:hover {
+            opacity: 0.9;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent);
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .hero {
+            padding: 6rem 0;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="rgba(255,255,255,0.1)"><path d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/></g></g></svg>');
+            opacity: 0.4;
+        }
+        
+        .hero .container {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .hero .author-name {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.95;
+            font-weight: 500;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 800px;
+            margin: 0 auto 1.5rem;
+            opacity: 0.95;
+            line-height: 1.8;
+            animation: fadeInUp 1.2s ease-out;
+        }
+        
+        .hero .tagline {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1.4s ease-out;
+        }
+        
+        .hero .contact-info {
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+            opacity: 0.9;
+            animation: fadeInUp 1.6s ease-out;
+        }
+        
+        .hero .contact-info a {
+            color: white;
+            text-decoration: none;
+            margin: 0 0.5rem;
+            padding: 0.3rem 0.8rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        
+        .hero .contact-info a:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .btn-group {
+            margin-top: 2.5rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1.8s ease-out;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: white;
+            color: var(--primary);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-size: 1rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: white;
+            color: var(--primary);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid rgba(255,255,255,0.5);
+            color: white;
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(255,255,255,0.2);
+            border-color: white;
+        }
+        
+        section {
+            padding: 5rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.8rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            border-radius: 2px;
+        }
+        
+        .section-title p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 2rem auto 0;
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+        
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.7rem 1.8rem;
+            border: 2px solid var(--light);
+            background: white;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .filter-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+        
+        .filter-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .blog-card {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            padding: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            border-top: 5px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .blog-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        
+        .blog-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .blog-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+            line-height: 1.3;
+            font-weight: 700;
+        }
+        
+        .blog-card .category {
+            display: inline-block;
+            background-color: var(--light);
+            color: var(--primary);
+            padding: 0.5rem 1.2rem;
+            border-radius: 25px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+        
+        .blog-card .category.realtime {
+            background-color: #e8f6f3;
+            color: var(--accent);
+        }
+        
+        .blog-card .category.healthcare {
+            background-color: #fdedec;
+            color: var(--danger);
+        }
+        
+        .blog-card .category.retail {
+            background-color: #fef9e7;
+            color: var(--warning);
+        }
+        
+        .blog-card .category.cloud {
+            background-color: #eaf2f8;
+            color: var(--secondary);
+        }
+        
+        .blog-card p {
+            color: var(--gray);
+            margin-bottom: 1.8rem;
+            flex-grow: 1;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+        
+        .blog-card .read-more {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+        
+        .blog-card .read-more:hover {
+            color: var(--accent);
+            transform: translateX(8px);
+        }
+        
+        .blog-card .read-more::after {
+            content: " →";
+            margin-left: 0.5rem;
+            transition: transform 0.3s;
+        }
+        
+        .blog-card .read-more:hover::after {
+            transform: translateX(8px);
+        }
+        
+        .stats {
+            background: linear-gradient(135deg, var(--primary) 0%, #34495e 50%, var(--secondary) 100%);
+            color: white;
+            padding: 6rem 0;
+            position: relative;
+        }
+        
+        .stats::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.2);
+        }
+        
+        .stats .container {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stats .section-title h2 {
+            color: white;
+        }
+        
+        .stats .section-title h2::after {
+            background: var(--accent);
+        }
+        
+        .stats .section-title p {
+            color: rgba(255,255,255,0.95);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2.5rem;
+            text-align: center;
+        }
+        
+        .stat-item {
+            background-color: rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+            padding: 3rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: all 0.4s;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-8px) scale(1.05);
+            background-color: rgba(255,255,255,0.18);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+        }
+        
+        .stat-item .number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 0.8rem;
+            display: block;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .stat-item .label {
+            color: rgba(255,255,255,0.95);
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        
+        .technologies {
+            background-color: white;
+        }
+        
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .tech-item {
+            background: linear-gradient(135deg, var(--light) 0%, white 100%);
+            padding: 2rem 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        
+        .tech-item:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            background: linear-gradient(135deg, white 0%, var(--light) 100%);
+        }
+        
+        .tech-item .tech-name {
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 0.8rem;
+            font-size: 0.95rem;
+        }
+        
+        .achievements {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+        
+        .achievement-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border-left: 5px solid var(--accent);
+            transition: all 0.3s;
+        }
+        
+        .achievement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+        
+        .achievement-card h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        
+        .achievement-card .metric {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+        
+        .achievement-card .description {
+            color: var(--gray);
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+            color: var(--accent);
+            font-weight: 700;
+        }
+        
+        .footer-section p {
+            color: #bdc3c7;
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+        
+        .footer-section a {
+            color: #bdc3c7;
+            margin-bottom: 0.9rem;
+            display: block;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+        
+        .footer-section a:hover {
+            color: var(--accent);
+            padding-left: 8px;
+            transform: translateX(5px);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .social-links a {
+            width: 45px;
+            height: 45px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .social-links a:hover {
+            background: var(--accent);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #95a5a6;
+            font-size: 0.9rem;
+        }
+        
+        .copyright a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .copyright a:hover {
+            text-decoration: underline;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                justify-content: center;
+                gap: 0.8rem;
+            }
+            
+            nav ul li a {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.85rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero .author-name {
+                font-size: 1.1rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .blog-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">Muhammad Siddique | Data<span>Engineering</span>.Blog</a>
+                <nav>
+                    <ul>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#stats">Stats</a></li>
+                        <li><a href="#technologies">Tech</a></li>
+                        <li><a href="#achievements">Achievements</a></li>
+                        <li><a href="posts/about-author.md" target="_blank">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Data Engineering Blog & Portfolio</h1>
+            <p class="author-name">By Muhammad Siddique</p>
+            <p>Real-world data engineering use cases, architectures, and implementations from <strong>50+ production projects</strong> across multiple industries and technologies.</p>
+            <p class="tagline">Enterprise-scale solutions | Performance optimization | Cloud platforms | ML/AI pipelines</p>
+            <div class="contact-info">
+                <strong>Contact:</strong>
+                <a href="tel:+923315868725">+92 331 5868725</a>
+                <a href="mailto:siddique.dea@gmail.com">siddique.dea@gmail.com</a>
+                <a href="https://www.linkedin.com/in/siddique-datalover" target="_blank">LinkedIn</a>
+            </div>
+            <div class="btn-group">
+                <a href="#blog" class="btn">Explore Blog Posts</a>
+                <a href="../projects/README.md" target="_blank" class="btn btn-secondary">View Projects</a>
+                <a href="posts/about-author.md" target="_blank" class="btn btn-outline">About Author</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="blog">
+        <div class="container">
+            <div class="section-title">
+                <h2>Featured Blog Posts</h2>
+                <p>Comprehensive deep dives into data engineering use cases, architectures, and best practices from production implementations</p>
+            </div>
+            
+            <div class="filter-bar">
+                <button class="filter-btn active" data-filter="all">All Posts</button>
+                <button class="filter-btn" data-filter="realtime">Real-Time</button>
+                <button class="filter-btn" data-filter="cloud">Cloud</button>
+                <button class="filter-btn" data-filter="ml">ML/AI</button>
+                <button class="filter-btn" data-filter="enterprise">Enterprise</button>
+            </div>
+            
+            <div class="blog-grid">
+                <div class="blog-card" data-category="realtime">
+                    <span class="category realtime">Real-Time Analytics</span>
+                    <h3>Building Real-Time Streaming Analytics</h3>
+                    <p>Complete guide to building real-time analytics platforms with Azure Event Hubs, Stream Analytics, and production implementations processing millions of events per second with sub-second latency.</p>
+                    <a href="posts/real-time-streaming-analytics.md" target="_blank" class="read-more">Read Article</a>
+                </div>
+                
+                <div class="blog-card" data-category="healthcare">
+                    <span class="category healthcare">Healthcare</span>
+                    <h3>HIPAA-Compliant Healthcare Data Platforms</h3>
+                    <p>Architectures and implementations for building HIPAA-compliant healthcare data platforms with patient analytics, clinical decision support, medical imaging processing, and compliance frameworks.</p>
+                    <a href="posts/healthcare-data-engineering.md" target="_blank" class="read-more">Read Article</a>
+                </div>
+                
+                <div class="blog-card" data-category="retail">
+                    <span class="category retail">Retail & E-commerce</span>
+                    <h3>End-to-End Retail Analytics</h3>
+                    <p>From transactions to insights: Building comprehensive retail analytics platforms with Azure Databricks, demand forecasting models, inventory optimization, and customer 360° analytics.</p>
+                    <a href="posts/ecommerce-retail-data-engineering.md" target="_blank" class="read-more">Read Article</a>
+                </div>
+                
+                <div class="blog-card" data-category="cloud">
+                    <span class="category cloud">Cloud Platforms</span>
+                    <h3>Modern Cloud Data Platforms</h3>
+                    <p>Production implementations using Azure Databricks, Snowflake, and Microsoft Fabric with lakehouse architectures, data mesh patterns, and hybrid cloud strategies for enterprise-scale solutions.</p>
+                    <a href="posts/cloud-data-platforms.md" target="_blank" class="read-more">Read Article</a>
+                </div>
+                
+                <div class="blog-card" data-category="enterprise">
+                    <span class="category">Enterprise</span>
+                    <h3>Enterprise ETL & Data Migration</h3>
+                    <p>Best practices from production: Migrating petabyte-scale data warehouses, building metadata-driven ETL frameworks, implementing change data capture, and legacy system modernization.</p>
+                    <a href="posts/enterprise-etl-migration.md" target="_blank" class="read-more">Read Article</a>
+                </div>
+                
+                <div class="blog-card" data-category="ml">
+                    <span class="category">ML & AI</span>
+                    <h3>Production ML Pipelines</h3>
+                    <p>From data to deployed models: Building end-to-end ML pipelines with automated feature engineering, model training, deployment strategies, monitoring, and MLflow integration.</p>
+                    <a href="posts/ml-ai-data-engineering.md" target="_blank" class="read-more">Read Article</a>
+                </div>
+                
+                <div class="blog-card" data-category="enterprise">
+                    <span class="category">Data Modeling</span>
+                    <h3>Data Modeling & Architecture</h3>
+                    <p>Building scalable data warehouses with dimensional modeling techniques, optimization strategies, star schemas, and production architectures from enterprise implementations.</p>
+                    <a href="posts/data-modeling-architecture.md" target="_blank" class="read-more">Read Article</a>
+                </div>
+                
+                <div class="blog-card" data-category="enterprise">
+                    <span class="category">Business Intelligence</span>
+                    <h3>BI & Reporting Solutions</h3>
+                    <p>Power BI optimization strategies, enterprise reporting platforms, advanced analytics dashboards with performance tuning, DAX optimization, and self-service analytics best practices.</p>
+                    <a href="posts/bi-reporting.md" target="_blank" class="read-more">Read Article</a>
+                </div>
+                
+                <div class="blog-card" data-category="enterprise">
+                    <span class="category cloud">Data Governance</span>
+                    <h3>Data Governance & Quality</h3>
+                    <p>Building trustworthy data platforms with comprehensive governance frameworks, automated quality validation, complete data lineage tracking, and regulatory compliance (HIPAA, GDPR, SOX).</p>
+                    <a href="posts/data-governance-quality.md" target="_blank" class="read-more">Read Article</a>
+                </div>
+                
+                <div class="blog-card" data-category="realtime">
+                    <span class="category realtime">IoT & Sensors</span>
+                    <h3>IoT & Sensor Data Platforms</h3>
+                    <p>Processing millions of telemetry events with real-time analytics, time-series storage optimization, predictive maintenance models, and comprehensive device management systems.</p>
+                    <a href="posts/iot-sensor-data-platforms.md" target="_blank" class="read-more">Read Article</a>
+                </div>
+                
+                <div class="blog-card" data-category="enterprise">
+                    <span class="category">Financial Services</span>
+                    <h3>Financial Services Data Engineering</h3>
+                    <p>Risk management systems, compliance reporting automation, real-time fraud detection, transaction processing pipelines, and regulatory analytics for financial institutions.</p>
+                    <a href="posts/financial-services-data-engineering.md" target="_blank" class="read-more">Read Article</a>
+                </div>
+                
+                <div class="blog-card" data-category="enterprise">
+                    <span class="category">Performance</span>
+                    <h3>Data Pipeline Optimization</h3>
+                    <p>Proven techniques for reducing pipeline execution time from hours to minutes through intelligent partitioning, join optimization, strategic caching, and auto-scaling strategies.</p>
+                    <a href="posts/data-pipeline-optimization.md" target="_blank" class="read-more">Read Article</a>
+                </div>
+                
+                <div class="blog-card" data-category="ml">
+                    <span class="category healthcare">Security</span>
+                    <h3>Fraud Detection & Security</h3>
+                    <p>Real-time fraud detection systems with ML models, rule engines, advanced feature engineering, comprehensive data security frameworks, and adaptive threshold management.</p>
+                    <a href="posts/fraud-detection-security.md" target="_blank" class="read-more">Read Article</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="stats" class="stats">
+        <div class="container">
+            <div class="section-title">
+                <h2>Portfolio Statistics</h2>
+                <p>Real-world production projects demonstrating expertise across industries and technologies</p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-item fade-in">
+                    <div class="number">50+</div>
+                    <div class="label">Production Projects</div>
+                </div>
+                
+                <div class="stat-item fade-in">
+                    <div class="number">20+</div>
+                    <div class="label">Technologies</div>
+                </div>
+                
+                <div class="stat-item fade-in">
+                    <div class="number">8+</div>
+                    <div class="label">Industries</div>
+                </div>
+                
+                <div class="stat-item fade-in">
+                    <div class="number">13+</div>
+                    <div class="label">Blog Posts</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="achievements" class="achievements">
+        <div class="container">
+            <div class="section-title">
+                <h2>Key Achievements</h2>
+                <p>Measurable impact and performance improvements from production implementations</p>
+            </div>
+            
+            <div class="achievement-grid">
+                <div class="achievement-card">
+                    <div class="metric">80%</div>
+                    <h4>Pipeline Time Reduction</h4>
+                    <p class="description">Reduced ETL pipeline execution time from 8 hours to 1.5 hours through comprehensive optimization strategies including partitioning, join optimization, and caching.</p>
+                </div>
+                
+                <div class="achievement-card">
+                    <div class="metric">65%</div>
+                    <h4>Query Performance Improvement</h4>
+                    <p class="description">Improved query performance through intelligent partitioning strategies, index optimization, materialized views, and query plan optimization techniques.</p>
+                </div>
+                
+                <div class="achievement-card">
+                    <div class="metric">35%</div>
+                    <h4>Forecast Accuracy Improvement</h4>
+                    <p class="description">Improved demand forecasting accuracy using advanced ML models (Prophet, XGBoost), feature engineering, and real-time data integration for retail analytics.</p>
+                </div>
+                
+                <div class="achievement-card">
+                    <div class="metric">60%</div>
+                    <h4>Downtime Reduction</h4>
+                    <p class="description">Reduced unplanned downtime through predictive maintenance models, real-time monitoring, IoT sensor analytics, and proactive alerting systems.</p>
+                </div>
+                
+                <div class="achievement-card">
+                    <div class="metric">40%</div>
+                    <h4>Storage Cost Reduction</h4>
+                    <p class="description">Optimized storage costs through intelligent data lifecycle management, tiered storage strategies, compression, and automated archival policies.</p>
+                </div>
+                
+                <div class="achievement-card">
+                    <div class="metric">95%</div>
+                    <h4>Fraud Detection Accuracy</h4>
+                    <p class="description">Achieved high fraud detection accuracy with ML models, rule engines, real-time feature engineering, and adaptive threshold management systems.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="technologies" class="technologies">
+        <div class="container">
+            <div class="section-title">
+                <h2>Technologies & Tools</h2>
+                <p>Expertise across modern data engineering stack and cloud platforms</p>
+            </div>
+            
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <div class="tech-name">Microsoft Azure</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Azure Databricks</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Snowflake</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Apache Spark</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Apache Kafka</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Power BI</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Python</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">SQL Server</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Azure ML</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Delta Lake</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Apache Airflow</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">MLflow</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">PostgreSQL</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Microsoft Fabric</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Azure Data Factory</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">AWS</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Blog Categories</h3>
+                    <a href="#blog">Real-Time Analytics</a>
+                    <a href="#blog">Healthcare Data</a>
+                    <a href="#blog">Retail & E-commerce</a>
+                    <a href="#blog">Cloud Platforms</a>
+                    <a href="#blog">Enterprise ETL</a>
+                    <a href="#blog">ML & AI</a>
+                    <a href="#blog">Data Governance</a>
+                    <a href="#blog">IoT & Sensors</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Projects & Resources</h3>
+                    <a href="../projects/README.md" target="_blank">Projects Overview</a>
+                    <a href="../projects/PROJECTS_INDEX.md" target="_blank">Projects Index</a>
+                    <a href="../Portfolio/14.html" target="_blank">Portfolio Website</a>
+                    <a href="README.md" target="_blank">Blog README</a>
+                    <a href="posts/about-author.md" target="_blank">About Author</a>
+                    <a href="posts/professional-summary.md" target="_blank">Professional Summary</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p><strong>Muhammad Siddique</strong></p>
+                    <p style="margin-bottom: 1rem;">Data Engineering Professional</p>
+                    <p style="margin-bottom: 0.8rem;"><strong>Phone:</strong> <a href="tel:+923315868725">+92 331 5868725</a></p>
+                    <p style="margin-bottom: 0.8rem;"><strong>Email:</strong> <a href="mailto:siddique.dea@gmail.com">siddique.dea@gmail.com</a></p>
+                    <p style="margin-bottom: 1.5rem;"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/siddique-datalover" target="_blank">linkedin.com/in/siddique-datalover</a></p>
+                    <p style="margin-top: 1.5rem; margin-bottom: 1rem;">Connect for collaborations and consulting</p>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/siddique-datalover" target="_blank" title="LinkedIn Profile">Li</a>
+                        <a href="mailto:siddique.dea@gmail.com" title="Email">Em</a>
+                        <a href="tel:+923315868725" title="Phone">Ph</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 <strong>Muhammad Siddique</strong> | Data Engineering Blog & Portfolio. All rights reserved.</p>
+                <p style="margin-top: 1rem; font-size: 0.85rem;">
+                    Contact: <a href="tel:+923315868725">+92 331 5868725</a> | 
+                    <a href="mailto:siddique.dea@gmail.com">siddique.dea@gmail.com</a> | 
+                    <a href="https://www.linkedin.com/in/siddique-datalover" target="_blank">LinkedIn</a>
+                </p>
+                <p style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.8;">Built with real-world experience from 50+ production projects across multiple industries</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Filter functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const blogCards = document.querySelectorAll('.blog-card');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const filter = this.getAttribute('data-filter');
+                    
+                    blogCards.forEach(card => {
+                        if (filter === 'all') {
+                            card.style.display = 'flex';
+                            card.style.opacity = '1';
+                        } else {
+                            const category = card.getAttribute('data-category');
+                            if (category === filter) {
+                                card.style.display = 'flex';
+                                setTimeout(() => {
+                                    card.style.opacity = '1';
+                                }, 10);
+                            } else {
+                                card.style.opacity = '0';
+                                setTimeout(() => {
+                                    card.style.display = 'none';
+                                }, 300);
+                            }
+                        }
+                    });
+                });
+            });
+            
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Intersection Observer for fade-in animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.blog-card, .stat-item, .achievement-card, .tech-item').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
