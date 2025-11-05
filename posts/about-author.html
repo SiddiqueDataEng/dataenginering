@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="About the Author - Muhammad Siddique Data Engineering Blog">
+    <meta name="keywords" content="data engineering, Power BI, Azure, data analytics, About the Author">
+    <meta name="author" content="Muhammad Siddique">
+    <title>About the Author | Muhammad Siddique - Data Engineering Blog</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #1abc9c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #7f8c8d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent);
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .article {
+            background: white;
+            padding: 3rem;
+            margin: 3rem auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            max-width: 1000px;
+        }
+        
+        .article-header {
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .article-header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        
+        .article-meta {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+        
+        .article-content {
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+        
+        .article-content h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin: 2.5rem 0 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        .article-content h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem 0;
+            padding-top: 1rem;
+        }
+        
+        .article-content h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin: 1.5rem 0 0.8rem 0;
+        }
+        
+        .article-content h4 {
+            color: var(--dark);
+            font-size: 1.3rem;
+            margin: 1.2rem 0 0.6rem 0;
+        }
+        
+        .article-content p {
+            margin-bottom: 1.2rem;
+            color: #444;
+        }
+        
+        .article-content ul, .article-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+        
+        .article-content li {
+            margin-bottom: 0.8rem;
+            color: #444;
+        }
+        
+        .article-content code {
+            background-color: #f4f4f4;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e83e8c;
+        }
+        
+        .article-content pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .article-content pre code {
+            background-color: transparent;
+            color: #ecf0f1;
+            padding: 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .article-content a {
+            color: var(--secondary);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .article-content a:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        
+        .article-content strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        .article-content em {
+            font-style: italic;
+            color: #555;
+        }
+        
+        .article-content hr {
+            border: none;
+            border-top: 2px solid var(--light);
+            margin: 2rem 0;
+        }
+        
+        .article-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .back-link:hover {
+            background-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            text-align: center;
+            padding: 2rem 0;
+        }
+        
+        .footer-content p {
+            margin-bottom: 1rem;
+            color: #bdc3c7;
+        }
+        
+        .footer-content a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .footer-content a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .article {
+                padding: 2rem 1.5rem;
+                margin: 2rem auto;
+            }
+            
+            .article-header h1 {
+                font-size: 2rem;
+            }
+            
+            .article-content {
+                font-size: 1rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">Muhammad Siddique | Data<span>Engineering</span>.Blog</a>
+                <nav>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../index.html#blog">Blog</a></li>
+                        <li><a href="about-author.html">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="article">
+        <div class="article-header">
+            <h1>About the Author</h1>
+            <div class="article-meta">
+                <strong>Muhammad Siddique</strong> | Data Engineering Professional | 
+                <a href="../index.html" style="color: var(--secondary);">Back to Blog</a>
+            </div>
+        </div>
+        
+        <div class="article-content">
+<h1>About the Author</h1>
+
+<strong>Muhammad Siddique</strong>  
+<em>Data Engineering Professional | Azure & Cloud Specialist | 50+ Production Projects</em>
+
+<strong>Contact Information:</strong>  
+<ul>
+<li><strong>Phone:</strong> +92 331 5868725  </li>
+<li><strong>Email:</strong> siddique.dea@gmail.com  </li>
+<li><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/siddique-datalover">linkedin.com/in/siddique-datalover</a></li>
+</ol>
+
+<h2>Professional Profile</h2>
+
+<p>I am a data engineering professional with extensive experience designing, building, and optimizing enterprise-scale data platforms. With expertise spanning cloud platforms (Azure, AWS, Snowflake), real-time streaming analytics, healthcare data systems, retail analytics, and machine learning pipelines, I have successfully delivered 50+ production data engineering solutions across multiple industries.</p>
+
+<h2>Core Expertise</h2>
+
+<h3>Cloud Data Platforms</h3>
+<ul>
+<li><strong>Azure Ecosystem</strong>: Azure Data Factory, Azure Databricks, Azure Synapse Analytics, Azure Data Lake Storage, Azure Machine Learning, Microsoft Fabric</li>
+<li><strong>AWS Services</strong>: EMR, S3, Redshift, SageMaker</li>
+<li><strong>Snowflake</strong>: Data warehousing, data mesh architectures, ML capabilities</li>
+<li><strong>Hybrid Cloud</strong>: Multi-cloud strategies and implementations</li>
+</ol>
+
+<h3>Data Engineering</h3>
+<ul>
+<li><strong>ETL/ELT Pipelines</strong>: Design and optimization of large-scale data pipelines</li>
+<li><strong>Real-Time Streaming</strong>: Apache Kafka, Azure Event Hubs, Stream Analytics</li>
+<li><strong>Data Warehousing</strong>: Dimensional modeling, star schemas, data vault patterns</li>
+<li><strong>Data Lakes</strong>: Delta Lake, data lakehouse architectures</li>
+<li><strong>Performance Optimization</strong>: Query optimization, partitioning, caching strategies</li>
+</ol>
+
+<h3>Machine Learning & AI</h3>
+<ul>
+<li><strong>ML Pipelines</strong>: End-to-end ML pipeline development and deployment</li>
+<li><strong>Feature Engineering</strong>: Automated feature stores and engineering</li>
+<li><strong>Model Deployment</strong>: MLflow, Azure ML, model serving</li>
+<li><strong>Time Series</strong>: Prophet, ARIMA, demand forecasting</li>
+<li><strong>Predictive Analytics</strong>: Risk models, fraud detection, predictive maintenance</li>
+</ol>
+
+<h3>Business Intelligence & Analytics</h3>
+<ul>
+<li><strong>Power BI</strong>: Advanced dashboards, optimization, DAX, semantic models</li>
+<li><strong>Reporting Platforms</strong>: Enterprise BI solutions, executive dashboards</li>
+<li><strong>Self-Service Analytics</strong>: Enabling business users with data access</li>
+<li><strong>Real-Time Dashboards</strong>: Live analytics and monitoring</li>
+</ol>
+
+<h3>Data Governance & Quality</h3>
+<ul>
+<li><strong>Data Quality Frameworks</strong>: Automated validation and monitoring</li>
+<li><strong>Data Lineage</strong>: End-to-end tracking and compliance</li>
+<li><strong>Data Governance</strong>: Policies, standards, catalog management</li>
+<li><strong>Security & Compliance</strong>: HIPAA, GDPR, SOX compliance implementations</li>
+</ol>
+
+<h2>Industry Experience</h2>
+
+<h3>Healthcare</h3>
+<ul>
+<li>HIPAA-compliant healthcare data platforms</li>
+<li>Patient analytics and clinical decision support</li>
+<li>Medical imaging processing and storage</li>
+<li>Healthcare research data platforms</li>
+</ol>
+
+<h3>Financial Services</h3>
+<ul>
+<li>Risk management and compliance reporting</li>
+<li>Real-time fraud detection systems</li>
+<li>Financial data pipelines and analytics</li>
+<li>Regulatory reporting automation</li>
+</ol>
+
+<h3>Retail & E-commerce</h3>
+<ul>
+<li>End-to-end retail analytics platforms</li>
+<li>Demand forecasting and inventory optimization</li>
+<li>Customer 360° analytics</li>
+<li>Real-time sales and inventory dashboards</li>
+</ol>
+
+<h3>Manufacturing & IoT</h3>
+<ul>
+<li>IoT sensor data platforms</li>
+<li>Fleet management and logistics optimization</li>
+<li>Predictive maintenance systems</li>
+<li>Real-time operational analytics</li>
+</ol>
+
+<h3>Enterprise Solutions</h3>
+<ul>
+<li>Data warehouse migrations and modernization</li>
+<li>Legacy system integration</li>
+<li>Multi-tenant SaaS platforms</li>
+<li>Enterprise BI implementations</li>
+</ol>
+
+<h2>Key Achievements</h2>
+
+<h3>Performance & Optimization</h3>
+<ul>
+<li><strong>80% reduction</strong> in ETL pipeline execution time (8 hours → 1.5 hours)</li>
+<li><strong>65% improvement</strong> in query performance through optimization</li>
+<li><strong>40% reduction</strong> in storage costs through data lifecycle management</li>
+<li><strong>70% reduction</strong> in report refresh times</li>
+</ol>
+
+<h3>Business Impact</h3>
+<ul>
+<li><strong>35% improvement</strong> in forecast accuracy for retail demand prediction</li>
+<li><strong>20% reduction</strong> in stockouts through inventory optimization</li>
+<li><strong>15-25% reduction</strong> in patient readmissions (healthcare analytics)</li>
+<li><strong>60% reduction</strong> in unplanned downtime (IoT predictive maintenance)</li>
+</ol>
+
+<h3>Technical Excellence</h3>
+<ul>
+<li>Built platforms processing <strong>millions of transactions per day</strong></li>
+<li>Real-time analytics with <strong>sub-second latency</strong></li>
+<li>Scalable architectures supporting <strong>petabyte-scale data</strong></li>
+<li><strong>99.9%+ uptime</strong> for critical production systems</li>
+</ol>
+
+<h2>Technical Skills</h2>
+
+<h3>Programming Languages</h3>
+<ul>
+<li><strong>Python</strong>: Data processing, ML models, automation scripts</li>
+<li><strong>SQL</strong>: Advanced queries, stored procedures, optimization</li>
+<li><strong>.NET/C#</strong>: Enterprise applications, SSIS packages</li>
+<li><strong>PowerShell</strong>: Automation and infrastructure scripts</li>
+</ol>
+
+<h3>Technologies & Tools</h3>
+<ul>
+<li><strong>Big Data</strong>: Apache Spark, Hadoop, Hive</li>
+<li><strong>Streaming</strong>: Kafka, Event Hubs, Stream Analytics, Flink</li>
+<li><strong>Databases</strong>: SQL Server, PostgreSQL, MySQL, Oracle</li>
+<li><strong>Data Formats</strong>: Parquet, Delta Lake, Avro, JSON</li>
+<li><strong>Orchestration</strong>: Apache Airflow, Azure Data Factory, SSIS</li>
+<li><strong>Containers</strong>: Docker, Kubernetes</li>
+<li><strong>Monitoring</strong>: Prometheus, Grafana, Application Insights</li>
+</ol>
+
+<h3>Methodologies</h3>
+<ul>
+<li>Agile/Scrum development</li>
+<li>DevOps and CI/CD pipelines</li>
+<li>Infrastructure as Code (Terraform, ARM templates)</li>
+<li>Test-driven development</li>
+<li>Data modeling best practices</li>
+</ol>
+
+<h2>Education & Certifications</h2>
+
+<em>[Note: Add your specific education and certifications here based on your resume]</em>
+
+<h2>Professional Philosophy</h2>
+
+<p>I believe in building data platforms that are:</p>
+<ul>
+<li><strong>Scalable</strong>: Designed to handle growth from day one</li>
+<li><strong>Performant</strong>: Optimized for speed and efficiency</li>
+<li><strong>Reliable</strong>: Built with error handling and monitoring</li>
+<li><strong>Secure</strong>: Following security best practices and compliance</li>
+<li><strong>Maintainable</strong>: Well-documented and following best practices</li>
+<li><strong>Cost-Effective</strong>: Optimized for cloud cost efficiency</li>
+</ol>
+
+<h2>Open Source & Community</h2>
+
+<p>I actively contribute to data engineering knowledge through:</p>
+<ul>
+<li>Technical blog posts and articles</li>
+<li>Open-source project contributions</li>
+<li>Knowledge sharing and mentoring</li>
+</ol>
+
+<h2>Contact & Links</h2>
+
+<ul>
+<li><strong>Name</strong>: Muhammad Siddique</li>
+<li><strong>Phone</strong>: +92 331 5868725</li>
+<li><strong>Email</strong>: siddique.dea@gmail.com</li>
+<li><strong>LinkedIn</strong>: <a href="https://www.linkedin.com/in/siddique-datalover">linkedin.com/in/siddique-datalover</a></li>
+<li><strong>Portfolio</strong>: <a href="../projects/README.html">Projects Repository</a></li>
+<li><strong>Blog</strong>: <a href="./README.html">Data Engineering Blog</a></li>
+<li><strong>GitHub</strong>: [View Projects on GitHub]</li>
+</ol>
+
+<p>---</p>
+
+<em>This blog represents real-world implementations and lessons learned from 50+ production data engineering projects across multiple industries and technologies.</em>
+
+
+        </div>
+        
+        <a href="../index.html" class="back-link">← Back to Blog</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p><strong>Muhammad Siddique</strong> | Data Engineering Professional</p>
+                <p>Phone: <a href="tel:+923315868725">+92 331 5868725</a> | 
+                   Email: <a href="mailto:siddique.dea@gmail.com">siddique.dea@gmail.com</a> | 
+                   <a href="https://www.linkedin.com/in/siddique-datalover" target="_blank">LinkedIn</a></p>
+                <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                    &copy; 2025 Muhammad Siddique | Data Engineering Blog & Portfolio
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

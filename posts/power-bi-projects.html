@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Athenahealth Data Generator - Muhammad Siddique Data Engineering Blog">
+    <meta name="keywords" content="data engineering, Power BI, Azure, data analytics, Athenahealth Data Generator">
+    <meta name="author" content="Muhammad Siddique">
+    <title>Athenahealth Data Generator | Muhammad Siddique - Data Engineering Blog</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #1abc9c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #7f8c8d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent);
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .article {
+            background: white;
+            padding: 3rem;
+            margin: 3rem auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            max-width: 1000px;
+        }
+        
+        .article-header {
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .article-header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        
+        .article-meta {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+        
+        .article-content {
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+        
+        .article-content h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin: 2.5rem 0 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        .article-content h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem 0;
+            padding-top: 1rem;
+        }
+        
+        .article-content h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin: 1.5rem 0 0.8rem 0;
+        }
+        
+        .article-content h4 {
+            color: var(--dark);
+            font-size: 1.3rem;
+            margin: 1.2rem 0 0.6rem 0;
+        }
+        
+        .article-content p {
+            margin-bottom: 1.2rem;
+            color: #444;
+        }
+        
+        .article-content ul, .article-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+        
+        .article-content li {
+            margin-bottom: 0.8rem;
+            color: #444;
+        }
+        
+        .article-content code {
+            background-color: #f4f4f4;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e83e8c;
+        }
+        
+        .article-content pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .article-content pre code {
+            background-color: transparent;
+            color: #ecf0f1;
+            padding: 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .article-content a {
+            color: var(--secondary);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .article-content a:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        
+        .article-content strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        .article-content em {
+            font-style: italic;
+            color: #555;
+        }
+        
+        .article-content hr {
+            border: none;
+            border-top: 2px solid var(--light);
+            margin: 2rem 0;
+        }
+        
+        .article-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .back-link:hover {
+            background-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            text-align: center;
+            padding: 2rem 0;
+        }
+        
+        .footer-content p {
+            margin-bottom: 1rem;
+            color: #bdc3c7;
+        }
+        
+        .footer-content a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .footer-content a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .article {
+                padding: 2rem 1.5rem;
+                margin: 2rem auto;
+            }
+            
+            .article-header h1 {
+                font-size: 2rem;
+            }
+            
+            .article-content {
+                font-size: 1rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">Muhammad Siddique | Data<span>Engineering</span>.Blog</a>
+                <nav>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../index.html#blog">Blog</a></li>
+                        <li><a href="about-author.html">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="article">
+        <div class="article-header">
+            <h1>Athenahealth Data Generator</h1>
+            <div class="article-meta">
+                <strong>Muhammad Siddique</strong> | Data Engineering Professional | 
+                <a href="../index.html" style="color: var(--secondary);">Back to Blog</a>
+            </div>
+        </div>
+        
+        <div class="article-content">
+<h1>Athenahealth Data Generator</h1>
+
+<p>This project generates realistic healthcare data at scale, modeled after Athenahealth's EHR and practice management systems. The script can generate billions of rows of synthetic healthcare data for analytics, testing, and development purposes.</p>
+
+<h2>Features</h2>
+
+<ul>
+<li>Generates multiple related healthcare datasets:</li>
+</ul>
+<p>  - Practice information</p>
+<p>  - Clinical performance metrics</p>
+<p>  - Financial performance metrics</p>
+<p>  - Patient engagement metrics</p>
+<p>  - AI utilization metrics</p>
+<p>  - Patient records</p>
+<p>  - Visit records</p>
+
+<ul>
+<li>Realistic data characteristics:</li>
+</ul>
+<p>  - Seasonal variations in healthcare metrics</p>
+<p>  - Yearly improvement trends</p>
+<p>  - Practice size and specialty-specific variations</p>
+<p>  - Realistic patient demographics and clinical values</p>
+<p>  - AI adoption curves that follow S-curve patterns</p>
+<p>  - Correlations between related metrics</p>
+
+<h2>Requirements</h2>
+
+<pre><code class="language-">pandas
+numpy
+faker
+</code></pre>
+
+<h2>Usage</h2>
+
+<ol>
+<li>Install dependencies:</li>
+</ol>
+<pre><code class="language-">pip install pandas numpy faker
+</code></pre>
+
+<ol>
+<li>Configure the script parameters in <code>generate<em>athenahealth</em>data.py</code>:</li>
+</ol>
+<pre><code class="language-python"><h1>Configuration</h1>
+OUTPUT<em>DIR = "generated</em>data"
+CHUNK<em>SIZE = 1</em>000_000  # Number of records per file
+TOTAL<em>RECORDS = 10</em>000_000  # Total number of records to generate (adjust as needed)
+PRACTICE_COUNT = 1000  # Number of practices to generate
+</code></pre>
+
+<ol>
+<li>Run the script:</li>
+</ol>
+<pre><code class="language-">python generate<em>athenahealth</em>data.py
+</code></pre>
+
+<ol>
+<li>The generated data will be saved to the <code>generated_data</code> directory.</li>
+</ol>
+
+<h2>Scaling to Billions of Rows</h2>
+
+<p>To generate billions of rows:</p>
+
+<ol>
+<li>Increase the <code>TOTAL_RECORDS</code> parameter in the script</li>
+<li>Consider running on a machine with sufficient RAM</li>
+<li>For extremely large datasets, consider using a distributed processing framework like Dask or Spark</li>
+</ol>
+
+<h2>Data Schema</h2>
+
+<p>The generated data follows these schemas:</p>
+
+<h3>Practices</h3>
+<ul>
+<li>practice_id: Unique identifier for the practice</li>
+<li>practice_name: Name of the practice</li>
+<li>practice_type: Type of practice (Independent, Health System, etc.)</li>
+<li>specialty: Medical specialty</li>
+<li>size: Size of practice (Small, Medium, Large)</li>
+<li>location: City and state</li>
+<li>athena_products: Athenahealth products used</li>
+<li>implementation_date: When the practice implemented Athenahealth</li>
+</ol>
+
+<h3>Clinical Metrics</h3>
+<ul>
+<li>practice_id: Practice identifier</li>
+<li>month, year, date: Time period</li>
+<li>patient_visits: Number of patient visits</li>
+<li>avg<em>visit</em>duration_min: Average visit duration in minutes</li>
+<li>charts<em>closed</em>same<em>day</em>pct: Percentage of charts closed same day</li>
+<li>quality<em>measures</em>met_pct: Percentage of quality measures met</li>
+<li>ai<em>documentation</em>usage: Level of AI documentation usage</li>
+</ol>
+
+<h3>Financial Metrics</h3>
+<ul>
+<li>practice_id: Practice identifier</li>
+<li>month, year, date: Time period</li>
+<li>total_charges: Total charges for the period</li>
+<li>collection<em>rate</em>pct: Collection rate percentage</li>
+<li>days<em>in</em>ar: Days in accounts receivable</li>
+<li>claim<em>denial</em>rate_pct: Claim denial rate percentage</li>
+<li>clean<em>claim</em>rate_pct: Clean claim rate percentage</li>
+</ol>
+
+<h3>Patient Engagement Metrics</h3>
+<ul>
+<li>practice_id: Practice identifier</li>
+<li>month, year, date: Time period</li>
+<li>portal<em>adoption</em>rate_pct: Patient portal adoption rate</li>
+<li>online<em>scheduling</em>pct: Online scheduling percentage</li>
+<li>digital<em>form</em>completion_pct: Digital form completion percentage</li>
+<li>patient<em>satisfaction</em>score: Patient satisfaction score (1-5)</li>
+<li>no<em>show</em>rate_pct: No-show rate percentage</li>
+</ol>
+
+<h3>AI Utilization Metrics</h3>
+<ul>
+<li>practice_id: Practice identifier</li>
+<li>month, year, date: Time period</li>
+<li>ambient<em>notes</em>usage_pct: Ambient notes usage percentage</li>
+<li>ai<em>assisted</em>coding_pct: AI-assisted coding percentage</li>
+<li>documentation<em>time</em>saved<em>min</em>per_visit: Documentation time saved (minutes per visit)</li>
+<li>ai<em>suggested</em>diagnoses<em>accepted</em>pct: Percentage of AI-suggested diagnoses accepted</li>
+</ol>
+
+<h3>Patients</h3>
+<ul>
+<li>patient_id: Unique patient identifier</li>
+<li>practice_id: Practice identifier</li>
+<li>age: Patient age</li>
+<li>gender: Patient gender</li>
+<li>primary<em>care</em>provider: Primary care provider name</li>
+<li>practice_name: Practice name</li>
+<li>insurance: Insurance provider</li>
+<li>medications: List of medications</li>
+<li>allergies: List of allergies</li>
+<li>registration_date: Date of registration</li>
+<li>last<em>visit</em>date: Date of last visit</li>
+<li>next<em>appointment</em>date: Date of next appointment</li>
+</ol>
+
+<h3>Visits</h3>
+<ul>
+<li>patient_id: Patient identifier</li>
+<li>visit_id: Unique visit identifier</li>
+<li>practice_id: Practice identifier</li>
+<li>visit_date: Date of visit</li>
+<li>provider: Provider name</li>
+<li>visit_type: Type of visit</li>
+<li>bp<em>systolic, bp</em>diastolic: Blood pressure readings</li>
+<li>weight<em>kg, height</em>cm, bmi: Physical measurements</li>
+<li>diagnoses: List of diagnoses</li>
+<li>procedures: List of procedures</li>
+<li>notes: Visit notes</li>
+<li>follow<em>up</em>needed: Whether follow-up is needed</li>
+<li>follow<em>up</em>timeframe: Timeframe for follow-up </li>
+</ul>
+        </div>
+        
+        <a href="../index.html" class="back-link">← Back to Blog</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p><strong>Muhammad Siddique</strong> | Data Engineering Professional</p>
+                <p>Phone: <a href="tel:+923315868725">+92 331 5868725</a> | 
+                   Email: <a href="mailto:siddique.dea@gmail.com">siddique.dea@gmail.com</a> | 
+                   <a href="https://www.linkedin.com/in/siddique-datalover" target="_blank">LinkedIn</a></p>
+                <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                    &copy; 2025 Muhammad Siddique | Data Engineering Blog & Portfolio
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

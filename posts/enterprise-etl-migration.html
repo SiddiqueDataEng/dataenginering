@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Enterprise ETL & Data Migration: Best Practices from Production - Muhammad Siddique Data Engineering Blog">
+    <meta name="keywords" content="data engineering, Power BI, Azure, data analytics, Enterprise ETL & Data Migration: Best Practices from Production">
+    <meta name="author" content="Muhammad Siddique">
+    <title>Enterprise ETL & Data Migration: Best Practices from Production | Muhammad Siddique - Data Engineering Blog</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #1abc9c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #7f8c8d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent);
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .article {
+            background: white;
+            padding: 3rem;
+            margin: 3rem auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            max-width: 1000px;
+        }
+        
+        .article-header {
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .article-header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        
+        .article-meta {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+        
+        .article-content {
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+        
+        .article-content h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin: 2.5rem 0 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        .article-content h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem 0;
+            padding-top: 1rem;
+        }
+        
+        .article-content h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin: 1.5rem 0 0.8rem 0;
+        }
+        
+        .article-content h4 {
+            color: var(--dark);
+            font-size: 1.3rem;
+            margin: 1.2rem 0 0.6rem 0;
+        }
+        
+        .article-content p {
+            margin-bottom: 1.2rem;
+            color: #444;
+        }
+        
+        .article-content ul, .article-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+        
+        .article-content li {
+            margin-bottom: 0.8rem;
+            color: #444;
+        }
+        
+        .article-content code {
+            background-color: #f4f4f4;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e83e8c;
+        }
+        
+        .article-content pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .article-content pre code {
+            background-color: transparent;
+            color: #ecf0f1;
+            padding: 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .article-content a {
+            color: var(--secondary);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .article-content a:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        
+        .article-content strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        .article-content em {
+            font-style: italic;
+            color: #555;
+        }
+        
+        .article-content hr {
+            border: none;
+            border-top: 2px solid var(--light);
+            margin: 2rem 0;
+        }
+        
+        .article-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .back-link:hover {
+            background-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            text-align: center;
+            padding: 2rem 0;
+        }
+        
+        .footer-content p {
+            margin-bottom: 1rem;
+            color: #bdc3c7;
+        }
+        
+        .footer-content a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .footer-content a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .article {
+                padding: 2rem 1.5rem;
+                margin: 2rem auto;
+            }
+            
+            .article-header h1 {
+                font-size: 2rem;
+            }
+            
+            .article-content {
+                font-size: 1rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">Muhammad Siddique | Data<span>Engineering</span>.Blog</a>
+                <nav>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../index.html#blog">Blog</a></li>
+                        <li><a href="about-author.html">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="article">
+        <div class="article-header">
+            <h1>Enterprise ETL & Data Migration: Best Practices from Production</h1>
+            <div class="article-meta">
+                <strong>Muhammad Siddique</strong> | Data Engineering Professional | 
+                <a href="../index.html" style="color: var(--secondary);">Back to Blog</a>
+            </div>
+        </div>
+        
+        <div class="article-content">
+<h1>Enterprise ETL & Data Migration: Best Practices from Production</h1>
+
+<em>Published: January 2025</em>
+
+<h2>Overview</h2>
+
+<p>Enterprise data migrations and ETL implementations are complex undertakings that require careful planning, robust frameworks, and proven patterns. This article shares lessons learned from migrating petabyte-scale data warehouses and building production ETL systems.</p>
+
+<h2>The Enterprise Challenge</h2>
+
+<p>Enterprise data engineering projects face:</p>
+<ul>
+<li><strong>Legacy system integration</strong> with outdated technologies</li>
+<li><strong>Data volume</strong> ranging from terabytes to petabytes</li>
+<li><strong>Complex business logic</strong> spanning decades</li>
+<li><strong>Minimal downtime</strong> requirements</li>
+<li><strong>Regulatory compliance</strong> needs</li>
+</ol>
+
+<h2>Migration Strategy: Phased Approach</h2>
+
+<p>Successful migrations follow a structured approach:</p>
+
+<pre><code class="language-">Assessment → Planning → Design → Development → Testing → Migration → Cutover → Validation
+</code></pre>
+
+<h2>Use Case 1: Enterprise Data Warehouse Migration</h2>
+
+<h3>Business Requirements</h3>
+<p>A Fortune 500 company needed to migrate a 50TB on-premises data warehouse to Azure cloud, requiring:</p>
+<ul>
+<li>Zero data loss</li>
+<li>Minimal business disruption</li>
+<li>Performance improvements</li>
+<li>Cost reduction</li>
+<li>Enhanced analytics capabilities</li>
+</ol>
+
+<h3>Migration Approach</h3>
+
+<h4>Phase 1: Assessment & Planning</h4>
+<pre><code class="language-python"><h1>Data discovery and profiling</h1>
+assessment_tasks = [
+    'catalog<em>all</em>tables',
+    'analyze<em>data</em>volumes',
+    'identify_dependencies',
+    'profile<em>data</em>quality',
+    'map<em>business</em>logic',
+    'assess<em>performance</em>requirements'
+]
+</code></pre>
+
+<strong>Key Activities:</strong>
+<ul>
+<li>Inventory of all database objects</li>
+<li>Data quality assessment</li>
+<li>Dependency mapping</li>
+<li>Performance baseline establishment</li>
+<li>Cost estimation</li>
+</ol>
+
+<h4>Phase 2: Architecture Design</h4>
+<pre><code class="language-">Source: On-Prem SQL Server
+    ↓
+Azure Data Factory (Orchestration)
+    ↓
+Azure Databricks (Transformation)
+    ↓
+Target: Azure Synapse Analytics
+    ↓
+Power BI (Reporting)
+</code></pre>
+
+<strong>Design Decisions:</strong>
+<ul>
+<li>Incremental loading strategy</li>
+<li>Parallel processing approach</li>
+<li>Error handling framework</li>
+<li>Rollback procedures</li>
+</ol>
+
+<h4>Phase 3: Development & Testing</h4>
+<pre><code class="language-python"><h1>ETL pipeline framework</h1>
+class ETLPipeline:
+    def extract(self, source):
+        # Extract from source with incremental logic
+        pass
+    
+    def transform(self, data):
+        # Apply business rules
+        pass
+    
+    def load(self, target):
+        # Load to target with validation
+        pass
+    
+    def validate(self):
+        # Data quality checks
+        pass
+</code></pre>
+
+<h4>Phase 4: Migration Execution</h4>
+<pre><code class="language-python"><h1>Migration strategy: Parallel Run</h1>
+strategy = {
+    'phase1': 'historical<em>data</em>load',  # Off-peak hours
+    'phase2': 'incremental_sync',       # Daily sync
+    'phase3': 'cutover',                # Weekend cutover
+    'phase4': 'validation',             # Post-migration validation
+    'phase5': 'decommission'           # Legacy system shutdown
+}
+</code></pre>
+
+<strong>Results:</strong>
+<ul>
+<li><strong>Zero data loss</strong> during migration</li>
+<li><strong>35% cost reduction</strong> in TCO</li>
+<li><strong>50% improvement</strong> in query performance</li>
+<li><strong>99.9% uptime</strong> maintained</li>
+<li><strong>3-month migration</strong> timeline</li>
+</ol>
+
+<h2>Use Case 2: Metadata-Driven ETL Framework</h2>
+
+<h3>Business Requirements</h3>
+<p>An enterprise needed a reusable ETL framework to:</p>
+<ul>
+<li>Standardize ETL processes across teams</li>
+<li>Enable self-service ETL development</li>
+<li>Reduce development time by 60%</li>
+<li>Ensure consistency and quality</li>
+</ol>
+
+<h3>Implementation</h3>
+
+<strong>Framework Architecture:</strong>
+<pre><code class="language-">Metadata Repository → ETL Engine → Data Pipelines → Monitoring
+         ↓                 ↓              ↓             ↓
+    Table Defs      Rule Engine    Execution      Alerts
+    Mappings        Transform      Logging        Metrics
+    Schedules       Validation
+</code></pre>
+
+<strong>Metadata Model:</strong>
+<pre><code class="language-python"><h1>Table metadata</h1>
+table_metadata = {
+    'table_name': 'customer',
+    'source_system': 'crm',
+    'target_schema': 'gold',
+    'columns': [
+        {'name': 'customer_id', 'type': 'bigint', 'key': True},
+        {'name': 'customer_name', 'type': 'varchar(100)'},
+        {'name': 'email', 'type': 'varchar(255)', 'validation': 'email'}
+    ],
+    'transformations': [
+        {'type': 'trim', 'column': 'customer_name'},
+        {'type': 'lowercase', 'column': 'email'}
+    ],
+    'data<em>quality</em>rules': [
+        {'rule': 'not<em>null', 'column': 'customer</em>id'},
+        {'rule': 'unique', 'column': 'customer_id'}
+    ]
+}
+</code></pre>
+
+<strong>ETL Engine:</strong>
+<pre><code class="language-python">class MetadataDrivenETL:
+    def <strong>init</strong>(self, metadata_repo):
+        self.metadata = metadata_repo
+        
+    def generate<em>pipeline(self, table</em>name):
+        metadata = self.metadata.get<em>table(table</em>name)
+        pipeline = Pipeline()
+        
+        # Extract
+        source = metadata['source_system']
+        extract_step = ExtractStep(source, metadata['columns'])
+        
+        # Transform
+        transform_step = TransformStep(metadata['transformations'])
+        
+        # Load
+        target = metadata['target_schema']
+        load<em>step = LoadStep(target, table</em>name)
+        
+        # Validation
+        validation<em>step = ValidationStep(metadata['data</em>quality_rules'])
+        
+        pipeline.add<em>steps([extract</em>step, transform_step, 
+                           load<em>step, validation</em>step])
+        return pipeline
+</code></pre>
+
+<strong>Benefits:</strong>
+<ul>
+<li><strong>60% reduction</strong> in development time</li>
+<li><strong>Consistent</strong> ETL patterns</li>
+<li><strong>Self-service</strong> capabilities for analysts</li>
+<li><strong>Centralized</strong> maintenance</li>
+</ol>
+
+<h2>Use Case 3: Data Cleanup Before Migration</h2>
+
+<h3>Business Requirements</h3>
+<p>Before migrating to cloud, an organization needed to:</p>
+<ul>
+<li>Clean 20 years of historical data</li>
+<li>Remove duplicates (estimated 30% of data)</li>
+<li>Standardize data formats</li>
+<li>Validate data quality</li>
+<li>Reduce data volume by 40%</li>
+</ol>
+
+<h3>Data Quality Framework</h3>
+
+<strong>Cleanup Pipeline:</strong>
+<pre><code class="language-">Raw Data → Profiling → Deduplication → Standardization → Validation → Clean Data
+            ↓              ↓                ↓                ↓            ↓
+        Data Stats    Duplicate ID    Format Fix    Quality Check    Gold Layer
+</code></pre>
+
+<strong>Deduplication Strategy:</strong>
+<pre><code class="language-python">def deduplicate_customers(df):
+    # Identify duplicates using multiple keys
+    duplicate<em>keys = ['email', 'phone', 'name</em>address_combo']
+    
+    # Prioritize: most recent, most complete
+    window = Window.partitionBy('email').orderBy(
+        F.col('last_updated').desc(),
+        F.col('completeness_score').desc()
+    )
+    
+    df<em>with</em>rank = df.withColumn('rank', F.row_number().over(window))
+    deduplicated = df<em>with</em>rank.filter(F.col('rank') == 1)
+    
+    return deduplicated
+</code></pre>
+
+<strong>Data Standardization:</strong>
+<pre><code class="language-python">def standardize_data(df):
+    # Standardize formats
+    df = df.withColumn('phone', 
+        F.regexp_replace('phone', r'[^0-9]', ''))
+    
+    df = df.withColumn('email', 
+        F.lower(F.trim('email')))
+    
+    df = df.withColumn('address', 
+        standardize<em>address</em>udf('address'))
+    
+    return df
+</code></pre>
+
+<strong>Results:</strong>
+<ul>
+<li><strong>40% reduction</strong> in data volume</li>
+<li><strong>95% improvement</strong> in data quality scores</li>
+<li><strong>Faster migration</strong> with cleaner data</li>
+<li><strong>Reduced storage costs</strong> in cloud</li>
+</ol>
+
+<h2>Use Case 4: Incremental ETL with Change Data Capture</h2>
+
+<h3>Business Requirements</h3>
+<p>A financial services organization needed real-time data sync between source and target systems with:</p>
+<ul>
+<li>Sub-second latency for critical data</li>
+<li>Full audit trail of changes</li>
+<li>Rollback capabilities</li>
+<li>High availability</li>
+</ol>
+
+<h3>CDC Implementation</h3>
+
+<strong>Architecture:</strong>
+<pre><code class="language-">Source Database → Change Tracking → CDC Pipeline → Target Database
+                      ↓                  ↓              ↓
+                Change Logs        Transformation    Apply Changes
+</code></pre>
+
+<strong>Change Data Capture Setup:</strong>
+<pre><code class="language-sql">-- Enable change tracking on source
+ALTER TABLE customer 
+ENABLE CHANGE_TRACKING 
+WITH (TRACK<em>COLUMNS</em>UPDATED = ON);
+
+-- Query changes
+SELECT 
+    ct.customer_id,
+    ct.SYS<em>CHANGE</em>OPERATION,
+    ct.SYS<em>CHANGE</em>VERSION,
+    c.*
+FROM CHANGETABLE(CHANGES customer, @last<em>sync</em>version) ct
+LEFT JOIN customer c ON ct.customer<em>id = c.customer</em>id;
+</code></pre>
+
+<strong>CDC Pipeline:</strong>
+<pre><code class="language-python">def process<em>cdc</em>changes(last_version):
+    # Get changes since last version
+    changes = get<em>changes</em>since(last_version)
+    
+    for change in changes:
+        if change.operation == 'INSERT':
+            insert_record(change.data)
+        elif change.operation == 'UPDATE':
+            update_record(change.data)
+        elif change.operation == 'DELETE':
+            delete_record(change.id)
+    
+    # Update last processed version
+    update<em>last</em>version(max(changes.version))
+</code></pre>
+
+<strong>Results:</strong>
+<ul>
+<li><strong>< 1 second</strong> latency for critical data</li>
+<li><strong>100% audit trail</strong> of all changes</li>
+<li><strong>Zero data loss</strong> during sync</li>
+<li><strong>99.99% uptime</strong> achieved</li>
+</ol>
+
+<h2>Technical Best Practices</h2>
+
+<h3>1. Incremental Loading Strategy</h3>
+
+<strong>Pattern 1: Timestamp-Based</strong>
+<pre><code class="language-python">def incremental<em>load</em>timestamp(last<em>load</em>time):
+    new_data = source.filter(
+        F.col('updated<em>timestamp') > last</em>load_time
+    )
+    return new_data
+</code></pre>
+
+<strong>Pattern 2: Change Tracking</strong>
+<pre><code class="language-python">def incremental<em>load</em>cdc(last<em>sync</em>version):
+    changes = get<em>cdc</em>changes(last<em>sync</em>version)
+    return process_changes(changes)
+</code></pre>
+
+<strong>Pattern 3: Hash Comparison</strong>
+<pre><code class="language-python">def incremental<em>load</em>hash(source<em>hash, target</em>hash):
+    changed<em>records = compare</em>hashes(source<em>hash, target</em>hash)
+    return changed_records
+</code></pre>
+
+<h3>2. Error Handling & Recovery</h3>
+
+<pre><code class="language-python">class ResilientETL:
+    def execute<em>with</em>retry(self, max_retries=3):
+        for attempt in range(max_retries):
+            try:
+                return self.execute()
+            except Exception as e:
+                if attempt == max_retries - 1:
+                    raise
+                self.handle_error(e)
+                time.sleep(2 ** attempt)  # Exponential backoff
+</code></pre>
+
+<h3>3. Data Validation Framework</h3>
+
+<pre><code class="language-python">class DataValidator:
+    def validate(self, df, rules):
+        errors = []
+        for rule in rules:
+            if rule.type == 'not_null':
+                errors.extend(self.check<em>not</em>null(df, rule.column))
+            elif rule.type == 'range':
+                errors.extend(self.check_range(df, rule.column, rule.min, rule.max))
+            elif rule.type == 'format':
+                errors.extend(self.check_format(df, rule.column, rule.pattern))
+        return errors
+</code></pre>
+
+<h3>4. Performance Optimization</h3>
+
+<strong>Parallel Processing:</strong>
+<pre><code class="language-python"><h1>Process multiple tables in parallel</h1>
+tables = ['customer', 'product', 'order', 'transaction']
+results = Parallel(n_jobs=4)(
+    delayed(process_table)(table) for table in tables
+)
+</code></pre>
+
+<strong>Batch Processing:</strong>
+<pre><code class="language-python"><h1>Process in batches for large datasets</h1>
+batch_size = 10000
+for i in range(0, len(df), batch_size):
+    batch = df[i:i+batch_size]
+    process_batch(batch)
+</code></pre>
+
+<h2>Migration Checklist</h2>
+
+<h3>Pre-Migration</h3>
+<ul>
+<li>[ ] Complete data assessment</li>
+<li>[ ] Design target architecture</li>
+<li>[ ] Build and test ETL pipelines</li>
+<li>[ ] Establish performance baselines</li>
+<li>[ ] Plan cutover strategy</li>
+<li>[ ] Prepare rollback procedures</li>
+</ol>
+
+<h3>Migration</h3>
+<ul>
+<li>[ ] Load historical data</li>
+<li>[ ] Set up incremental sync</li>
+<li>[ ] Run parallel validation</li>
+<li>[ ] Execute cutover plan</li>
+<li>[ ] Validate post-migration</li>
+</ol>
+
+<h3>Post-Migration</h3>
+<ul>
+<li>[ ] Performance tuning</li>
+<li>[ ] User training</li>
+<li>[ ] Monitoring setup</li>
+<li>[ ] Documentation updates</li>
+<li>[ ] Legacy system decommission</li>
+</ol>
+
+<h2>Related Projects</h2>
+
+<ul>
+<li><a href="../projects/enterprise-data-warehouse-migration/">Enterprise Data Warehouse Migration</a></li>
+<li><a href="../projects/Metadata-driven%20ETL%20framework/">Metadata-driven ETL Framework</a></li>
+<li><a href="../projects/DataCleanUpAheadofMigration/">Data Cleanup Ahead of Migration</a></li>
+<li><a href="../projects/ETL%20automation%20solution/">ETL Automation Solution</a></li>
+</ol>
+
+<h2>Conclusion</h2>
+
+<p>Enterprise ETL and migration projects require careful planning, proven frameworks, and robust execution. The key to success is following a structured approach, implementing reusable patterns, and ensuring data quality throughout the process.</p>
+
+<strong>Key Takeaways:</strong>
+<ol>
+<li>Phased approach reduces risk and enables validation</li>
+<li>Metadata-driven frameworks enable standardization and speed</li>
+<li>Data cleanup before migration saves costs and improves quality</li>
+<li>Incremental loading strategies enable near real-time sync</li>
+<li>Comprehensive testing and validation are critical</li>
+</ol>
+
+<p>---</p>
+
+<strong>Next Steps:</strong>
+<ul>
+<li><a href="./ml-ai-data-engineering.html">ML/AI Data Engineering</a></li>
+<li><a href="./data-modeling-architecture.html">Data Modeling & Architecture</a></li>
+</ol>
+
+
+        </div>
+        
+        <a href="../index.html" class="back-link">← Back to Blog</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p><strong>Muhammad Siddique</strong> | Data Engineering Professional</p>
+                <p>Phone: <a href="tel:+923315868725">+92 331 5868725</a> | 
+                   Email: <a href="mailto:siddique.dea@gmail.com">siddique.dea@gmail.com</a> | 
+                   <a href="https://www.linkedin.com/in/siddique-datalover" target="_blank">LinkedIn</a></p>
+                <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                    &copy; 2025 Muhammad Siddique | Data Engineering Blog & Portfolio
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

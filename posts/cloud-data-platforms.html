@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Modern Cloud Data Platforms: Azure, Snowflake, and Databricks - Muhammad Siddique Data Engineering Blog">
+    <meta name="keywords" content="data engineering, Power BI, Azure, data analytics, Modern Cloud Data Platforms: Azure, Snowflake, and Databricks">
+    <meta name="author" content="Muhammad Siddique">
+    <title>Modern Cloud Data Platforms: Azure, Snowflake, and Databricks | Muhammad Siddique - Data Engineering Blog</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #1abc9c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #7f8c8d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent);
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .article {
+            background: white;
+            padding: 3rem;
+            margin: 3rem auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            max-width: 1000px;
+        }
+        
+        .article-header {
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .article-header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        
+        .article-meta {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+        
+        .article-content {
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+        
+        .article-content h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin: 2.5rem 0 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        .article-content h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem 0;
+            padding-top: 1rem;
+        }
+        
+        .article-content h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin: 1.5rem 0 0.8rem 0;
+        }
+        
+        .article-content h4 {
+            color: var(--dark);
+            font-size: 1.3rem;
+            margin: 1.2rem 0 0.6rem 0;
+        }
+        
+        .article-content p {
+            margin-bottom: 1.2rem;
+            color: #444;
+        }
+        
+        .article-content ul, .article-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+        
+        .article-content li {
+            margin-bottom: 0.8rem;
+            color: #444;
+        }
+        
+        .article-content code {
+            background-color: #f4f4f4;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e83e8c;
+        }
+        
+        .article-content pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .article-content pre code {
+            background-color: transparent;
+            color: #ecf0f1;
+            padding: 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .article-content a {
+            color: var(--secondary);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .article-content a:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        
+        .article-content strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        .article-content em {
+            font-style: italic;
+            color: #555;
+        }
+        
+        .article-content hr {
+            border: none;
+            border-top: 2px solid var(--light);
+            margin: 2rem 0;
+        }
+        
+        .article-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .back-link:hover {
+            background-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            text-align: center;
+            padding: 2rem 0;
+        }
+        
+        .footer-content p {
+            margin-bottom: 1rem;
+            color: #bdc3c7;
+        }
+        
+        .footer-content a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .footer-content a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .article {
+                padding: 2rem 1.5rem;
+                margin: 2rem auto;
+            }
+            
+            .article-header h1 {
+                font-size: 2rem;
+            }
+            
+            .article-content {
+                font-size: 1rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">Muhammad Siddique | Data<span>Engineering</span>.Blog</a>
+                <nav>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../index.html#blog">Blog</a></li>
+                        <li><a href="about-author.html">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="article">
+        <div class="article-header">
+            <h1>Modern Cloud Data Platforms: Azure, Snowflake, and Databricks</h1>
+            <div class="article-meta">
+                <strong>Muhammad Siddique</strong> | Data Engineering Professional | 
+                <a href="../index.html" style="color: var(--secondary);">Back to Blog</a>
+            </div>
+        </div>
+        
+        <div class="article-content">
+<h1>Modern Cloud Data Platforms: Azure, Snowflake, and Databricks</h1>
+
+<em>Published: January 2025 | By: Cloud Data Engineering Specialist</em>
+
+<h2>Overview</h2>
+
+<p>Modern cloud data platforms have revolutionized how organizations build and scale data infrastructure. This article explores production implementations using Azure Databricks, Snowflake, and Microsoft Fabric, covering lakehouse architectures, data mesh patterns, and hybrid cloud strategies.</p>
+
+<h2>The Evolution of Data Platforms</h2>
+
+<p>Traditional data warehouses had limitations:</p>
+<ul>
+<li><strong>Rigid schemas</strong> that were hard to evolve</li>
+<li><strong>Limited scalability</strong> for growing data volumes</li>
+<li><strong>High costs</strong> for storage and compute</li>
+<li><strong>Vendor lock-in</strong> with proprietary technologies</li>
+</ol>
+
+<p>Modern cloud platforms address these with:</p>
+<ul>
+<li><strong>Schema-on-read</strong> flexibility</li>
+<li><strong>Elastic scaling</strong> on demand</li>
+<li><strong>Separation of storage and compute</strong></li>
+<li><strong>Open standards</strong> and formats</li>
+</ol>
+
+<h2>Architecture Pattern: Data Lakehouse</h2>
+
+<p>The lakehouse architecture combines:</p>
+<ul>
+<li><strong>Data lake flexibility</strong> for raw data storage</li>
+<li><strong>Data warehouse performance</strong> for analytics</li>
+<li><strong>ACID transactions</strong> for reliability</li>
+<li><strong>Open formats</strong> (Parquet, Delta) for interoperability</li>
+</ol>
+
+<pre><code class="language-">Data Sources → Data Lake (Bronze) → Processing → Delta Lake (Silver/Gold) → Analytics
+</code></pre>
+
+<h2>Use Case 1: Azure Databricks Lakehouse Platform</h2>
+
+<h3>Business Requirements</h3>
+<p>An enterprise needed a unified analytics platform to:</p>
+<ul>
+<li>Process petabyte-scale data from multiple sources</li>
+<li>Support both batch and streaming analytics</li>
+<li>Enable ML model training and serving</li>
+<li>Provide self-service analytics capabilities</li>
+</ol>
+
+<h3>Implementation</h3>
+
+<strong>Platform Architecture:</strong>
+<pre><code class="language-">Data Sources → ADLS Gen2 → Databricks → Delta Lake → Power BI
+                ↓              ↓            ↓           ↓
+            Bronze Raw    Processing    Gold Layer   Analytics
+</code></pre>
+
+<strong>Key Features:</strong>
+
+<h4>1. Multi-Layer Data Architecture</h4>
+<pre><code class="language-">Bronze Layer: Raw ingested data (JSON, CSV, Parquet)
+Silver Layer: Cleaned, validated, enriched data
+Gold Layer: Business-level aggregated data
+</code></pre>
+
+<h4>2. Delta Lake Integration</h4>
+<pre><code class="language-python"><h1>Delta Lake benefits</h1>
+<ul>
+<li>ACID transactions</li>
+<li>Time travel (data versioning)</li>
+<li>Schema evolution</li>
+<li>Upsert operations</li>
+<li>Z-ordering for optimization</li>
+</ol>
+
+<h1>Example: Upsert operation</h1>
+from delta.tables import DeltaTable
+
+delta_table.alias("target").merge(
+    source_df.alias("source"),
+    "target.id = source.id"
+).whenMatchedUpdateAll().whenNotMatchedInsertAll().execute()
+</code></pre>
+
+<h4>3. Performance Optimization</h4>
+<pre><code class="language-python"><h1>Z-ordering for query optimization</h1>
+df.write.format("delta").option("delta.autoOptimize.optimizeWrite", "true") \
+    .option("delta.autoOptimize.autoCompact", "true") \
+    .mode("overwrite").save("/gold/customer_data")
+</code></pre>
+
+<strong>Results:</strong>
+<ul>
+<li><strong>65% reduction</strong> in query times</li>
+<li><strong>40% reduction</strong> in storage costs</li>
+<li><strong>Petabyte-scale</strong> data processing</li>
+<li><strong>Sub-second</strong> query performance for analytics</li>
+</ol>
+
+<h2>Use Case 2: Snowflake Data Mesh Platform</h2>
+
+<h3>Business Requirements</h3>
+<p>A multi-tenant SaaS platform needed a data mesh architecture to:</p>
+<ul>
+<li>Enable domain-driven data ownership</li>
+<li>Support multi-tenant data isolation</li>
+<li>Provide self-service data access</li>
+<li>Scale to thousands of tenants</li>
+</ol>
+
+<h3>Implementation</h3>
+
+<strong>Data Mesh Architecture:</strong>
+<pre><code class="language-">Data Domains → Domain Data Products → Centralized Governance → Consumption Layer
+     ↓                ↓                        ↓                      ↓
+ Customer      Product Catalog          Data Catalog          Analytics
+ Marketing         Sales Data          Access Control        ML Models
+ Operations       Operations Data      Quality Monitoring    Reporting
+</code></pre>
+
+<strong>Key Components:</strong>
+
+<h4>1. Domain-Oriented Data Products</h4>
+<pre><code class="language-sql">-- Customer domain data product
+CREATE DATABASE customer_domain;
+CREATE SCHEMA customer<em>domain.customer</em>360;
+
+-- Product domain data product
+CREATE DATABASE product_domain;
+CREATE SCHEMA product<em>domain.product</em>catalog;
+</code></pre>
+
+<h4>2. Centralized Data Catalog</h4>
+<ul>
+<li>Metadata management</li>
+<li>Data lineage tracking</li>
+<li>Access policies</li>
+<li>Quality metrics</li>
+</ol>
+
+<h4>3. Multi-Tenancy Strategy</h4>
+<pre><code class="language-sql">-- Row-level security for tenant isolation
+CREATE ROW ACCESS POLICY tenant_isolation
+AS (tenant<em>id) REFERENCES current</em>user_tenant();
+</code></pre>
+
+<strong>Results:</strong>
+<ul>
+<li><strong>1000+ tenants</strong> supported</li>
+<li><strong>99.9% uptime</strong> SLA</li>
+<li><strong>Self-service</strong> data access</li>
+<li><strong>Automated</strong> data quality monitoring</li>
+</ol>
+
+<h2>Use Case 3: Microsoft Fabric Unified Platform</h2>
+
+<h3>Business Requirements</h3>
+<p>An organization wanted to consolidate multiple analytics tools into a unified platform with:</p>
+<ul>
+<li>End-to-end data integration</li>
+<li>Unified data modeling</li>
+<li>Self-service BI capabilities</li>
+<li>Integrated ML capabilities</li>
+</ol>
+
+<h3>Implementation</h3>
+
+<strong>Fabric Architecture:</strong>
+<pre><code class="language-">Data Sources → Data Factory → OneLake → Power BI → Business Users
+                    ↓              ↓         ↓
+            ETL Pipelines    Unified    Dashboards
+                            Storage
+</code></pre>
+
+<strong>Key Features:</strong>
+
+<h4>1. OneLake (Unified Storage)</h4>
+<ul>
+<li>Single storage location for all data</li>
+<li>Open data formats (Delta, Parquet)</li>
+<li>Multi-engine access (Spark, SQL, Power BI)</li>
+</ol>
+
+<h4>2. Unified Data Modeling</h4>
+<ul>
+<li>Semantic models for business logic</li>
+<li>Reusable across Power BI, Excel, Analysis Services</li>
+</ol>
+
+<h4>3. Integrated Services</h4>
+<ul>
+<li>Data Factory for ETL</li>
+<li>Dataflows for data transformation</li>
+<li>Power BI for visualization</li>
+<li>ML models integration</li>
+</ol>
+
+<strong>Results:</strong>
+<ul>
+<li><strong>50% reduction</strong> in time to insights</li>
+<li><strong>Single source of truth</strong> for analytics</li>
+<li><strong>Reduced complexity</strong> in data stack</li>
+<li><strong>Improved</strong> data governance</li>
+</ol>
+
+<h2>Use Case 4: Hybrid Cloud Data Infrastructure</h2>
+
+<h3>Business Requirements</h3>
+<p>A financial services organization needed a hybrid cloud strategy to:</p>
+<ul>
+<li>Maintain sensitive data on-premises</li>
+<li>Leverage cloud for analytics and ML</li>
+<li>Ensure compliance with regulations</li>
+<li>Support disaster recovery</li>
+</ol>
+
+<h3>Implementation</h3>
+
+<strong>Hybrid Architecture:</strong>
+<pre><code class="language-">On-Premises Systems → Azure Data Gateway → Azure Cloud Services
+      ↓                      ↓                      ↓
+SQL Server            Secure Connection    Databricks
+Oracle                Data Sync           Storage Accounts
+File Systems         Monitoring          ML Services
+</code></pre>
+
+<strong>Key Features:</strong>
+
+<h4>1. Secure Data Gateway</h4>
+<ul>
+<li>Encrypted connections</li>
+<li>On-premises data agents</li>
+<li>Incremental data sync</li>
+<li>Network isolation</li>
+</ol>
+
+<h4>2. Data Synchronization</h4>
+<pre><code class="language-python"><h1>Incremental data load</h1>
+def sync<em>incremental</em>data(source, target):
+    # Get last sync timestamp
+    last<em>sync = get</em>last<em>sync</em>timestamp()
+    
+    # Extract changed data
+    changed<em>data = extract</em>changes<em>since(last</em>sync)
+    
+    # Load to cloud
+    load<em>to</em>cloud(changed_data)
+    
+    # Update sync timestamp
+    update<em>sync</em>timestamp()
+</code></pre>
+
+<h4>3. Disaster Recovery</h4>
+<ul>
+<li>Automated backups</li>
+<li>Cross-region replication</li>
+<li>Recovery procedures</li>
+<li>RTO/RPO SLAs</li>
+</ol>
+
+<strong>Results:</strong>
+<ul>
+<li><strong>99.9% availability</strong> across hybrid environment</li>
+<li><strong>Secure data transfer</strong> with encryption</li>
+<li><strong>Compliance</strong> with regulations</li>
+<li><strong>Disaster recovery</strong> in minutes</li>
+</ol>
+
+<h2>Technical Deep Dive</h2>
+
+<h3>Performance Optimization Strategies</h3>
+
+<h4>1. Partitioning</h4>
+<pre><code class="language-python"><h1>Date-based partitioning</h1>
+df.write.partitionBy("year", "month", "day").format("delta").save("/data")
+
+<h1>Benefits:</h1>
+<h1>- Partition pruning in queries</h1>
+<h1>- Parallel processing</h1>
+<h1>- Reduced data scanning</h1>
+</code></pre>
+
+<h4>2. Clustering/Z-Ordering</h4>
+<pre><code class="language-python"><h1>Z-ordering for multi-column queries</h1>
+df.write.format("delta") \
+    .option("delta.autoOptimize.optimizeWrite", "true") \
+    .option("delta.autoOptimize.autoCompact", "true") \
+    .save("/data")
+
+<h1>Optimizes queries filtering on multiple columns</h1>
+</code></pre>
+
+<h4>3. Caching</h4>
+<pre><code class="language-python"><h1>Cache frequently accessed data</h1>
+df.cache()
+spark.catalog.cacheTable("gold.customer_data")
+
+<h1>Use when:</h1>
+<h1>- Data accessed multiple times</h1>
+<h1>- Dataset fits in memory</h1>
+<h1>- Query patterns are predictable</h1>
+</code></pre>
+
+<h3>Cost Optimization</h3>
+
+<h4>1. Compute Right-Sizing</h4>
+<pre><code class="language-python"><h1>Start with smaller clusters, scale up as needed</h1>
+cluster_config = {
+    'min_workers': 2,
+    'max_workers': 10,
+    'auto_scale': True
+}
+</code></pre>
+
+<h4>2. Storage Tiering</h4>
+<ul>
+<li>Hot: Frequently accessed data</li>
+<li>Cool: Infrequently accessed data</li>
+<li>Archive: Long-term storage</li>
+</ol>
+
+<h4>3. Query Optimization</h4>
+<pre><code class="language-sql">-- Use appropriate file formats (Parquet, Delta)
+-- Enable predicate pushdown
+-- Use column pruning
+-- Optimize join strategies
+</code></pre>
+
+<h3>Security Best Practices</h3>
+
+<h4>1. Access Control</h4>
+<pre><code class="language-python"><h1>Role-based access control</h1>
+roles = {
+    'data_engineer': ['read', 'write'],
+    'data_analyst': ['read'],
+    'data<em>scientist': ['read', 'write</em>ml_models']
+}
+</code></pre>
+
+<h4>2. Encryption</h4>
+<ul>
+<li>Encryption at rest</li>
+<li>Encryption in transit (TLS)</li>
+<li>Key management (Azure Key Vault)</li>
+</ol>
+
+<h4>3. Audit Logging</h4>
+<pre><code class="language-python"><h1>Track all data access</h1>
+audit_logs = {
+    'user': user_id,
+    'action': action,
+    'resource': resource,
+    'timestamp': datetime.now()
+}
+</code></pre>
+
+<h2>Best Practices</h2>
+
+<h3>1. Choose the Right Platform</h3>
+<ul>
+<li><strong>Databricks</strong>: Unified analytics, ML focus</li>
+<li><strong>Snowflake</strong>: Data warehousing, SQL-centric</li>
+<li><strong>Fabric</strong>: Microsoft ecosystem integration</li>
+<li><strong>Hybrid</strong>: Regulatory or on-prem requirements</li>
+</ol>
+
+<h3>2. Design for Scale</h3>
+<ul>
+<li>Start small, scale horizontally</li>
+<li>Use partitioning strategies</li>
+<li>Implement incremental processing</li>
+<li>Monitor and optimize continuously</li>
+</ol>
+
+<h3>3. Data Governance</h3>
+<ul>
+<li>Implement data catalog</li>
+<li>Track data lineage</li>
+<li>Enforce data quality</li>
+<li>Monitor access patterns</li>
+</ol>
+
+<h3>4. Cost Management</h3>
+<ul>
+<li>Monitor cloud costs regularly</li>
+<li>Right-size compute resources</li>
+<li>Use appropriate storage tiers</li>
+<li>Implement data lifecycle policies</li>
+</ol>
+
+<h2>Related Projects</h2>
+
+<ul>
+<li><a href="../projects/azuredatabricks_lakehouse/">Azure Databricks Lakehouse</a></li>
+<li><a href="../projects/snowflake<em>data</em>mesh_platform/">Snowflake Data Mesh Platform</a></li>
+<li><a href="../projects/hybrid-cloud-data-infrastructure/">Hybrid Cloud Data Infrastructure</a></li>
+<li><a href="../projects/unified-data-integration-fabric/">Microsoft Fabric Unified Platform</a></li>
+</ol>
+
+<h2>Conclusion</h2>
+
+<p>Modern cloud data platforms offer unprecedented scalability, flexibility, and performance. The key is choosing the right platform for your use case, implementing proper architecture patterns, and optimizing for cost and performance.</p>
+
+<strong>Key Takeaways:</strong>
+<ol>
+<li>Lakehouse architecture combines lake flexibility with warehouse performance</li>
+<li>Data mesh enables domain-driven data ownership</li>
+<li>Hybrid cloud supports regulatory and legacy requirements</li>
+<li>Performance optimization is critical at scale</li>
+<li>Cost management requires continuous monitoring</li>
+</ol>
+
+<p>---</p>
+
+<strong>Next Steps:</strong>
+<ul>
+<li><a href="./enterprise-etl-migration.html">Enterprise ETL & Migration</a></li>
+<li><a href="./ml-ai-data-engineering.html">ML/AI Data Engineering</a></li>
+</ol>
+
+
+        </div>
+        
+        <a href="../index.html" class="back-link">← Back to Blog</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p><strong>Muhammad Siddique</strong> | Data Engineering Professional</p>
+                <p>Phone: <a href="tel:+923315868725">+92 331 5868725</a> | 
+                   Email: <a href="mailto:siddique.dea@gmail.com">siddique.dea@gmail.com</a> | 
+                   <a href="https://www.linkedin.com/in/siddique-datalover" target="_blank">LinkedIn</a></p>
+                <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                    &copy; 2025 Muhammad Siddique | Data Engineering Blog & Portfolio
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

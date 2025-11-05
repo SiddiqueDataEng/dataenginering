@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Metadata-Driven ETL Framework: Orchestrating 1,000+ Packages - Muhammad Siddique Data Engineering Blog">
+    <title>Metadata-Driven ETL Framework: Orchestrating 1,000+ Packages | Muhammad Siddique - Data Engineering Blog</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #1abc9c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #7f8c8d;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .container { width: 90%; max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+        }
+        .logo span { color: var(--accent); }
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        nav ul li a:hover {
+            color: var(--accent);
+            background-color: rgba(255,255,255,0.1);
+        }
+        .article {
+            background: white;
+            padding: 3rem;
+            margin: 3rem auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            max-width: 1000px;
+        }
+        .article-header {
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+        .article-header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        .article-meta {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+        .article-content {
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+        .article-content h1 { color: var(--primary); font-size: 2.2rem; margin: 2.5rem 0 1.5rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid var(--light); }
+        .article-content h2 { color: var(--primary); font-size: 1.8rem; margin: 2rem 0 1rem 0; padding-top: 1rem; }
+        .article-content h3 { color: var(--primary); font-size: 1.5rem; margin: 1.5rem 0 0.8rem 0; }
+        .article-content h4 { color: var(--dark); font-size: 1.3rem; margin: 1.2rem 0 0.6rem 0; }
+        .article-content p { margin-bottom: 1.2rem; color: #444; }
+        .article-content ul, .article-content ol { margin: 1.5rem 0; padding-left: 2rem; }
+        .article-content li { margin-bottom: 0.8rem; color: #444; }
+        .article-content code {
+            background-color: #f4f4f4;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e83e8c;
+        }
+        .article-content pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .article-content pre code {
+            background-color: transparent;
+            color: #ecf0f1;
+            padding: 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .article-content a { color: var(--secondary); text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.3s; }
+        .article-content a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+        .article-content strong { color: var(--primary); font-weight: 700; }
+        .article-content em { font-style: italic; color: #555; }
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .back-link:hover {
+            background-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        footer {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+        .footer-content {
+            text-align: center;
+            padding: 2rem 0;
+        }
+        .footer-content p { margin-bottom: 1rem; color: #bdc3c7; }
+        .footer-content a { color: var(--accent); text-decoration: none; }
+        .footer-content a:hover { text-decoration: underline; }
+        @media (max-width: 768px) {
+            .article { padding: 2rem 1.5rem; margin: 2rem auto; }
+            .article-header h1 { font-size: 2rem; }
+            .article-content { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">Muhammad Siddique | Data<span>Engineering</span>.Blog</a>
+                <nav>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../index.html#blog">Blog</a></li>
+                        <li><a href="about-author.html">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="article">
+        <div class="article-header">
+            <h1>Metadata-Driven ETL Framework: Orchestrating 1,000+ Packages</h1>
+            <div class="article-meta">
+                <strong>Muhammad Siddique</strong> | Data Engineering Professional | 
+                <a href="../index.html" style="color: var(--secondary);">Back to Blog</a>
+            </div>
+        </div>
+        
+        <div class="article-content">
+<h1>Metadata-Driven ETL Framework: Orchestrating 1,000+ Packages</h1>
+
+<em>Published: January 2025 | By: Data Engineering Professional</em>
+
+<h2>Overview</h2>
+
+<p>Building a metadata-driven controller and logging framework to orchestrate 1,000+ stored procedures and SSIS packages, enabling automated execution, monitoring, retry logic, and seamless migration to Azure. This framework reduces manual intervention by ~80% and significantly improves troubleshooting visibility.</p>
+
+<h2>The Challenge</h2>
+
+<strong>Business Requirements:</strong>
+<p>- Orchestrate 1,000+ SSIS packages and stored procedures</p>
+<p>- Reduce manual runs by ~80%</p>
+<p>- Improve visibility and troubleshooting</p>
+<p>- Enable seamless migration to Azure</p>
+<p>- Implement centralized logging and monitoring</p>
+
+<strong>Technical Challenges:</strong>
+<p>- Managing dependencies across 1,000+ packages</p>
+<p>- Coordinating execution schedules</p>
+<p>- Handling failures and retries</p>
+<p>- Monitoring and logging at scale</p>
+<p>- Hybrid on-premises and cloud execution</p>
+
+<p>---</p>
+
+<h2>Architecture Overview</h2>
+
+<h3>Framework Architecture</h3>
+
+<pre><code class="language-">┌─────────────────────────────────────────────────────┐
+<p>│           Metadata Database (SSISConfig)             │</p>
+<p>│  • Package Configuration                             │</p>
+<p>│  • Schedules & Dependencies                          │</p>
+<p>│  • Credentials (Key Vault References)                │</p>
+<p>│  • Retry Policies                                     │</p>
+<p>│  • Execution Logs                                    │</p>
+<p>└──────────────────┬──────────────────────────────────┘</p>
+<p>                   │</p>
+<p>       ┌───────────┴───────────┐</p>
+<p>       │                       │</p>
+<p>┌──────▼──────────┐   ┌────────▼────────┐</p>
+<p>│  T-SQL          │   │  Azure Data     │</p>
+<p>│  Orchestrator   │   │  Factory        │</p>
+<p>│  (On-Prem)      │   │  (Cloud)        │</p>
+<p>└──────┬──────────┘   └────────┬────────┘</p>
+<p>       │                       │</p>
+<p>┌──────▼───────────────────────▼────────┐</p>
+<p>│      Execution Layer                   │</p>
+<p>│  • SSIS Packages (On-Prem/Cloud)      │</p>
+<p>│  • Stored Procedures                   │</p>
+<p>│  • Azure-SSIS Integration Runtime     │</p>
+<p>└──────────────────┬────────────────────┘</p>
+<p>                   │</p>
+<p>┌──────────────────▼────────────────────┐</p>
+<p>│      Logging & Monitoring              │</p>
+<p>│  • ApplicationInstance                 │</p>
+<p>│  • PackageExecution                    │</p>
+<p>│  • LogEntry (Detailed)                 │</p>
+<p>│  • Azure Monitor / Log Analytics        │</p>
+<p>└────────────────────────────────────────┘</p>
+</code></pre>
+
+<h3>Key Components</h3>
+
+<strong>Metadata Database (SSISConfig):</strong>
+<p>- Centralized configuration store</p>
+<p>- Package metadata and dependencies</p>
+<p>- Schedule and retry policies</p>
+<p>- Execution history and logging</p>
+
+<strong>Orchestrator:</strong>
+<p>- T-SQL controller for queue management</p>
+<p>- Azure Data Factory pipelines</p>
+<p>- Priority-based execution</p>
+<p>- Dependency resolution</p>
+
+<strong>Execution Layer:</strong>
+<p>- SSIS packages (on-premises and cloud)</p>
+<p>- Stored procedures</p>
+<p>- Azure-SSIS Integration Runtime</p>
+<p>- Self-Hosted Integration Runtime</p>
+
+<strong>Logging & Monitoring:</strong>
+<p>- ApplicationInstance tracking</p>
+<p>- PackageExecution logs</p>
+<p>- Detailed step/task logs</p>
+<p>- Azure Monitor integration</p>
+
+<p>---</p>
+
+<h2>Metadata Model Design</h2>
+
+<h3>Core Tables</h3>
+
+<strong>Packages Table:</strong>
+<pre><code class="language-sql">CREATE TABLE dbo.Packages (
+<p>  PackageID      INT IDENTITY PRIMARY KEY,</p>
+<p>  PackageName    NVARCHAR(260),</p>
+<p>  ProjectName    NVARCHAR(260),</p>
+<p>  DeploymentMode VARCHAR(20), -- 'SSISDB'|'FileSystem'</p>
+<p>  IsEnabled      BIT DEFAULT 1,</p>
+<p>  NodeCount      INT DEFAULT 1,</p>
+<p>  TimeoutMinutes INT DEFAULT 120,</p>
+<p>  RetryPolicy    NVARCHAR(MAX), -- JSON retry configuration</p>
+<p>  LastModifiedBy NVARCHAR(100),</p>
+<p>  LastModifiedAt DATETIME2 DEFAULT SYSUTCDATETIME()</p>
+<p>);</p>
+</code></pre>
+
+<strong>Orchestrator Queue:</strong>
+<pre><code class="language-sql">CREATE TABLE dbo.OrchQueue (
+<p>  QueueID       INT IDENTITY PRIMARY KEY,</p>
+<p>  PackageID     INT REFERENCES dbo.Packages(PackageID),</p>
+<p>  ScheduledFor  DATETIME2,</p>
+<p>  Priority      TINYINT DEFAULT 5, -- 1=Highest, 10=Lowest</p>
+<p>  Status        VARCHAR(20) DEFAULT 'Pending', -- Pending, Running, Completed, Failed</p>
+<p>  LockedBy      NVARCHAR(100) NULL,</p>
+<p>  LockedAt      DATETIME2 NULL</p>
+<p>);</p>
+</code></pre>
+
+<strong>Application Instance:</strong>
+<pre><code class="language-sql">CREATE TABLE dbo.ApplicationInstance (
+<p>  AppInstanceID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),</p>
+<p>  StartedAt     DATETIME2,</p>
+<p>  FinishedAt    DATETIME2 NULL,</p>
+<p>  Status        VARCHAR(20), -- Running, Completed, Failed</p>
+<p>  Initiator     NVARCHAR(100),</p>
+<p>  Remarks       NVARCHAR(4000),</p>
+<p>  CorrelationID NVARCHAR(100) -- For log correlation</p>
+<p>);</p>
+</code></pre>
+
+<strong>Package Execution Log:</strong>
+<pre><code class="language-sql">CREATE TABLE dbo.PackageExecution (
+<p>  ExecID         BIGINT IDENTITY PRIMARY KEY,</p>
+<p>  AppInstanceID  UNIQUEIDENTIFIER REFERENCES dbo.ApplicationInstance(AppInstanceID),</p>
+<p>  QueueID        INT REFERENCES dbo.OrchQueue(QueueID),</p>
+<p>  PackageID      INT REFERENCES dbo.Packages(PackageID),</p>
+<p>  StartedAt      DATETIME2,</p>
+<p>  FinishedAt     DATETIME2,</p>
+<p>  Status         VARCHAR(20), -- Running, Success, Failed, Cancelled</p>
+<p>  RowsProcessed  BIGINT NULL,</p>
+<p>  DurationSeconds INT NULL,</p>
+<p>  ErrorCode      INT NULL,</p>
+<p>  ErrorMessage   NVARCHAR(4000) NULL,</p>
+<p>  RetryCount     INT DEFAULT 0,</p>
+<p>  ExecutionMode VARCHAR(20) -- 'OnPrem'|'Azure'</p>
+<p>);</p>
+</code></pre>
+
+<strong>Detailed Log Entry:</strong>
+<pre><code class="language-sql">CREATE TABLE dbo.LogEntry (
+<p>  LogID       BIGINT IDENTITY PRIMARY KEY,</p>
+<p>  ExecID      BIGINT REFERENCES dbo.PackageExecution(ExecID),</p>
+<p>  LoggedAt    DATETIME2 DEFAULT SYSUTCDATETIME(),</p>
+<p>  Level       VARCHAR(10), -- INFO, WARN, ERROR</p>
+<p>  Component   NVARCHAR(200),</p>
+<p>  Message     NVARCHAR(MAX),</p>
+<p>  StackTrace  NVARCHAR(MAX) NULL</p>
+<p>);</p>
+</code></pre>
+
+<p>---</p>
+
+<h2>Orchestrator Implementation</h2>
+
+<h3>T-SQL Controller</h3>
+
+<strong>Core Orchestrator Stored Procedure:</strong>
+<pre><code class="language-sql">CREATE PROCEDURE dbo.usp_Orchestrator_ProcessNext
+<p>AS</p>
+<p>BEGIN</p>
+<p>    SET NOCOUNT ON;</p>
+    
+<p>    DECLARE @QueueID INT;</p>
+<p>    DECLARE @PackageID INT;</p>
+<p>    DECLARE @AppInstanceID UNIQUEIDENTIFIER = NEWID();</p>
+    
+<p>    BEGIN TRANSACTION;</p>
+    
+<p>    -- Lock and select next item from queue</p>
+<p>    SELECT TOP 1 </p>
+<p>        @QueueID = QueueID,</p>
+<p>        @PackageID = PackageID</p>
+<p>    FROM dbo.OrchQueue WITH (UPDLOCK, ROWLOCK)</p>
+<p>    WHERE Status = 'Pending' </p>
+<p>        AND ScheduledFor <= GETUTCDATE()</p>
+<p>        AND IsEnabled = 1</p>
+<p>    ORDER BY Priority ASC, ScheduledFor ASC;</p>
+    
+<p>    IF @QueueID IS NOT NULL</p>
+<p>    BEGIN</p>
+<p>        -- Create application instance</p>
+<p>        INSERT INTO dbo.ApplicationInstance (AppInstanceID, StartedAt, Status, Initiator)</p>
+<p>        VALUES (@AppInstanceID, GETUTCDATE(), 'Running', SYSTEM_USER);</p>
+        
+<p>        -- Update queue status</p>
+<p>        UPDATE dbo.OrchQueue</p>
+<p>        SET Status = 'Running',</p>
+<p>            LockedBy = SYSTEM_USER,</p>
+<p>            LockedAt = GETUTCDATE()</p>
+<p>        WHERE QueueID = @QueueID;</p>
+        
+<p>        COMMIT TRANSACTION;</p>
+        
+<p>        -- Execute package (on-premises or queue for ADF)</p>
+<p>        EXEC dbo.usp_ExecutePackage </p>
+<p>            @PackageID = @PackageID,</p>
+<p>            @AppInstanceID = @AppInstanceID,</p>
+<p>            @QueueID = @QueueID;</p>
+<p>    END</p>
+<p>    ELSE</p>
+<p>    BEGIN</p>
+<p>        COMMIT TRANSACTION;</p>
+<p>    END</p>
+<p>END;</p>
+</code></pre>
+
+<h3>Package Execution Logic</h3>
+
+<strong>On-Premises Execution:</strong>
+<pre><code class="language-sql">CREATE PROCEDURE dbo.usp_ExecutePackage
+<p>    @PackageID INT,</p>
+<p>    @AppInstanceID UNIQUEIDENTIFIER,</p>
+<p>    @QueueID INT</p>
+<p>AS</p>
+<p>BEGIN</p>
+<p>    DECLARE @ExecID BIGINT;</p>
+<p>    DECLARE @PackageName NVARCHAR(260);</p>
+<p>    DECLARE @StartTime DATETIME2 = GETUTCDATE();</p>
+<p>    DECLARE @ExitCode INT;</p>
+    
+<p>    SELECT @PackageName = PackageName </p>
+<p>    FROM dbo.Packages </p>
+<p>    WHERE PackageID = @PackageID;</p>
+    
+<p>    -- Log execution start</p>
+<p>    INSERT INTO dbo.PackageExecution </p>
+<p>        (AppInstanceID, QueueID, PackageID, StartedAt, Status)</p>
+<p>    VALUES </p>
+<p>        (@AppInstanceID, @QueueID, @PackageID, @StartTime, 'Running');</p>
+    
+<p>    SET @ExecID = SCOPE_IDENTITY();</p>
+    
+<p>    -- Execute SSIS package via dtexec or SQL Agent</p>
+<p>    -- Capture exit code</p>
+    
+<p>    DECLARE @EndTime DATETIME2 = GETUTCDATE();</p>
+<p>    DECLARE @DurationSeconds INT = DATEDIFF(SECOND, @StartTime, @EndTime);</p>
+    
+<p>    IF @ExitCode = 0</p>
+<p>    BEGIN</p>
+<p>        UPDATE dbo.PackageExecution</p>
+<p>        SET Status = 'Success',</p>
+<p>            FinishedAt = @EndTime,</p>
+<p>            DurationSeconds = @DurationSeconds</p>
+<p>        WHERE ExecID = @ExecID;</p>
+        
+<p>        UPDATE dbo.OrchQueue</p>
+<p>        SET Status = 'Completed'</p>
+<p>        WHERE QueueID = @QueueID;</p>
+<p>    END</p>
+<p>    ELSE</p>
+<p>    BEGIN</p>
+<p>        UPDATE dbo.PackageExecution</p>
+<p>        SET Status = 'Failed',</p>
+<p>            FinishedAt = @EndTime,</p>
+<p>            DurationSeconds = @DurationSeconds,</p>
+<p>            ErrorCode = @ExitCode,</p>
+<p>            ErrorMessage = 'Package execution failed'</p>
+<p>        WHERE ExecID = @ExecID;</p>
+        
+<p>        -- Apply retry policy</p>
+<p>        EXEC dbo.usp_HandleRetry @QueueID, @PackageID;</p>
+<p>    END</p>
+<p>END;</p>
+</code></pre>
+
+<p>---</p>
+
+<h2>Azure Data Factory Integration</h2>
+
+<h3>Metadata-Driven Pipeline</h3>
+
+<strong>Pipeline Structure:</strong>
+<pre><code class="language-json">{
+<p>  "name": "OrchestratorMain",</p>
+<p>  "properties": {</p>
+<p>    "activities": [</p>
+<p>      {</p>
+<p>        "name": "GetPackagesToRun",</p>
+<p>        "type": "Lookup",</p>
+<p>        "typeProperties": {</p>
+<p>          "source": {</p>
+<p>            "type": "SqlSource",</p>
+<p>            "sqlReaderQuery": "SELECT * FROM dbo.OrchQueue WHERE Status='Pending' AND ScheduledFor <= GETUTCDATE()"</p>
+<p>          }</p>
+<p>        }</p>
+<p>      },</p>
+<p>      {</p>
+<p>        "name": "ForEachPackage",</p>
+<p>        "type": "ForEach",</p>
+<p>        "dependsOn": [{"activity": "GetPackagesToRun"}],</p>
+<p>        "typeProperties": {</p>
+<p>          "items": {</p>
+<p>            "value": "@activity('GetPackagesToRun').output.value",</p>
+<p>            "type": "Expression"</p>
+<p>          },</p>
+<p>          "isSequential": false,</p>
+<p>          "batchCount": 5,</p>
+<p>          "activities": [</p>
+<p>            {</p>
+<p>              "name": "StartAzureSSISIR",</p>
+<p>              "type": "WebActivity",</p>
+<p>              "condition": "@equals(item().ExecutionMode, 'Azure')",</p>
+<p>              "typeProperties": {</p>
+<p>                "url": "https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DataFactory/factories/{factoryName}/integrationRuntimes/{irName}/start?api-version=2018-06-01",</p>
+<p>                "method": "POST"</p>
+<p>              }</p>
+<p>            },</p>
+<p>            {</p>
+<p>              "name": "ExecuteSSISPackage",</p>
+<p>              "type": "ExecuteSSISPackage",</p>
+<p>              "typeProperties": {</p>
+<p>                "packageLocation": {</p>
+<p>                  "type": "SSISDB",</p>
+<p>                  "packagePath": "@concat(item().ProjectName, '/', item().PackageName)"</p>
+<p>                },</p>
+<p>                "runtime": {</p>
+<p>                  "type": "Managed",</p>
+<p>                  "computeType": "General",</p>
+<p>                  "coreCount": item().NodeCount</p>
+<p>                },</p>
+<p>                "projectParameters": {</p>
+<p>                  "Environment": "Production"</p>
+<p>                }</p>
+<p>              }</p>
+<p>            },</p>
+<p>            {</p>
+<p>              "name": "UpdateExecutionLog",</p>
+<p>              "type": "SqlServerStoredProcedure",</p>
+<p>              "typeProperties": {</p>
+<p>                "storedProcedureName": "dbo.usp_UpdateExecutionLog",</p>
+<p>                "storedProcedureParameters": {</p>
+<p>                  "ExecID": {"value": "@activity('ExecuteSSISPackage').output.executionId", "type": "String"},</p>
+<p>                  "Status": {"value": "@activity('ExecuteSSISPackage').output.status", "type": "String"}</p>
+<p>                }</p>
+<p>              }</p>
+<p>            },</p>
+<p>            {</p>
+<p>              "name": "StopAzureSSISIR",</p>
+<p>              "type": "WebActivity",</p>
+<p>              "condition": "@equals(item().ExecutionMode, 'Azure')",</p>
+<p>              "typeProperties": {</p>
+<p>                "url": "https://management.azure.com/.../integrationRuntimes/{irName}/stop?api-version=2018-06-01",</p>
+<p>                "method": "POST"</p>
+<p>              }</p>
+<p>            }</p>
+<p>          ]</p>
+<p>        }</p>
+<p>      }</p>
+<p>    ]</p>
+<p>  }</p>
+<p>}</p>
+</code></pre>
+
+<p>---</p>
+
+<h2>Key Features</h2>
+
+<h3>Centralized Logging</h3>
+
+<strong>Three-Level Logging:</strong>
+<p>1. <strong>ApplicationInstance</strong>: Logical application run</p>
+<p>2. <strong>PackageExecution</strong>: Individual package execution</p>
+<p>3. <strong>LogEntry</strong>: Detailed step/task messages</p>
+
+<strong>Correlation IDs:</strong>
+<p>- Trace execution across all levels</p>
+<p>- Join logs for SLA tracking</p>
+<p>- Incident investigation</p>
+<p>- Performance analysis</p>
+
+<h3>Retry Logic</h3>
+
+<strong>Configurable Retry Policies:</strong>
+<pre><code class="language-sql">-- Retry policy JSON structure
+<p>{</p>
+<p>  "maxRetries": 3,</p>
+<p>  "retryDelaySeconds": 60,</p>
+<p>  "backoffMultiplier": 2,</p>
+<p>  "retryOnErrors": [500, 503, 504],</p>
+<p>  "exponentialBackoff": true</p>
+<p>}</p>
+</code></pre>
+
+<strong>Retry Implementation:</strong>
+<pre><code class="language-sql">CREATE PROCEDURE dbo.usp_HandleRetry
+<p>    @QueueID INT,</p>
+<p>    @PackageID INT</p>
+<p>AS</p>
+<p>BEGIN</p>
+<p>    DECLARE @RetryCount INT;</p>
+<p>    DECLARE @MaxRetries INT;</p>
+<p>    DECLARE @RetryPolicy NVARCHAR(MAX);</p>
+    
+<p>    SELECT @RetryPolicy = RetryPolicy</p>
+<p>    FROM dbo.Packages</p>
+<p>    WHERE PackageID = @PackageID;</p>
+    
+<p>    -- Parse retry policy and determine if retry allowed</p>
+<p>    -- Update queue with new scheduled time</p>
+<p>    -- Increment retry count</p>
+<p>END;</p>
+</code></pre>
+
+<h3>Cost Optimization</h3>
+
+<strong>Azure-SSIS IR Management:</strong>
+<p>- Start IR only when needed</p>
+<p>- Stop IR after execution completes</p>
+<p>- Scale nodes based on workload</p>
+<p>- Monitor idle time and costs</p>
+
+<strong>PowerShell Automation:</strong>
+<pre><code class="language-powershell"><h1>Start Azure-SSIS IR</h1>
+<p>Start-AzDataFactoryV2IntegrationRuntime `</p>
+<p>    -ResourceGroupName "rg-etl" `</p>
+<p>    -DataFactoryName "adf-etl" `</p>
+<p>    -Name "Azure-SSIS-IR"</p>
+
+<h1>Stop Azure-SSIS IR after execution</h1>
+<p>Stop-AzDataFactoryV2IntegrationRuntime `</p>
+<p>    -ResourceGroupName "rg-etl" `</p>
+<p>    -DataFactoryName "adf-etl" `</p>
+<p>    -Name "Azure-SSIS-IR"</p>
+</code></pre>
+
+<p>---</p>
+
+<h2>Key Achievements</h2>
+
+<h3>Operational Improvements</h3>
+
+<strong>Automation:</strong>
+<p>- ✅ <strong>~80% reduction</strong> in manual package runs</p>
+<p>- ✅ <strong>Automated scheduling</strong> and execution</p>
+<p>- ✅ <strong>Self-healing</strong> retry mechanisms</p>
+<p>- ✅ <strong>Centralized</strong> configuration management</p>
+
+<strong>Visibility:</strong>
+<p>- ✅ <strong>Comprehensive logging</strong> at all levels</p>
+<p>- ✅ <strong>Real-time monitoring</strong> and alerts</p>
+<p>- ✅ <strong>Correlation IDs</strong> for troubleshooting</p>
+<p>- ✅ <strong>Performance metrics</strong> and analytics</p>
+
+<strong>Migration:</strong>
+<p>- ✅ <strong>Seamless migration</strong> to Azure</p>
+<p>- ✅ <strong>Hybrid execution</strong> support</p>
+<p>- ✅ <strong>Cost optimization</strong> through IR management</p>
+<p>- ✅ <strong>Scalable architecture</strong></p>
+
+<p>---</p>
+
+<h2>Best Practices</h2>
+
+<h3>Framework Best Practices</h3>
+
+<p>1. <strong>Single Source of Truth</strong>: Metadata DB for all configuration</p>
+<p>2. <strong>Idempotent Packages</strong>: Safe to re-run packages</p>
+<p>3. <strong>Centralized Logging</strong>: Correlation IDs for troubleshooting</p>
+<p>4. <strong>Secrets Management</strong>: Azure Key Vault for credentials</p>
+<p>5. <strong>Small, Focused Packages</strong>: Modular and maintainable</p>
+<p>6. <strong>CI/CD Integration</strong>: Automated deployment</p>
+<p>7. <strong>Concurrency Control</strong>: Limit parallelism to protect resources</p>
+<p>8. <strong>Schema Validation</strong>: Validate before heavy processing</p>
+
+<h3>Common Traps & Solutions</h3>
+
+<strong>Trap</strong>: Hard-coded file paths in packages  
+<strong>Solution</strong>: Parameterize all paths using metadata
+
+<strong>Trap</strong>: Secrets in package configs  
+<strong>Solution</strong>: Use Azure Key Vault references
+
+<strong>Trap</strong>: Running Azure-SSIS IR 24x7  
+<strong>Solution</strong>: Automate start/stop based on schedule
+
+<strong>Trap</strong>: Database locking with parallel packages  
+<strong>Solution</strong>: Limit concurrency and implement locking strategies
+
+<strong>Trap</strong>: Full loads instead of incremental  
+<strong>Solution</strong>: Implement change data capture (CDC)
+
+<p>---</p>
+
+<h2>Monitoring & Observability</h2>
+
+<h3>Azure Monitor Integration</h3>
+
+<strong>Metrics:</strong>
+<p>- Package execution duration</p>
+<p>- Success/failure rates</p>
+<p>- Retry counts</p>
+<p>- Resource utilization</p>
+
+<strong>Alerts:</strong>
+<p>- Failed package executions</p>
+<p>- Long-running packages</p>
+<p>- High retry rates</p>
+<p>- Cost threshold alerts</p>
+
+<strong>Log Analytics:</strong>
+<p>- Centralized log analysis</p>
+<p>- Query execution logs</p>
+<p>- Performance trends</p>
+<p>- Error pattern analysis</p>
+
+<p>---</p>
+
+<h2>Migration Checklist</h2>
+
+<h3>Quick Migration Steps</h3>
+
+<p>1. <strong>Inventory</strong>: Catalog all packages and stored procedures</p>
+<p>2. <strong>Tag</strong>: Classify by risk, dependencies, and frequency</p>
+<p>3. <strong>Parameterize</strong>: Replace hard-coded values with parameters</p>
+<p>4. <strong>Metadata</strong>: Implement SSISConfig database</p>
+<p>5. <strong>Orchestrator</strong>: Build controller and logging procedures</p>
+<p>6. <strong>Deploy</strong>: Deploy packages to Azure-SSIS IR</p>
+<p>7. <strong>ADF Pipelines</strong>: Build metadata-driven ADF pipelines</p>
+<p>8. <strong>Monitor</strong>: Set up monitoring and alerts</p>
+<p>9. <strong>Cutover</strong>: Gradual migration with validation</p>
+<p>10. <strong>Optimize</strong>: Tune performance and costs</p>
+
+<p>---</p>
+
+<h2>Conclusion</h2>
+
+<p>A metadata-driven ETL framework provides:</p>
+<p>- <strong>Centralized control</strong> for 1,000+ packages</p>
+<p>- <strong>Automated execution</strong> reducing manual effort</p>
+<p>- <strong>Comprehensive logging</strong> improving troubleshooting</p>
+<p>- <strong>Seamless migration</strong> to cloud platforms</p>
+<p>- <strong>Cost optimization</strong> through intelligent resource management</p>
+
+<strong>Key Takeaways:</strong>
+<p>1. Metadata-driven approach scales to thousands of packages</p>
+<p>2. Centralized logging dramatically improves troubleshooting</p>
+<p>3. Automated retry logic reduces manual intervention</p>
+<p>4. Cost optimization through intelligent IR management</p>
+<p>5. Hybrid execution enables gradual cloud migration</p>
+
+<p>---</p>
+
+<em>This framework enables enterprise-scale ETL orchestration. For related content, see <a href="./enterprise-data-warehouse-migration.html">Enterprise Data Warehouse Migration</a> and <a href="./etl-automation-solution.html">ETL Automation Solution</a>.</em>
+
+
+        </div>
+        
+        <a href="../index.html" class="back-link">← Back to Blog</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p><strong>Muhammad Siddique</strong> | Data Engineering Professional</p>
+                <p>Phone: <a href="tel:+923315868725">+92 331 5868725</a> | 
+                   Email: <a href="mailto:siddique.dea@gmail.com">siddique.dea@gmail.com</a> | 
+                   <a href="https://www.linkedin.com/in/siddique-datalover" target="_blank">LinkedIn</a></p>
+                <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                    &copy; 2025 Muhammad Siddique | Data Engineering Blog & Portfolio
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

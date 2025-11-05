@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Power BI Architect Role: Enterprise Architecture & Design Patterns - Muhammad Siddique Data Engineering Blog">
+    <meta name="keywords" content="data engineering, Power BI, Azure, data analytics, Power BI Architect Role: Enterprise Architecture & Design Patterns">
+    <meta name="author" content="Muhammad Siddique">
+    <title>Power BI Architect Role: Enterprise Architecture & Design Patterns | Muhammad Siddique - Data Engineering Blog</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #1abc9c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #7f8c8d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent);
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .article {
+            background: white;
+            padding: 3rem;
+            margin: 3rem auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            max-width: 1000px;
+        }
+        
+        .article-header {
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .article-header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        
+        .article-meta {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+        
+        .article-content {
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+        
+        .article-content h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin: 2.5rem 0 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        .article-content h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem 0;
+            padding-top: 1rem;
+        }
+        
+        .article-content h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin: 1.5rem 0 0.8rem 0;
+        }
+        
+        .article-content h4 {
+            color: var(--dark);
+            font-size: 1.3rem;
+            margin: 1.2rem 0 0.6rem 0;
+        }
+        
+        .article-content p {
+            margin-bottom: 1.2rem;
+            color: #444;
+        }
+        
+        .article-content ul, .article-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+        
+        .article-content li {
+            margin-bottom: 0.8rem;
+            color: #444;
+        }
+        
+        .article-content code {
+            background-color: #f4f4f4;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e83e8c;
+        }
+        
+        .article-content pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .article-content pre code {
+            background-color: transparent;
+            color: #ecf0f1;
+            padding: 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .article-content a {
+            color: var(--secondary);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .article-content a:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        
+        .article-content strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        .article-content em {
+            font-style: italic;
+            color: #555;
+        }
+        
+        .article-content hr {
+            border: none;
+            border-top: 2px solid var(--light);
+            margin: 2rem 0;
+        }
+        
+        .article-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .back-link:hover {
+            background-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            text-align: center;
+            padding: 2rem 0;
+        }
+        
+        .footer-content p {
+            margin-bottom: 1rem;
+            color: #bdc3c7;
+        }
+        
+        .footer-content a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .footer-content a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .article {
+                padding: 2rem 1.5rem;
+                margin: 2rem auto;
+            }
+            
+            .article-header h1 {
+                font-size: 2rem;
+            }
+            
+            .article-content {
+                font-size: 1rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">Muhammad Siddique | Data<span>Engineering</span>.Blog</a>
+                <nav>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../index.html#blog">Blog</a></li>
+                        <li><a href="about-author.html">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="article">
+        <div class="article-header">
+            <h1>Power BI Architect Role: Enterprise Architecture & Design Patterns</h1>
+            <div class="article-meta">
+                <strong>Muhammad Siddique</strong> | Data Engineering Professional | 
+                <a href="../index.html" style="color: var(--secondary);">Back to Blog</a>
+            </div>
+        </div>
+        
+        <div class="article-content">
+<h1>Power BI Architect Role: Enterprise Architecture & Design Patterns</h1>
+
+<em>Published: January 2025 | By: Data Engineering Professional</em>
+
+<h2>Overview</h2>
+
+<p>The Power BI Architect role focuses on designing scalable, maintainable, and performant Power BI solutions at enterprise scale. This guide covers architecture patterns, multi-layer designs, and enterprise deployment strategies.</p>
+
+<h2>Core Responsibilities</h2>
+
+<ul>
+<li><strong>Architecture Design</strong>: Design scalable Power BI solutions</li>
+<li><strong>Enterprise Patterns</strong>: Implement multi-layer architectures</li>
+<li><strong>Technology Selection</strong>: Choose appropriate Power BI components</li>
+<li><strong>Integration Strategy</strong>: Integrate with data platforms and services</li>
+<li><strong>Performance Architecture</strong>: Design for optimal performance at scale</li>
+<li><strong>Governance Framework</strong>: Establish architecture governance</li>
+</ol>
+
+<p>---</p>
+
+<h2>Part I: Architecture Fundamentals</h2>
+
+<h3>Power BI Components Overview</h3>
+
+<strong>Core Components:</strong>
+<ul>
+<li>Power BI Desktop (Development)</li>
+<li>Power BI Service (Cloud Hosting)</li>
+<li>Power BI Report Server (On-Premises)</li>
+<li>Power BI Mobile App</li>
+<li>On-Premises Data Gateway</li>
+</ol>
+
+<strong>Data Components:</strong>
+<ul>
+<li>Datasets (Semantic Models)</li>
+<li>Dataflows (ETL Layer)</li>
+<li>Datamarts (No-Code Data Warehouse)</li>
+<li>Shared Datasets (Reusable Models)</li>
+</ol>
+
+<strong>Reporting Components:</strong>
+<ul>
+<li>Power BI Reports (Interactive)</li>
+<li>Dashboards (Visual Analytics)</li>
+<li>Paginated Reports (Pixel-Perfect)</li>
+<li>Metrics & Scorecards</li>
+</ol>
+
+<p>---</p>
+
+<h2>Part II: Multi-Layer Architecture Patterns</h2>
+
+<h3>Pattern 1: Traditional Three-Layer Architecture</h3>
+
+<pre><code class="language-">┌─────────────────────────────────────┐
+│         Data Sources                │
+│  (SQL, Files, APIs, etc.)           │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│         Dataflows Layer              │
+│  • ETL & Data Preparation            │
+│  • Scheduled Refresh                 │
+│  • Centralized Transformations      │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│       Shared Datasets Layer          │
+│  • Semantic Models                   │
+│  • Business Logic (DAX)              │
+│  • Reusable Across Reports           │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│        Reports Layer                 │
+│  • Thin Reports (Visualization)      │
+│  • Dashboards                        │
+│  • Apps                              │
+└─────────────────────────────────────┘
+</code></pre>
+
+<strong>Benefits:</strong>
+<ul>
+<li>Separation of concerns</li>
+<li>Reusability</li>
+<li>Maintainability</li>
+<li>Performance optimization</li>
+</ol>
+
+<strong>Use Cases:</strong>
+<ul>
+<li>Enterprise reporting</li>
+<li>Multiple report authors</li>
+<li>Centralized data model</li>
+<li>Standardized metrics</li>
+</ol>
+
+<h3>Pattern 2: Datamart-Based Architecture</h3>
+
+<pre><code class="language-">┌─────────────────────────────────────┐
+│         Data Sources                │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│         Datamarts Layer              │
+│  • Auto-Generated Synapse DB         │
+│  • SQL Queryable                     │
+│  • Self-Service Analytics            │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│         Reports & Datasets           │
+│  • Direct Connection to Datamarts    │
+│  • Power BI Datasets                 │
+│  • Reports & Dashboards              │
+└─────────────────────────────────────┘
+</code></pre>
+
+<strong>Benefits:</strong>
+<ul>
+<li>SQL-based access</li>
+<li>Citizen data analyst empowerment</li>
+<li>Built-in governance</li>
+<li>No-code data warehouse</li>
+</ol>
+
+<strong>Use Cases:</strong>
+<ul>
+<li>Self-service analytics</li>
+<li>SQL-based reporting tools</li>
+<li>Datamart as a service</li>
+<li>Business user analytics</li>
+</ol>
+
+<h3>Pattern 3: Hybrid Architecture</h3>
+
+<pre><code class="language-">┌─────────────────────────────────────┐
+│         Multiple Data Sources        │
+│  (Cloud, On-Premises, Real-Time)     │
+└──────────────┬──────────────────────┘
+               │
+       ┌───────┴───────┐
+       │               │
+┌──────▼──────┐  ┌─────▼──────┐
+│  Dataflows  │  │ DirectQuery │
+│  (ETL)      │  │ (Real-Time) │
+└──────┬──────┘  └─────┬──────┘
+       │               │
+┌──────▼───────────────▼──────┐
+│    Composite Models          │
+│  • Import + DirectQuery      │
+│  • Hybrid Tables             │
+└──────┬───────────────────────┘
+       │
+┌──────▼───────────────────────┐
+│    Reports & Dashboards       │
+└───────────────────────────────┘
+</code></pre>
+
+<strong>Benefits:</strong>
+<ul>
+<li>Flexible data access</li>
+<li>Real-time capabilities</li>
+<li>Optimized for different scenarios</li>
+<li>Best of both worlds</li>
+</ol>
+
+<p>---</p>
+
+<h2>Part III: Data Architecture Patterns</h2>
+
+<h3>Dataflows vs Datasets vs Datamarts</h3>
+
+<strong>Dataflows:</strong>
+<ul>
+<li><strong>Purpose</strong>: ETL and data preparation</li>
+<li><strong>Use When</strong>: Need centralized data transformation</li>
+<li><strong>Output</strong>: Prepared data tables</li>
+<li><strong>Refresh</strong>: Scheduled refresh</li>
+</ol>
+
+<strong>Datasets:</strong>
+<ul>
+<li><strong>Purpose</strong>: Semantic models and business logic</li>
+<li><strong>Use When</strong>: Need reusable data models</li>
+<li><strong>Output</strong>: DAX models with measures</li>
+<li><strong>Refresh</strong>: Scheduled or on-demand</li>
+</ol>
+
+<strong>Datamarts:</strong>
+<ul>
+<li><strong>Purpose</strong>: No-code data warehouse</li>
+<li><strong>Use When</strong>: Need SQL queryable data</li>
+<li><strong>Output</strong>: Synapse database</li>
+<li><strong>Refresh</strong>: Automatic</li>
+</ol>
+
+<strong>Decision Matrix:</strong>
+
+<p>| Requirement | Dataflows | Datasets | Datamarts |</p>
+<p>|------------|-----------|----------|-----------|</p>
+<p>| ETL Needed | ✅ | ❌ | ✅ |</p>
+<p>| DAX Measures | ❌ | ✅ | ⚠️ |</p>
+<p>| SQL Access | ❌ | ⚠️ | ✅ |</p>
+<p>| Self-Service | ⚠️ | ❌ | ✅ |</p>
+<p>| Reusability | ✅ | ✅ | ✅ |</p>
+
+<h3>Choosing the Right Connection Type</h3>
+
+<strong>Import Mode:</strong>
+<ul>
+<li>Best query performance</li>
+<li>Full DAX functionality</li>
+<li>Requires storage</li>
+<li>Scheduled refresh</li>
+</ol>
+
+<strong>DirectQuery:</strong>
+<ul>
+<li>Real-time data</li>
+<li>No storage needed</li>
+<li>Limited DAX</li>
+<li>Performance depends on source</li>
+</ol>
+
+<strong>Live Connection:</strong>
+<ul>
+<li>Reuse existing models</li>
+<li>No transformations</li>
+<li>Report-level measures</li>
+<li>Centralized model</li>
+</ol>
+
+<strong>Composite Models:</strong>
+<ul>
+<li>Hybrid approach</li>
+<li>Flexibility</li>
+<li>Optimized for different needs</li>
+<li>Complex architecture</li>
+</ol>
+
+<strong>Architecture Decision Tree:</strong>
+<pre><code class="language-">Need Real-Time Data?
+├─ Yes → DirectQuery or Live Connection
+└─ No → Need Best Performance?
+    ├─ Yes → Import Mode
+    └─ No → Need Both?
+        └─ Yes → Composite Model
+</code></pre>
+
+<p>---</p>
+
+<h2>Part IV: Enterprise Architecture Patterns</h2>
+
+<h3>Enterprise Deployment Architecture</h3>
+
+<pre><code class="language-">┌─────────────────────────────────────────────────────┐
+│              Azure / Cloud Services                 │
+│  ┌──────────────┐  ┌──────────────┐                │
+│  │ Power BI      │  │ Azure Data   │                │
+│  │ Service       │  │ Lake Storage  │                │
+│  └──────┬───────┘  └──────┬───────┘                │
+│         │                  │                         │
+│  ┌──────▼──────────────────▼───────┐                │
+│  │     Microsoft Fabric            │                │
+│  │  (Data Integration Platform)    │                │
+│  └─────────────────────────────────┘                │
+└──────────────────┬──────────────────────────────────┘
+                   │
+┌──────────────────▼──────────────────────────────────┐
+│          On-Premises Data Gateway                    │
+│  (Secure Connection to On-Premises Sources)         │
+└──────────────────┬──────────────────────────────────┘
+                   │
+┌──────────────────▼──────────────────────────────────┐
+│         On-Premises Data Sources                     │
+│  • SQL Server                                        │
+│  • Oracle                                           │
+│  • SAP                                              │
+│  • File Servers                                     │
+└─────────────────────────────────────────────────────┘
+</code></pre>
+
+<h3>Multi-Workspace Architecture</h3>
+
+<strong>Workspace Types:</strong>
+<ul>
+<li><strong>Development</strong>: Active development</li>
+<li><strong>Test/UAT</strong>: User acceptance testing</li>
+<li><strong>Production</strong>: Live reports</li>
+</ol>
+
+<strong>Deployment Pipeline:</strong>
+<pre><code class="language-">Development → Test → Production
+     ↓           ↓         ↓
+  Workspace  Workspace  Workspace
+</code></pre>
+
+<strong>Benefits:</strong>
+<ul>
+<li>Separation of environments</li>
+<li>Controlled deployments</li>
+<li>Testing before production</li>
+<li>Version control</li>
+</ol>
+
+<p>---</p>
+
+<h2>Part V: Integration Patterns</h2>
+
+<h3>Microsoft Fabric Integration</h3>
+
+<strong>Fabric Components:</strong>
+<ul>
+<li>OneLake (Data Lake)</li>
+<li>Data Factory (ETL)</li>
+<li>Synapse Analytics (Data Warehouse)</li>
+<li>Power BI (Analytics)</li>
+</ol>
+
+<strong>Integration Architecture:</strong>
+<pre><code class="language-">┌─────────────────────────────────────┐
+│         Microsoft Fabric            │
+│  ┌──────────┐  ┌──────────┐        │
+│  │ OneLake  │  │ Synapse   │        │
+│  └────┬─────┘  └────┬──────┘        │
+│       │             │                │
+│  ┌────▼─────────────▼──────┐         │
+│  │   Power BI Datasets     │         │
+│  └─────────────────────────┘         │
+└─────────────────────────────────────┘
+</code></pre>
+
+<h3>Azure Integration</h3>
+
+<strong>Azure Services:</strong>
+<ul>
+<li>Azure Data Factory → ETL</li>
+<li>Azure Databricks → Data Processing</li>
+<li>Azure Synapse → Data Warehouse</li>
+<li>Azure Data Lake → Data Storage</li>
+<li>Power BI → Analytics</li>
+</ol>
+
+<strong>Hybrid Cloud Architecture:</strong>
+<ul>
+<li>On-premises data sources</li>
+<li>Azure cloud services</li>
+<li>Power BI Service</li>
+<li>Secure connectivity via Gateway</li>
+</ol>
+
+<p>---</p>
+
+<h2>Part VI: Performance Architecture</h2>
+
+<h3>Aggregation Strategy</h3>
+
+<strong>Aggregation Architecture:</strong>
+<pre><code class="language-">┌─────────────────────────────────────┐
+│      Detailed Fact Table            │
+│      (DirectQuery or Import)        │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│      Aggregation Tables              │
+│      (Import Mode - Fast)            │
+│  • Daily Aggregations                │
+│  • Monthly Aggregations              │
+│  • Yearly Aggregations               │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│      Reports & Dashboards            │
+│      (Auto-Select Aggregations)      │
+└─────────────────────────────────────┘
+</code></pre>
+
+<h3>Incremental Refresh Architecture</h3>
+
+<strong>Partition Strategy:</strong>
+<ul>
+<li>Historical data: Full refresh (monthly)</li>
+<li>Recent data: Incremental refresh (daily)</li>
+<li>Current data: Real-time (DirectQuery)</li>
+</ol>
+
+<strong>Hybrid Table Architecture:</strong>
+<ul>
+<li>Import partitions for historical</li>
+<li>DirectQuery for recent</li>
+<li>Seamless query experience</li>
+</ol>
+
+<p>---</p>
+
+<h2>Part VII: Security Architecture</h2>
+
+<h3>Row-Level Security (RLS) Architecture</h3>
+
+<strong>RLS Patterns:</strong>
+<ul>
+<li><strong>User-based</strong>: Filter by user identity</li>
+<li><strong>Role-based</strong>: Filter by user roles</li>
+<li><strong>Dynamic</strong>: Filter based on relationships</li>
+</ol>
+
+<strong>Security Architecture:</strong>
+<pre><code class="language-">┌─────────────────────────────────────┐
+│         User Authentication         │
+│         (Azure AD)                   │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│      Power BI Dataset                │
+│      (RLS Rules Applied)             │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│      Reports (Filtered Views)        │
+└─────────────────────────────────────┘
+</code></pre>
+
+<h3>Object-Level Security (OLS)</h3>
+
+<strong>Security Levels:</strong>
+<ul>
+<li>Table-level security</li>
+<li>Column-level security</li>
+<li>Measure-level security</li>
+</ol>
+
+<p>---</p>
+
+<h2>Part VIII: Governance Architecture</h2>
+
+<h3>Data Governance Framework</h3>
+
+<strong>Governance Components:</strong>
+<ul>
+<li><strong>Dataflows</strong>: Certified data sources</li>
+<li><strong>Datasets</strong>: Endorsed (Certified/Promoted)</li>
+<li><strong>Reports</strong>: Published vs. Personal</li>
+<li><strong>Workspaces</strong>: Governance policies</li>
+</ol>
+
+<strong>Governance Architecture:</strong>
+<pre><code class="language-">┌─────────────────────────────────────┐
+│      Governance Policies             │
+│  • Data Quality Standards            │
+│  • Naming Conventions                │
+│  • Security Policies                 │
+│  • Refresh Policies                  │
+└──────────────┬──────────────────────┘
+               │
+┌──────────────▼──────────────────────┐
+│      Power BI Components             │
+│  • Dataflows (Certified)             │
+│  • Datasets (Promoted/Certified)     │
+│  • Reports (Published)              │
+└─────────────────────────────────────┘
+</code></pre>
+
+<p>---</p>
+
+<h2>Architecture Decision Framework</h2>
+
+<h3>Decision Criteria</h3>
+
+<strong>1. Data Volume:</strong>
+<ul>
+<li>Small (< 1GB): Import Mode</li>
+<li>Medium (1-10GB): Import with Aggregations</li>
+<li>Large (> 10GB): DirectQuery or Incremental Refresh</li>
+</ol>
+
+<strong>2. Refresh Requirements:</strong>
+<ul>
+<li>Real-time: DirectQuery or Streaming</li>
+<li>Hourly: Scheduled Refresh</li>
+<li>Daily: Scheduled Refresh</li>
+<li>Weekly: Scheduled Refresh</li>
+</ol>
+
+<strong>3. User Requirements:</strong>
+<ul>
+<li>Self-service: Datamarts or Dataflows</li>
+<li>Standardized: Shared Datasets</li>
+<li>Ad-hoc: Personal Workspaces</li>
+</ol>
+
+<strong>4. Performance Requirements:</strong>
+<ul>
+<li>Fast queries: Import Mode</li>
+<li>Real-time: DirectQuery</li>
+<li>Balanced: Composite Model</li>
+</ol>
+
+<p>---</p>
+
+<h2>Best Practices for Architects</h2>
+
+<h3>Design Principles</h3>
+
+<ol>
+<li><strong>Separation of Concerns</strong>: Separate ETL, Modeling, and Visualization</li>
+<li><strong>Reusability</strong>: Design for reuse across reports</li>
+<li><strong>Scalability</strong>: Plan for growth</li>
+<li><strong>Performance</strong>: Design for optimal performance</li>
+<li><strong>Security</strong>: Security by design</li>
+<li><strong>Governance</strong>: Governance from the start</li>
+</ol>
+
+<h3>Architecture Patterns</h3>
+
+<ol>
+<li><strong>Multi-Layer</strong>: Dataflows → Datasets → Reports</li>
+<li><strong>Shared Models</strong>: Reusable semantic models</li>
+<li><strong>Incremental Refresh</strong>: Optimize for large datasets</li>
+<li><strong>Aggregations</strong>: Optimize for query performance</li>
+<li><strong>Hybrid Approach</strong>: Combine import and DirectQuery</li>
+</ol>
+
+<p>---</p>
+
+<h2>Conclusion</h2>
+
+<p>Effective Power BI architecture requires:</p>
+<ul>
+<li>Understanding of Power BI components</li>
+<li>Knowledge of architecture patterns</li>
+<li>Decision-making framework</li>
+<li>Integration with data platforms</li>
+<li>Performance optimization strategies</li>
+<li>Security and governance</li>
+</ol>
+
+<strong>Key Takeaways:</strong>
+<ol>
+<li>Choose appropriate architecture pattern</li>
+<li>Implement multi-layer architecture</li>
+<li>Optimize for performance and scale</li>
+<li>Integrate with data platforms</li>
+<li>Establish governance framework</li>
+</ol>
+
+<p>---</p>
+
+<em>This guide is based on enterprise Power BI implementations. For development practices, see <a href="./power-bi-developer-role.html">Power BI Developer Guide</a>. For administration, see <a href="./power-bi-administrator-role.html">Power BI Administrator Guide</a>.</em>
+
+
+        </div>
+        
+        <a href="../index.html" class="back-link">← Back to Blog</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p><strong>Muhammad Siddique</strong> | Data Engineering Professional</p>
+                <p>Phone: <a href="tel:+923315868725">+92 331 5868725</a> | 
+                   Email: <a href="mailto:siddique.dea@gmail.com">siddique.dea@gmail.com</a> | 
+                   <a href="https://www.linkedin.com/in/siddique-datalover" target="_blank">LinkedIn</a></p>
+                <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                    &copy; 2025 Muhammad Siddique | Data Engineering Blog & Portfolio
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

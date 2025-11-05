@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Data Cleanup Ahead of Migration: Salesforce Data Preparation - Muhammad Siddique Data Engineering Blog">
+    <title>Data Cleanup Ahead of Migration: Salesforce Data Preparation | Muhammad Siddique - Data Engineering Blog</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #1abc9c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #7f8c8d;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .container { width: 90%; max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+        }
+        .logo span { color: var(--accent); }
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        nav ul li a:hover {
+            color: var(--accent);
+            background-color: rgba(255,255,255,0.1);
+        }
+        .article {
+            background: white;
+            padding: 3rem;
+            margin: 3rem auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            max-width: 1000px;
+        }
+        .article-header {
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+        .article-header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        .article-meta {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+        .article-content {
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+        .article-content h1 { color: var(--primary); font-size: 2.2rem; margin: 2.5rem 0 1.5rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid var(--light); }
+        .article-content h2 { color: var(--primary); font-size: 1.8rem; margin: 2rem 0 1rem 0; padding-top: 1rem; }
+        .article-content h3 { color: var(--primary); font-size: 1.5rem; margin: 1.5rem 0 0.8rem 0; }
+        .article-content h4 { color: var(--dark); font-size: 1.3rem; margin: 1.2rem 0 0.6rem 0; }
+        .article-content p { margin-bottom: 1.2rem; color: #444; }
+        .article-content ul, .article-content ol { margin: 1.5rem 0; padding-left: 2rem; }
+        .article-content li { margin-bottom: 0.8rem; color: #444; }
+        .article-content code {
+            background-color: #f4f4f4;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e83e8c;
+        }
+        .article-content pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .article-content pre code {
+            background-color: transparent;
+            color: #ecf0f1;
+            padding: 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .article-content a { color: var(--secondary); text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.3s; }
+        .article-content a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+        .article-content strong { color: var(--primary); font-weight: 700; }
+        .article-content em { font-style: italic; color: #555; }
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .back-link:hover {
+            background-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        footer {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+        .footer-content {
+            text-align: center;
+            padding: 2rem 0;
+        }
+        .footer-content p { margin-bottom: 1rem; color: #bdc3c7; }
+        .footer-content a { color: var(--accent); text-decoration: none; }
+        .footer-content a:hover { text-decoration: underline; }
+        @media (max-width: 768px) {
+            .article { padding: 2rem 1.5rem; margin: 2rem auto; }
+            .article-header h1 { font-size: 2rem; }
+            .article-content { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">Muhammad Siddique | Data<span>Engineering</span>.Blog</a>
+                <nav>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../index.html#blog">Blog</a></li>
+                        <li><a href="about-author.html">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="article">
+        <div class="article-header">
+            <h1>Data Cleanup Ahead of Migration: Salesforce Data Preparation</h1>
+            <div class="article-meta">
+                <strong>Muhammad Siddique</strong> | Data Engineering Professional | 
+                <a href="../index.html" style="color: var(--secondary);">Back to Blog</a>
+            </div>
+        </div>
+        
+        <div class="article-content">
+<h1>Data Cleanup Ahead of Migration: Salesforce Data Preparation</h1>
+
+<em>Published: January 2025 | By: Data Engineering Professional</em>
+
+<h2>Overview</h2>
+
+<p>Production-ready Python solution for normalizing and transforming 7 Excel files into 7 Salesforce-ready CSVs with advanced deduplication, fuzzy matching, data enrichment, QA metrics, and a one-command CLI. This project demonstrates enterprise data preparation patterns for migration scenarios.</p>
+
+<h2>The Challenge</h2>
+
+<strong>Business Requirements:</strong>
+<p>- Transform 7 Excel files into Salesforce-ready format</p>
+<p>- Normalize data from multiple sources</p>
+<p>- Implement deduplication and fuzzy matching</p>
+<p>- Enrich data with additional information</p>
+<p>- Provide QA metrics and validation</p>
+<p>- One-command execution for automation</p>
+
+<strong>Technical Challenges:</strong>
+<p>- Multiple source formats and structures</p>
+<p>- Data quality issues (duplicates, inconsistencies)</p>
+<p>- Complex matching requirements</p>
+<p>- Performance for large datasets</p>
+<p>- Maintainable and extensible architecture</p>
+
+<p>---</p>
+
+<h2>Architecture Overview</h2>
+
+<h3>Data Pipeline Architecture</h3>
+
+<pre><code class="language-">┌─────────────────────────────────────────────────────┐
+<p>│              Ingestion Layer                        │</p>
+<p>│  • Excel File Reading                               │</p>
+<p>│  • Schema Detection                                 │</p>
+<p>│  • Data Type Inference                              │</p>
+<p>└──────────────────┬──────────────────────────────────┘</p>
+<p>                   │</p>
+<p>┌──────────────────▼──────────────────────────────────┐</p>
+<p>│              Staging Layer                          │</p>
+<p>│  • Data Cleaning                                    │</p>
+<p>│  • Standardization                                 │</p>
+<p>│  • Validation                                       │</p>
+<p>└──────────────────┬──────────────────────────────────┘</p>
+<p>                   │</p>
+<p>┌──────────────────▼──────────────────────────────────┐</p>
+<p>│         Deduplication & Fuzzy Matching              │</p>
+<p>│  • Duplicate Detection                             │</p>
+<p>│  • Fuzzy Matching Algorithms                       │</p>
+<p>│  • Record Linking                                  │</p>
+<p>└──────────────────┬──────────────────────────────────┘</p>
+<p>                   │</p>
+<p>┌──────────────────▼──────────────────────────────────┐</p>
+<p>│         Company Generation & Normalization           │</p>
+<p>│  • Company Record Creation                         │</p>
+<p>│  • Relationship Mapping                            │</p>
+<p>│  • Data Normalization                              │</p>
+<p>└──────────────────┬──────────────────────────────────┘</p>
+<p>                   │</p>
+<p>┌──────────────────▼──────────────────────────────────┐</p>
+<p>│              Enrichment Layer                       │</p>
+<p>│  • External Data Lookup                            │</p>
+<p>│  • Data Augmentation                               │</p>
+<p>│  • Business Rule Application                       │</p>
+<p>└──────────────────┬──────────────────────────────────┘</p>
+<p>                   │</p>
+<p>┌──────────────────▼──────────────────────────────────┐</p>
+<p>│              QA & Validation                        │</p>
+<p>│  • Quality Metrics                                 │</p>
+<p>│  • Validation Rules                                │</p>
+<p>│  • Exception Reporting                             │</p>
+<p>└──────────────────┬──────────────────────────────────┘</p>
+<p>                   │</p>
+<p>┌──────────────────▼──────────────────────────────────┐</p>
+<p>│              Export Layer                           │</p>
+<p>│  • Salesforce CSV Format                           │</p>
+<p>│  • File Generation                                 │</p>
+<p>│  • QA Summary Report                               │</p>
+<p>└─────────────────────────────────────────────────────┘</p>
+</code></pre>
+
+<h3>Project Structure</h3>
+
+<pre><code class="language-">sf-cleanup/
+<p>├── config/</p>
+<p>│   └── example.yml              # Configuration file</p>
+<p>├── input/                        # Input Excel files</p>
+<p>│   ├── file1.xlsx</p>
+<p>│   ├── file2.xlsx</p>
+<p>│   └── ...</p>
+<p>├── output/                       # Generated CSVs</p>
+<p>│   ├── output1.csv</p>
+<p>│   ├── output2.csv</p>
+<p>│   └── qa_summary.json</p>
+<p>├── src/</p>
+<p>│   ├── ingestion/</p>
+<p>│   │   ├── excel_reader.py</p>
+<p>│   │   └── schema_detector.py</p>
+<p>│   ├── staging/</p>
+<p>│   │   ├── cleaner.py</p>
+<p>│   │   └── validator.py</p>
+<p>│   ├── deduplication/</p>
+<p>│   │   ├── fuzzy_matcher.py</p>
+<p>│   │   └── record_linker.py</p>
+<p>│   ├── normalization/</p>
+<p>│   │   ├── company_generator.py</p>
+<p>│   │   └── relationship_mapper.py</p>
+<p>│   ├── enrichment/</p>
+<p>│   │   ├── data_enricher.py</p>
+<p>│   │   └── business_rules.py</p>
+<p>│   ├── qa/</p>
+<p>│   │   ├── metrics_calculator.py</p>
+<p>│   │   └── validator.py</p>
+<p>│   └── export/</p>
+<p>│       ├── csv_generator.py</p>
+<p>│       └── report_generator.py</p>
+<p>├── tests/</p>
+<p>│   ├── test_ingestion.py</p>
+<p>│   ├── test_deduplication.py</p>
+<p>│   └── ...</p>
+<p>├── Dockerfile</p>
+<p>├── pyproject.toml</p>
+<p>└── README.md</p>
+</code></pre>
+
+<p>---</p>
+
+<h2>Core Components</h2>
+
+<h3>1. Ingestion Layer</h3>
+
+<strong>Excel File Reading:</strong>
+<pre><code class="language-python">import pandas as pd
+<p>from pathlib import Path</p>
+
+<p>def read_excel_file(file_path: Path, config: dict) -> pd.DataFrame:</p>
+<p>    """Read Excel file with configuration-based parsing"""</p>
+<p>    df = pd.read_excel(</p>
+<p>        file_path,</p>
+<p>        sheet_name=config.get('sheet_name', 0),</p>
+<p>        header=config.get('header_row', 0),</p>
+<p>        skiprows=config.get('skip_rows', 0)</p>
+<p>    )</p>
+<p>    return df</p>
+</code></pre>
+
+<strong>Schema Detection:</strong>
+<pre><code class="language-python">def detect_schema(df: pd.DataFrame) -> dict:
+<p>    """Detect and infer schema from DataFrame"""</p>
+<p>    schema = {</p>
+<p>        'columns': list(df.columns),</p>
+<p>        'dtypes': df.dtypes.to_dict(),</p>
+<p>        'nullable': df.isnull().any().to_dict(),</p>
+<p>        'sample_values': df.head(5).to_dict('records')</p>
+<p>    }</p>
+<p>    return schema</p>
+</code></pre>
+
+<h3>2. Staging & Data Cleaning</h3>
+
+<strong>Data Cleaning:</strong>
+<pre><code class="language-python">def clean_data(df: pd.DataFrame, rules: dict) -> pd.DataFrame:
+<p>    """Apply cleaning rules to DataFrame"""</p>
+    # Remove whitespace
+<p>    df = df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)</p>
+    
+    # Standardize formats
+<p>    if 'phone' in df.columns:</p>
+<p>        df['phone'] = df['phone'].str.replace(r'[^\d]', '', regex=True)</p>
+    
+    # Handle missing values
+<p>    df = df.fillna('')</p>
+    
+<p>    return df</p>
+</code></pre>
+
+<strong>Validation:</strong>
+<pre><code class="language-python">def validate_data(df: pd.DataFrame, validators: list) -> dict:
+<p>    """Validate data against rules"""</p>
+<p>    results = {</p>
+<p>        'valid': True,</p>
+<p>        'errors': [],</p>
+<p>        'warnings': []</p>
+<p>    }</p>
+    
+<p>    for validator in validators:</p>
+<p>        result = validator(df)</p>
+<p>        if not result['valid']:</p>
+<p>            results['valid'] = False</p>
+<p>            results['errors'].extend(result['errors'])</p>
+    
+<p>    return results</p>
+</code></pre>
+
+<h3>3. Deduplication & Fuzzy Matching</h3>
+
+<strong>Fuzzy Matching:</strong>
+<pre><code class="language-python">from fuzzywuzzy import fuzz
+<p>from fuzzywuzzy import process</p>
+
+<p>def find_duplicates(df: pd.DataFrame, key_columns: list, threshold: int = 85) -> pd.DataFrame:</p>
+<p>    """Find duplicate records using fuzzy matching"""</p>
+<p>    duplicates = []</p>
+<p>    processed = set()</p>
+    
+<p>    for idx, row in df.iterrows():</p>
+<p>        if idx in processed:</p>
+<p>            continue</p>
+        
+        # Create comparison key
+<p>        key = ' '.join([str(row[col]) for col in key_columns])</p>
+        
+        # Find similar records
+<p>        matches = process.extract(</p>
+<p>            key,</p>
+<p>            df[key_columns].apply(lambda x: ' '.join(x.astype(str)), axis=1),</p>
+<p>            limit=10,</p>
+<p>            scorer=fuzz.token_sort_ratio</p>
+<p>        )</p>
+        
+        # Group matches above threshold
+<p>        group = [idx]</p>
+<p>        for match, score, match_idx in matches:</p>
+<p>            if score >= threshold and match_idx not in processed:</p>
+<p>                group.append(match_idx)</p>
+<p>                processed.add(match_idx)</p>
+        
+<p>        if len(group) > 1:</p>
+<p>            duplicates.append({</p>
+<p>                'group_id': len(duplicates),</p>
+<p>                'records': group,</p>
+<p>                'confidence': max([score for _, score, _ in matches])</p>
+<p>            })</p>
+        
+<p>        processed.add(idx)</p>
+    
+<p>    return pd.DataFrame(duplicates)</p>
+</code></pre>
+
+<strong>Record Linking:</strong>
+<pre><code class="language-python">def link_records(df: pd.DataFrame, linking_rules: dict) -> pd.DataFrame:
+<p>    """Link related records based on business rules"""</p>
+<p>    linked_df = df.copy()</p>
+    
+    # Add relationship columns
+<p>    linked_df['parent_record_id'] = None</p>
+<p>    linked_df['relationship_type'] = None</p>
+    
+<p>    for rule in linking_rules:</p>
+        # Apply linking logic
+<p>        condition = eval(rule['condition'])</p>
+<p>        linked_df.loc[condition, 'parent_record_id'] = rule['parent_id']</p>
+<p>        linked_df.loc[condition, 'relationship_type'] = rule['type']</p>
+    
+<p>    return linked_df</p>
+</code></pre>
+
+<h3>4. Company Generation & Normalization</h3>
+
+<strong>Company Record Creation:</strong>
+<pre><code class="language-python">def generate_company_records(df: pd.DataFrame) -> pd.DataFrame:
+<p>    """Generate company records from individual records"""</p>
+<p>    companies = []</p>
+    
+    # Group by company identifier
+<p>    grouped = df.groupby('company_name')</p>
+    
+<p>    for company_name, group in grouped:</p>
+<p>        company_record = {</p>
+<p>            'Name': company_name,</p>
+<p>            'Type': 'Account',</p>
+<p>            'Industry': group['industry'].mode()[0] if 'industry' in group.columns else '',</p>
+<p>            'Phone': group['phone'].iloc[0] if 'phone' in group.columns else '',</p>
+<p>            'Website': group['website'].mode()[0] if 'website' in group.columns else '',</p>
+<p>            'Description': f"Auto-generated from {len(group)} records"</p>
+<p>        }</p>
+<p>        companies.append(company_record)</p>
+    
+<p>    return pd.DataFrame(companies)</p>
+</code></pre>
+
+<strong>Data Normalization:</strong>
+<pre><code class="language-python">def normalize_data(df: pd.DataFrame, mapping: dict) -> pd.DataFrame:
+<p>    """Normalize data to Salesforce format"""</p>
+<p>    normalized_df = pd.DataFrame()</p>
+    
+<p>    for sf_field, source_field in mapping.items():</p>
+<p>        if source_field in df.columns:</p>
+<p>            normalized_df[sf_field] = df[source_field]</p>
+<p>        else:</p>
+<p>            normalized_df[sf_field] = ''</p>
+    
+<p>    return normalized_df</p>
+</code></pre>
+
+<h3>5. Enrichment Layer</h3>
+
+<strong>Data Enrichment:</strong>
+<pre><code class="language-python">def enrich_data(df: pd.DataFrame, enrichment_sources: list) -> pd.DataFrame:
+<p>    """Enrich data with external sources"""</p>
+<p>    enriched_df = df.copy()</p>
+    
+<p>    for source in enrichment_sources:</p>
+<p>        if source['type'] == 'api':</p>
+            # Call external API
+<p>            enriched_df = call_enrichment_api(enriched_df, source)</p>
+<p>        elif source['type'] == 'lookup':</p>
+            # Database lookup
+<p>            enriched_df = lookup_enrichment(enriched_df, source)</p>
+    
+<p>    return enriched_df</p>
+</code></pre>
+
+<h3>6. QA & Validation</h3>
+
+<strong>QA Metrics Calculation:</strong>
+<pre><code class="language-python">def calculate_qa_metrics(df: pd.DataFrame, original_df: pd.DataFrame) -> dict:
+<p>    """Calculate quality assurance metrics"""</p>
+<p>    metrics = {</p>
+<p>        'total_records': len(df),</p>
+<p>        'original_records': len(original_df),</p>
+<p>        'duplicates_removed': len(original_df) - len(df),</p>
+<p>        'completeness_score': calculate_completeness(df),</p>
+<p>        'accuracy_score': calculate_accuracy(df),</p>
+<p>        'consistency_score': calculate_consistency(df),</p>
+<p>        'valid_records': len(df[df['validation_status'] == 'valid']),</p>
+<p>        'invalid_records': len(df[df['validation_status'] == 'invalid'])</p>
+<p>    }</p>
+    
+<p>    return metrics</p>
+</code></pre>
+
+<strong>Validation Rules:</strong>
+<pre><code class="language-python">def apply_validation_rules(df: pd.DataFrame, rules: list) -> pd.DataFrame:
+<p>    """Apply validation rules and mark records"""</p>
+<p>    df['validation_status'] = 'valid'</p>
+<p>    df['validation_errors'] = ''</p>
+    
+<p>    for rule in rules:</p>
+<p>        condition = eval(rule['condition'])</p>
+<p>        invalid_mask = ~condition</p>
+        
+<p>        df.loc[invalid_mask, 'validation_status'] = 'invalid'</p>
+<p>        df.loc[invalid_mask, 'validation_errors'] += f"{rule['name']}; "</p>
+    
+<p>    return df</p>
+</code></pre>
+
+<h3>7. Export Layer</h3>
+
+<strong>CSV Generation:</strong>
+<pre><code class="language-python">def generate_salesforce_csv(df: pd.DataFrame, output_path: Path, config: dict):
+<p>    """Generate Salesforce-ready CSV"""</p>
+    # Filter valid records
+<p>    valid_df = df[df['validation_status'] == 'valid']</p>
+    
+    # Select only required columns
+<p>    columns = config.get('salesforce_columns', df.columns.tolist())</p>
+<p>    export_df = valid_df[columns]</p>
+    
+    # Format for Salesforce
+<p>    export_df = format_for_salesforce(export_df, config)</p>
+    
+    # Export to CSV
+<p>    export_df.to_csv(output_path, index=False, encoding='utf-8')</p>
+</code></pre>
+
+<strong>QA Report Generation:</strong>
+<pre><code class="language-python">def generate_qa_report(metrics: dict, output_path: Path):
+<p>    """Generate QA summary report"""</p>
+<p>    report = {</p>
+<p>        'timestamp': datetime.now().isoformat(),</p>
+<p>        'metrics': metrics,</p>
+<p>        'summary': {</p>
+<p>            'total_processed': metrics['total_records'],</p>
+<p>            'success_rate': metrics['valid_records'] / metrics['total_records'] * 100,</p>
+<p>            'quality_score': (</p>
+<p>                metrics['completeness_score'] +</p>
+<p>                metrics['accuracy_score'] +</p>
+<p>                metrics['consistency_score']</p>
+<p>            ) / 3</p>
+<p>        }</p>
+<p>    }</p>
+    
+<p>    with open(output_path, 'w') as f:</p>
+<p>        json.dump(report, f, indent=2)</p>
+</code></pre>
+
+<p>---</p>
+
+<h2>CLI Interface</h2>
+
+<h3>Command-Line Interface</h3>
+
+<strong>Main CLI Implementation:</strong>
+<pre><code class="language-python">import click
+<p>from pathlib import Path</p>
+<p>import yaml</p>
+
+<p>@click.group()</p>
+<p>def cli():</p>
+<p>    """Salesforce Data Cleanup CLI"""</p>
+<p>    pass</p>
+
+<p>@cli.command()</p>
+<p>@click.option('--config', required=True, type=click.Path(exists=True))</p>
+<p>@click.option('--input', required=True, type=click.Path(exists=True))</p>
+<p>@click.option('--output', required=True, type=click.Path())</p>
+<p>def run(config, input, output):</p>
+<p>    """Execute the full pipeline"""</p>
+    # Load configuration
+<p>    with open(config) as f:</p>
+<p>        config_data = yaml.safe_load(f)</p>
+    
+    # Run pipeline
+<p>    pipeline = DataCleanupPipeline(config_data)</p>
+<p>    results = pipeline.run(Path(input), Path(output))</p>
+    
+<p>    click.echo(f"Processing complete: {results['total_records']} records processed")</p>
+
+<p>@cli.command()</p>
+<p>@click.option('--output', default='./config/example.yml')</p>
+<p>def sample(output):</p>
+<p>    """Generate sample config and folder structure"""</p>
+    # Generate sample configuration
+<p>    sample_config = {</p>
+<p>        'input_files': {</p>
+<p>            'file1': {'sheet_name': 0, 'header_row': 0},</p>
+<p>            'file2': {'sheet_name': 0, 'header_row': 0}</p>
+<p>        },</p>
+<p>        'deduplication': {</p>
+<p>            'enabled': True,</p>
+<p>            'threshold': 85,</p>
+<p>            'key_columns': ['name', 'email']</p>
+<p>        },</p>
+<p>        'enrichment': {</p>
+<p>            'enabled': True,</p>
+<p>            'sources': []</p>
+<p>        }</p>
+<p>    }</p>
+    
+<p>    with open(output, 'w') as f:</p>
+<p>        yaml.dump(sample_config, f, default_flow_style=False)</p>
+    
+<p>    click.echo(f"Sample config created at {output}")</p>
+
+<p>@cli.command()</p>
+<p>@click.option('--output-dir', required=True, type=click.Path(exists=True))</p>
+<p>def qa(output_dir):</p>
+<p>    """Print QA metrics for a run"""</p>
+<p>    qa_file = Path(output_dir) / 'qa_summary.json'</p>
+    
+<p>    if not qa_file.exists():</p>
+<p>        click.echo("QA summary not found")</p>
+<p>        return</p>
+    
+<p>    with open(qa_file) as f:</p>
+<p>        metrics = json.load(f)</p>
+    
+<p>    click.echo("QA Metrics:")</p>
+<p>    click.echo(f"Total Records: {metrics['metrics']['total_records']}")</p>
+<p>    click.echo(f"Success Rate: {metrics['summary']['success_rate']:.2f}%")</p>
+<p>    click.echo(f"Quality Score: {metrics['summary']['quality_score']:.2f}%")</p>
+</code></pre>
+
+<p>---</p>
+
+<h2>Configuration</h2>
+
+<h3>YAML Configuration Example</h3>
+
+<pre><code class="language-yaml">input_files:
+<p>  file1:</p>
+<p>    filename: "contacts.xlsx"</p>
+<p>    sheet_name: 0</p>
+<p>    header_row: 0</p>
+<p>    skip_rows: 0</p>
+<p>  file2:</p>
+<p>    filename: "companies.xlsx"</p>
+<p>    sheet_name: 0</p>
+<p>    header_row: 0</p>
+
+<p>deduplication:</p>
+<p>  enabled: true</p>
+<p>  threshold: 85</p>
+<p>  key_columns:</p>
+<p>    - name</p>
+<p>    - email</p>
+<p>    - phone</p>
+<p>  algorithm: "fuzzy_token_sort"</p>
+
+<p>fuzzy_matching:</p>
+<p>  enabled: true</p>
+<p>  methods:</p>
+<p>    - token_sort_ratio</p>
+<p>    - partial_ratio</p>
+<p>  threshold: 80</p>
+
+<p>normalization:</p>
+<p>  column_mapping:</p>
+<p>    FirstName: first_name</p>
+<p>    LastName: last_name</p>
+<p>    Email: email</p>
+<p>    Phone: phone</p>
+<p>    Company: company_name</p>
+
+<p>enrichment:</p>
+<p>  enabled: true</p>
+<p>  sources:</p>
+<p>    - type: "lookup"</p>
+<p>      table: "company_directory"</p>
+<p>      match_on: "company_name"</p>
+<p>      fields: ["industry", "website", "employee_count"]</p>
+
+<p>qa:</p>
+<p>  validation_rules:</p>
+<p>    - name: "email_format"</p>
+<p>      condition: "df['email'].str.contains('@', na=False)"</p>
+<p>    - name: "phone_format"</p>
+<p>      condition: "df['phone'].str.len() >= 10"</p>
+  
+<p>  metrics:</p>
+<p>    - completeness</p>
+<p>    - accuracy</p>
+<p>    - consistency</p>
+
+<p>output:</p>
+<p>  format: "csv"</p>
+<p>  encoding: "utf-8"</p>
+<p>  include_qa_report: true</p>
+</code></pre>
+
+<p>---</p>
+
+<h2>Key Features</h2>
+
+<h3>Advanced Deduplication</h3>
+
+<p>- <strong>Fuzzy Matching</strong>: Multiple algorithms (token_sort, partial_ratio, etc.)</p>
+<p>- <strong>Configurable Thresholds</strong>: Adjustable similarity thresholds</p>
+<p>- <strong>Multi-column Matching</strong>: Match on multiple columns simultaneously</p>
+<p>- <strong>Confidence Scores</strong>: Match confidence scoring</p>
+
+<h3>Data Enrichment</h3>
+
+<p>- <strong>External Lookups</strong>: Database and API lookups</p>
+<p>- <strong>Business Rules</strong>: Configurable business logic</p>
+<p>- <strong>Data Augmentation</strong>: Add calculated fields</p>
+<p>- <strong>Relationship Mapping</strong>: Link related records</p>
+
+<h3>Quality Assurance</h3>
+
+<p>- <strong>Comprehensive Metrics</strong>: Completeness, accuracy, consistency</p>
+<p>- <strong>Validation Rules</strong>: Configurable validation</p>
+<p>- <strong>Exception Reporting</strong>: Detailed error reporting</p>
+<p>- <strong>QA Summary</strong>: JSON report with all metrics</p>
+
+<h3>Automation</h3>
+
+<p>- <strong>One-Command Execution</strong>: Single CLI command</p>
+<p>- <strong>Configurable</strong>: YAML-based configuration</p>
+<p>- <strong>Extensible</strong>: Plugin-based architecture</p>
+<p>- <strong>Testable</strong>: Comprehensive test suite</p>
+
+<p>---</p>
+
+<h2>Best Practices</h2>
+
+<h3>Data Preparation Best Practices</h3>
+
+<p>1. <strong>Incremental Processing</strong>: Process data in chunks for large files</p>
+<p>2. <strong>Validation Early</strong>: Validate at each stage</p>
+<p>3. <strong>Error Handling</strong>: Robust error handling and recovery</p>
+<p>4. <strong>Logging</strong>: Comprehensive logging for debugging</p>
+<p>5. <strong>Testing</strong>: Test with sample data before production</p>
+
+<h3>Migration Best Practices</h3>
+
+<p>1. <strong>Data Profiling</strong>: Understand data before migration</p>
+<p>2. <strong>Clean Before Migrate</strong>: Clean data before migration</p>
+<p>3. <strong>Incremental Migration</strong>: Migrate in phases</p>
+<p>4. <strong>Validation</strong>: Validate after each phase</p>
+<p>5. <strong>Rollback Plan</strong>: Plan for rollback if needed</p>
+
+<p>---</p>
+
+<h2>Performance Optimization</h2>
+
+<h3>Large Dataset Handling</h3>
+
+<strong>Chunking:</strong>
+<pre><code class="language-python">def process_large_file(file_path: Path, chunk_size: int = 10000):
+<p>    """Process large files in chunks"""</p>
+<p>    for chunk in pd.read_excel(file_path, chunksize=chunk_size):</p>
+<p>        processed_chunk = process_chunk(chunk)</p>
+<p>        yield processed_chunk</p>
+</code></pre>
+
+<strong>Parallel Processing:</strong>
+<pre><code class="language-python">from multiprocessing import Pool
+
+<p>def parallel_process(files: list, num_workers: int = 4):</p>
+<p>    """Process multiple files in parallel"""</p>
+<p>    with Pool(num_workers) as pool:</p>
+<p>        results = pool.map(process_file, files)</p>
+<p>    return results</p>
+</code></pre>
+
+<p>---</p>
+
+<h2>Conclusion</h2>
+
+<p>Effective data cleanup before migration ensures:</p>
+<p>- <strong>High-quality data</strong> in target system</p>
+<p>- <strong>Reduced migration issues</strong> through pre-validation</p>
+<p>- <strong>Automated processing</strong> reducing manual effort</p>
+<p>- <strong>Comprehensive QA</strong> metrics for validation</p>
+<p>- <strong>Scalable solution</strong> for enterprise needs</p>
+
+<strong>Key Takeaways:</strong>
+<p>1. Data cleanup is critical before migration</p>
+<p>2. Fuzzy matching improves duplicate detection</p>
+<p>3. QA metrics provide confidence in data quality</p>
+<p>4. Automation reduces manual effort and errors</p>
+<p>5. Configurable solutions adapt to different scenarios</p>
+
+<p>---</p>
+
+<em>This solution demonstrates enterprise data preparation patterns. For related content, see <a href="./enterprise-data-warehouse-migration.html">Enterprise Data Warehouse Migration</a> and <a href="./etl-automation-solution.html">ETL Automation Solution</a>.</em>
+
+
+        </div>
+        
+        <a href="../index.html" class="back-link">← Back to Blog</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p><strong>Muhammad Siddique</strong> | Data Engineering Professional</p>
+                <p>Phone: <a href="tel:+923315868725">+92 331 5868725</a> | 
+                   Email: <a href="mailto:siddique.dea@gmail.com">siddique.dea@gmail.com</a> | 
+                   <a href="https://www.linkedin.com/in/siddique-datalover" target="_blank">LinkedIn</a></p>
+                <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                    &copy; 2025 Muhammad Siddique | Data Engineering Blog & Portfolio
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

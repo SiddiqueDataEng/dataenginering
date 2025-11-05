@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Data Modeling & Architecture: Building Scalable Data Warehouses - Muhammad Siddique Data Engineering Blog">
+    <meta name="keywords" content="data engineering, Power BI, Azure, data analytics, Data Modeling & Architecture: Building Scalable Data Warehouses">
+    <meta name="author" content="Muhammad Siddique">
+    <title>Data Modeling & Architecture: Building Scalable Data Warehouses | Muhammad Siddique - Data Engineering Blog</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #1abc9c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #7f8c8d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent);
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .article {
+            background: white;
+            padding: 3rem;
+            margin: 3rem auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            max-width: 1000px;
+        }
+        
+        .article-header {
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .article-header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        
+        .article-meta {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+        
+        .article-content {
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+        
+        .article-content h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin: 2.5rem 0 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        .article-content h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem 0;
+            padding-top: 1rem;
+        }
+        
+        .article-content h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin: 1.5rem 0 0.8rem 0;
+        }
+        
+        .article-content h4 {
+            color: var(--dark);
+            font-size: 1.3rem;
+            margin: 1.2rem 0 0.6rem 0;
+        }
+        
+        .article-content p {
+            margin-bottom: 1.2rem;
+            color: #444;
+        }
+        
+        .article-content ul, .article-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+        
+        .article-content li {
+            margin-bottom: 0.8rem;
+            color: #444;
+        }
+        
+        .article-content code {
+            background-color: #f4f4f4;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e83e8c;
+        }
+        
+        .article-content pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .article-content pre code {
+            background-color: transparent;
+            color: #ecf0f1;
+            padding: 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .article-content a {
+            color: var(--secondary);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .article-content a:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        
+        .article-content strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        .article-content em {
+            font-style: italic;
+            color: #555;
+        }
+        
+        .article-content hr {
+            border: none;
+            border-top: 2px solid var(--light);
+            margin: 2rem 0;
+        }
+        
+        .article-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .back-link:hover {
+            background-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            text-align: center;
+            padding: 2rem 0;
+        }
+        
+        .footer-content p {
+            margin-bottom: 1rem;
+            color: #bdc3c7;
+        }
+        
+        .footer-content a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .footer-content a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .article {
+                padding: 2rem 1.5rem;
+                margin: 2rem auto;
+            }
+            
+            .article-header h1 {
+                font-size: 2rem;
+            }
+            
+            .article-content {
+                font-size: 1rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">Muhammad Siddique | Data<span>Engineering</span>.Blog</a>
+                <nav>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../index.html#blog">Blog</a></li>
+                        <li><a href="about-author.html">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="article">
+        <div class="article-header">
+            <h1>Data Modeling & Architecture: Building Scalable Data Warehouses</h1>
+            <div class="article-meta">
+                <strong>Muhammad Siddique</strong> | Data Engineering Professional | 
+                <a href="../index.html" style="color: var(--secondary);">Back to Blog</a>
+            </div>
+        </div>
+        
+        <div class="article-content">
+<h1>Data Modeling & Architecture: Building Scalable Data Warehouses</h1>
+
+<em>Published: January 2025</em>
+
+<h2>Overview</h2>
+
+<p>Proper data modeling is the foundation of any successful data warehouse. This article explores dimensional modeling patterns, data architecture designs, and optimization techniques from production data warehouses.</p>
+
+<h2>The Data Modeling Challenge</h2>
+
+<p>Effective data modeling must:</p>
+<ul>
+<li><strong>Support business requirements</strong> for analytics</li>
+<li><strong>Enable performance</strong> with proper indexing</li>
+<li><strong>Scale</strong> with growing data volumes</li>
+<li><strong>Remain maintainable</strong> as requirements evolve</li>
+</ol>
+
+<h2>Data Modeling Approaches</h2>
+
+<h3>1. Dimensional Modeling (Star Schema)</h3>
+<ul>
+<li><strong>Fact tables</strong>: Transactional data</li>
+<li><strong>Dimension tables</strong>: Descriptive attributes</li>
+<li><strong>Optimized</strong> for analytics queries</li>
+<li><strong>Intuitive</strong> for business users</li>
+</ol>
+
+<h3>2. Normalized Modeling (3NF)</h3>
+<ul>
+<li><strong>Eliminates redundancy</strong></li>
+<li><strong>Reduces storage</strong> requirements</li>
+<li><strong>Complex joins</strong> for analytics</li>
+<li><strong>Better for</strong> operational systems</li>
+</ol>
+
+<h3>3. Data Vault Modeling</h3>
+<ul>
+<li><strong>Hub-Satellite-Link</strong> structure</li>
+<li><strong>Audit-friendly</strong> design</li>
+<li><strong>Scalable</strong> architecture</li>
+<li><strong>Historical tracking</strong> built-in</li>
+</ol>
+
+<h2>Use Case 1: Retail Data Warehouse Modeling</h2>
+
+<h3>Business Requirements</h3>
+<p>A retail company needed a data warehouse to support:</p>
+<ul>
+<li>Sales analysis by product, store, customer, time</li>
+<li>Inventory management</li>
+<li>Customer segmentation</li>
+<li>Promotional effectiveness analysis</li>
+</ol>
+
+<h3>Dimensional Model Design</h3>
+
+<strong>Star Schema:</strong>
+<pre><code class="language-">Fact_Sales (Fact Table)
+├── Sale_ID (PK)
+├── Date<em>ID (FK → Dim</em>Date)
+├── Product<em>ID (FK → Dim</em>Product)
+├── Store<em>ID (FK → Dim</em>Store)
+├── Customer<em>ID (FK → Dim</em>Customer)
+├── Promotion<em>ID (FK → Dim</em>Promotion)
+├── Sale_Amount
+├── Quantity
+└── Cost
+
+Dim_Date (Dimension)
+├── Date_ID (PK)
+├── Date
+├── Year, Quarter, Month, Week
+├── Day<em>of</em>Week
+├── Is_Holiday
+└── Fiscal_Period
+
+Dim_Product (Dimension)
+├── Product_ID (PK)
+├── Product_Name
+├── Category, Subcategory
+├── Brand, Supplier
+├── Price
+└── SCD columns (Type 2)
+
+Dim_Store (Dimension)
+├── Store_ID (PK)
+├── Store_Name
+├── Location (City, State, Region)
+├── Store_Size
+└── Opening_Date
+
+Dim_Customer (Dimension)
+├── Customer_ID (PK)
+├── Customer_Name
+├── Demographics
+├── Customer_Segment
+└── SCD columns (Type 2)
+
+Dim_Promotion (Dimension)
+├── Promotion_ID (PK)
+├── Promotion_Name
+├── Promotion_Type
+├── Discount_Percent
+└── Start<em>Date, End</em>Date
+</code></pre>
+
+<strong>Design Decisions:</strong>
+
+<ol>
+<li><strong>Slowly Changing Dimensions (SCD)</strong></li>
+</ol>
+   <pre><code class="language-sql">   -- Type 2 SCD for Product and Customer
+   CREATE TABLE Dim<em>Product</em>SCD (
+       Product_SK INT PRIMARY KEY,
+       Product_ID INT,
+       Product_Name VARCHAR(100),
+       Current_Price DECIMAL(10,2),
+       Valid_From DATE,
+       Valid_To DATE,
+       Is_Current BIT
+   );
+   </code></pre>
+
+<ol>
+<li><strong>Conformed Dimensions</strong></li>
+</ol>
+<p>   - Shared across multiple data marts</p>
+<p>   - Ensures consistency</p>
+<p>   - Single source of truth</p>
+
+<ol>
+<li><strong>Aggregation Tables</strong></li>
+</ol>
+   <pre><code class="language-sql">   -- Pre-aggregated fact table
+   CREATE TABLE Fact<em>Sales</em>Daily (
+       Date_ID INT,
+       Product_ID INT,
+       Store_ID INT,
+       Total_Sales DECIMAL(18,2),
+       Total_Quantity INT,
+       Transaction_Count INT
+   );
+   </code></pre>
+
+<strong>Results:</strong>
+<ul>
+<li><strong>80% faster</strong> query performance</li>
+<li><strong>Easier</strong> for business users</li>
+<li><strong>Scalable</strong> to millions of rows</li>
+<li><strong>Flexible</strong> for new requirements</li>
+</ol>
+
+<h2>Use Case 2: Snowflake Cloud Data Modeling</h2>
+
+<h3>Business Requirements</h3>
+<p>A SaaS platform needed a scalable data model in Snowflake to:</p>
+<ul>
+<li>Support multi-tenant architecture</li>
+<li>Handle petabyte-scale data</li>
+<li>Enable fast analytics queries</li>
+<li>Support data sharing</li>
+</ol>
+
+<h3>Implementation</h3>
+
+<strong>Clustering Strategy:</strong>
+<pre><code class="language-sql">-- Cluster by date for time-series queries
+CREATE TABLE Fact_Sales (
+    Sale_ID BIGINT,
+    Sale_Date DATE,
+    Product_ID INT,
+    Amount DECIMAL(18,2)
+)
+CLUSTER BY (Sale_Date);
+
+-- Auto-clustering enabled
+ALTER TABLE Fact<em>Sales SET AUTO</em>CLUSTERING = TRUE;
+</code></pre>
+
+<strong>Partitioning:</strong>
+<pre><code class="language-sql">-- Partition large tables by date
+CREATE TABLE Fact<em>Sales</em>Partitioned (
+    Sale_ID BIGINT,
+    Sale_Date DATE,
+    Product_ID INT,
+    Amount DECIMAL(18,2)
+)
+PARTITION BY Sale_Date;
+
+-- Enables partition pruning
+</code></pre>
+
+<strong>Multi-Tenant Design:</strong>
+<pre><code class="language-sql">-- Row-level security for tenant isolation
+CREATE ROW ACCESS POLICY tenant_policy AS
+    (tenant<em>id INT) REFERENCES (SELECT tenant</em>id FROM user<em>tenants WHERE user = CURRENT</em>USER());
+
+ALTER TABLE Fact<em>Sales ADD ROW ACCESS POLICY tenant</em>policy ON (tenant_id);
+</code></pre>
+
+<strong>Materialized Views:</strong>
+<pre><code class="language-sql">-- Pre-aggregated views for performance
+CREATE MATERIALIZED VIEW Sales<em>Summary</em>MV AS
+SELECT 
+    Sale_Date,
+    Product_ID,
+    SUM(Amount) as Total_Sales,
+    COUNT(*) as Transaction_Count
+FROM Fact_Sales
+GROUP BY Sale<em>Date, Product</em>ID;
+
+-- Auto-refresh materialized view
+ALTER MATERIALIZED VIEW Sales<em>Summary</em>MV SET AUTO_REFRESH = TRUE;
+</code></pre>
+
+<strong>Results:</strong>
+<ul>
+<li><strong>65% reduction</strong> in query times</li>
+<li><strong>40% reduction</strong> in storage costs</li>
+<li><strong>Secure</strong> multi-tenant isolation</li>
+<li><strong>Scalable</strong> to petabytes</li>
+</ol>
+
+<h2>Use Case 3: Enterprise Data Warehouse Architecture</h2>
+
+<h3>Business Requirements</h3>
+<p>An enterprise needed to modernize a legacy data warehouse with:</p>
+<ul>
+<li>Integration of 20+ source systems</li>
+<li>Support for historical data (10+ years)</li>
+<li>Real-time and batch processing</li>
+<li>Data governance and quality</li>
+</ol>
+
+<h3>Architecture Design</h3>
+
+<strong>Multi-Layer Architecture:</strong>
+<pre><code class="language-">Staging Layer (Raw)
+    ↓
+Integration Layer (Cleansed)
+    ↓
+Data Warehouse (Dimensional)
+    ↓
+Data Marts (Subject Areas)
+    ↓
+Analytics Layer (BI Tools)
+</code></pre>
+
+<strong>Data Vault Implementation:</strong>
+<pre><code class="language-sql">-- Hubs (Business Keys)
+CREATE TABLE Hub_Customer (
+    Customer_HK VARCHAR(32) PRIMARY KEY,
+    Customer_ID VARCHAR(50),
+    Load_Date TIMESTAMP,
+    Record_Source VARCHAR(100)
+);
+
+-- Links (Relationships)
+CREATE TABLE Link<em>Customer</em>Order (
+    Link_HK VARCHAR(32) PRIMARY KEY,
+    Customer_HK VARCHAR(32),
+    Order_HK VARCHAR(32),
+    Load_Date TIMESTAMP,
+    Record_Source VARCHAR(100)
+);
+
+-- Satellites (Attributes)
+CREATE TABLE Sat_Customer (
+    Customer_HK VARCHAR(32),
+    Load_Date TIMESTAMP,
+    Hash_Diff VARCHAR(32),
+    Customer_Name VARCHAR(100),
+    Email VARCHAR(255),
+    Phone VARCHAR(20),
+    Load<em>End</em>Date TIMESTAMP,
+    PRIMARY KEY (Customer<em>HK, Load</em>Date)
+);
+</code></pre>
+
+<strong>Benefits:</strong>
+<ul>
+<li><strong>Audit trail</strong> for all changes</li>
+<li><strong>Scalable</strong> for large volumes</li>
+<li><strong>Flexible</strong> for new sources</li>
+<li><strong>Historical tracking</strong> built-in</li>
+</ol>
+
+<h2>Technical Best Practices</h2>
+
+<h3>1. Indexing Strategy</h3>
+
+<strong>Clustered Index:</strong>
+<pre><code class="language-sql">-- Primary key as clustered index
+CREATE CLUSTERED INDEX PK<em>Fact</em>Sales 
+ON Fact<em>Sales(Sale</em>ID);
+</code></pre>
+
+<strong>Non-Clustered Indexes:</strong>
+<pre><code class="language-sql">-- Index foreign keys for joins
+CREATE NONCLUSTERED INDEX IX<em>Fact</em>Sales_Date 
+ON Fact<em>Sales(Date</em>ID);
+
+CREATE NONCLUSTERED INDEX IX<em>Fact</em>Sales_Product 
+ON Fact<em>Sales(Product</em>ID);
+</code></pre>
+
+<strong>Columnstore Indexes:</strong>
+<pre><code class="language-sql">-- For analytics workloads
+CREATE COLUMNSTORE INDEX IX<em>Fact</em>Sales_Columnstore 
+ON Fact<em>Sales(Date</em>ID, Product<em>ID, Store</em>ID, Sale_Amount, Quantity);
+</code></pre>
+
+<h3>2. Partitioning Strategy</h3>
+
+<strong>Date-Based Partitioning:</strong>
+<pre><code class="language-sql">-- Partition by month
+CREATE PARTITION FUNCTION PF<em>Sales</em>Monthly(DATE)
+AS RANGE RIGHT FOR VALUES (
+    '2024-01-01', '2024-02-01', '2024-03-01', ...
+);
+
+CREATE PARTITION SCHEME PS<em>Sales</em>Monthly
+AS PARTITION PF<em>Sales</em>Monthly
+ALL TO ([PRIMARY]);
+</code></pre>
+
+<strong>Benefits:</strong>
+<ul>
+<li>Partition elimination in queries</li>
+<li>Faster data loading</li>
+<li>Easier data archival</li>
+<li>Parallel processing</li>
+</ol>
+
+<h3>3. Data Quality Framework</h3>
+
+<pre><code class="language-python">class DataQualityValidator:
+    def validate<em>dimension(self, dim</em>table):
+        rules = {
+            'not<em>null': ['dim</em>key', 'business_key'],
+            'unique': ['business_key'],
+            'referential<em>integrity': 'fact</em>table_fks'
+        }
+        return self.check<em>rules(dim</em>table, rules)
+    
+    def validate<em>fact(self, fact</em>table):
+        rules = {
+            'not<em>null': ['fact</em>key', 'measure'],
+            'positive': ['quantity', 'amount'],
+            'date<em>range': ['sale</em>date']
+        }
+        return self.check<em>rules(fact</em>table, rules)
+</code></pre>
+
+<h2>Performance Optimization</h2>
+
+<h3>1. Query Optimization</h3>
+<ul>
+<li>Use appropriate indexes</li>
+<li>Enable partition pruning</li>
+<li>Optimize join strategies</li>
+<li>Use materialized views</li>
+</ol>
+
+<h3>2. Data Compression</h3>
+<pre><code class="language-sql">-- Enable data compression
+ALTER TABLE Fact<em>Sales REBUILD WITH (DATA</em>COMPRESSION = PAGE);
+</code></pre>
+
+<h3>3. Statistics Management</h3>
+<pre><code class="language-sql">-- Update statistics regularly
+UPDATE STATISTICS Fact_Sales WITH FULLSCAN;
+</code></pre>
+
+<h2>Related Projects</h2>
+
+<ul>
+<li><a href="../projects/Data%20Modeling%20for%20Student%20Registration%20&%20Airline%20Passenger%20Systems/">Data Modeling for Student & Airline Systems</a></li>
+<li><a href="../projects/snowflak-datamodeling/">Snowflake Data Modeling</a></li>
+<li><a href="../projects/Enterprise%20Data%20Warehouse%20Modernization/">Enterprise Data Warehouse Modernization</a></li>
+</ol>
+
+<h2>Conclusion</h2>
+
+<p>Effective data modeling is crucial for building scalable, performant data warehouses. The key is choosing the right modeling approach, implementing proper indexing and partitioning strategies, and maintaining data quality throughout.</p>
+
+<strong>Key Takeaways:</strong>
+<ol>
+<li>Dimensional modeling optimizes for analytics</li>
+<li>Proper indexing significantly improves performance</li>
+<li>Partitioning enables scalability</li>
+<li>Data quality validation is essential</li>
+<li>Multi-layer architecture supports flexibility</li>
+</ol>
+
+<p>---</p>
+
+<strong>Next Steps:</strong>
+<ul>
+<li><a href="./bi-reporting.html">Business Intelligence & Reporting</a></li>
+<li><a href="./enterprise-etl-migration.html">Enterprise ETL & Migration</a></li>
+</ol>
+
+
+        </div>
+        
+        <a href="../index.html" class="back-link">← Back to Blog</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p><strong>Muhammad Siddique</strong> | Data Engineering Professional</p>
+                <p>Phone: <a href="tel:+923315868725">+92 331 5868725</a> | 
+                   Email: <a href="mailto:siddique.dea@gmail.com">siddique.dea@gmail.com</a> | 
+                   <a href="https://www.linkedin.com/in/siddique-datalover" target="_blank">LinkedIn</a></p>
+                <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                    &copy; 2025 Muhammad Siddique | Data Engineering Blog & Portfolio
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="IoT & Sensor Data Platforms: Processing Millions of Telemetry Events - Muhammad Siddique Data Engineering Blog">
+    <meta name="keywords" content="data engineering, Power BI, Azure, data analytics, IoT & Sensor Data Platforms: Processing Millions of Telemetry Events">
+    <meta name="author" content="Muhammad Siddique">
+    <title>IoT & Sensor Data Platforms: Processing Millions of Telemetry Events | Muhammad Siddique - Data Engineering Blog</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #1abc9c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #7f8c8d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent);
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .article {
+            background: white;
+            padding: 3rem;
+            margin: 3rem auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            max-width: 1000px;
+        }
+        
+        .article-header {
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .article-header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        
+        .article-meta {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+        
+        .article-content {
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+        
+        .article-content h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin: 2.5rem 0 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        .article-content h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem 0;
+            padding-top: 1rem;
+        }
+        
+        .article-content h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin: 1.5rem 0 0.8rem 0;
+        }
+        
+        .article-content h4 {
+            color: var(--dark);
+            font-size: 1.3rem;
+            margin: 1.2rem 0 0.6rem 0;
+        }
+        
+        .article-content p {
+            margin-bottom: 1.2rem;
+            color: #444;
+        }
+        
+        .article-content ul, .article-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+        
+        .article-content li {
+            margin-bottom: 0.8rem;
+            color: #444;
+        }
+        
+        .article-content code {
+            background-color: #f4f4f4;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e83e8c;
+        }
+        
+        .article-content pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .article-content pre code {
+            background-color: transparent;
+            color: #ecf0f1;
+            padding: 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .article-content a {
+            color: var(--secondary);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .article-content a:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        
+        .article-content strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        .article-content em {
+            font-style: italic;
+            color: #555;
+        }
+        
+        .article-content hr {
+            border: none;
+            border-top: 2px solid var(--light);
+            margin: 2rem 0;
+        }
+        
+        .article-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .back-link:hover {
+            background-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            text-align: center;
+            padding: 2rem 0;
+        }
+        
+        .footer-content p {
+            margin-bottom: 1rem;
+            color: #bdc3c7;
+        }
+        
+        .footer-content a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .footer-content a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .article {
+                padding: 2rem 1.5rem;
+                margin: 2rem auto;
+            }
+            
+            .article-header h1 {
+                font-size: 2rem;
+            }
+            
+            .article-content {
+                font-size: 1rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">Muhammad Siddique | Data<span>Engineering</span>.Blog</a>
+                <nav>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../index.html#blog">Blog</a></li>
+                        <li><a href="about-author.html">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="article">
+        <div class="article-header">
+            <h1>IoT & Sensor Data Platforms: Processing Millions of Telemetry Events</h1>
+            <div class="article-meta">
+                <strong>Muhammad Siddique</strong> | Data Engineering Professional | 
+                <a href="../index.html" style="color: var(--secondary);">Back to Blog</a>
+            </div>
+        </div>
+        
+        <div class="article-content">
+<h1>IoT & Sensor Data Platforms: Processing Millions of Telemetry Events</h1>
+
+<em>Published: January 2025</em>
+
+<h2>Overview</h2>
+
+<p>Internet of Things (IoT) and sensor data platforms must handle massive volumes of telemetry data, enable real-time processing, and support both operational monitoring and predictive analytics. This article explores production architectures for IoT data ingestion, time-series storage, and real-time analytics.</p>
+
+<h2>The IoT Data Challenge</h2>
+
+<p>IoT platforms face unique challenges:</p>
+<ul>
+<li><strong>High volume</strong>: Millions of events per second</li>
+<li><strong>High velocity</strong>: Real-time data streaming</li>
+<li><strong>Variety</strong>: Different device types and protocols</li>
+<li><strong>Scalability</strong>: Growing number of devices</li>
+<li><strong>Storage</strong>: Long-term historical data retention</li>
+</ol>
+
+<h2>IoT Platform Architecture</h2>
+
+<p>A comprehensive IoT platform includes:</p>
+
+<pre><code class="language-">IoT Devices → Ingestion → Processing → Storage → Analytics → Actions
+     ↓            ↓            ↓          ↓          ↓          ↓
+  Sensors    Message Broker   Streaming   Time-Series  ML Models   Alerts
+  Actuators  Event Hubs       Analytics   Database     Dashboards   Control
+</code></pre>
+
+<h2>Use Case 1: Large-Scale IoT Sensor Platform</h2>
+
+<h3>Business Requirements</h3>
+<p>A manufacturing company with 10,000+ sensors needed a platform to:</p>
+<ul>
+<li>Ingest 1M+ sensor readings per minute</li>
+<li>Process data in real-time for alerts</li>
+<li>Store 5+ years of historical data</li>
+<li>Enable predictive maintenance</li>
+<li>Support device management</li>
+</ol>
+
+<h3>Implementation Architecture</h3>
+
+<strong>Data Ingestion Layer:</strong>
+<pre><code class="language-">IoT Sensors → Azure IoT Hub → Event Hubs → Stream Processing
+                ↓                ↓              ↓
+         Device Management   Partitioning   Real-Time Processing
+         Authentication      Load Balancing  Anomaly Detection
+</code></pre>
+
+<strong>Key Components:</strong>
+
+<h4>1. Device Ingestion with Azure IoT Hub</h4>
+<pre><code class="language-python">class IoTDeviceIngestion:
+    def <strong>init</strong>(self):
+        self.iot_hub = IoTHubClient()
+        self.event_hubs = EventHubsClient()
+    
+    def ingest<em>device</em>data(self, device_message):
+        """Ingest data from IoT device"""
+        # Validate device authentication
+        if not self.authenticate<em>device(device</em>message.device_id):
+            raise AuthenticationError("Invalid device credentials")
+        
+        # Parse telemetry
+        telemetry = self.parse<em>telemetry(device</em>message.payload)
+        
+        # Enrich with metadata
+        enriched_data = {
+            'device<em>id': device</em>message.device_id,
+            'timestamp': datetime.utcnow(),
+            'sensor_readings': telemetry,
+            'device<em>metadata': self.get</em>device<em>metadata(device</em>message.device_id),
+            'location': self.get<em>device</em>location(device<em>message.device</em>id)
+        }
+        
+        # Send to Event Hubs for processing
+        self.event<em>hubs.send(enriched</em>data, partition<em>key=device</em>message.device_id)
+        
+        # Store raw data in data lake
+        self.store<em>raw</em>data(enriched_data)
+        
+        return enriched_data
+    
+    def authenticate<em>device(self, device</em>id):
+        """Authenticate IoT device"""
+        device<em>credentials = self.get</em>device<em>credentials(device</em>id)
+        return device<em>credentials is not None and device</em>credentials.active
+</code></pre>
+
+<h4>2. Real-Time Stream Processing</h4>
+<pre><code class="language-python">class IoTStreamProcessor:
+    def <strong>init</strong>(self):
+        self.stream_analytics = StreamAnalyticsJob()
+        self.alert_engine = AlertEngine()
+        self.ml_models = MLModelRegistry()
+    
+    def process<em>stream(self, telemetry</em>stream):
+        """Process IoT telemetry stream in real-time"""
+        # Parse stream
+        parsed<em>stream = telemetry</em>stream.select(
+            col("device_id"),
+            col("timestamp"),
+            col("sensor_readings.*"),
+            col("location")
+        )
+        
+        # Apply transformations
+        processed<em>stream = parsed</em>stream \
+            .withColumn("normalized<em>value", self.normalize</em>sensor_value(col("value"))) \
+            .withColumn("delta", self.calculate<em>delta(col("value"), col("previous</em>value"))) \
+            .withColumn("trend", self.calculate_trend(col("value")))
+        
+        # Real-time aggregations (1-minute windows)
+        aggregated = processed_stream \
+            .withWatermark("timestamp", "1 minute") \
+            .groupBy(
+                window("timestamp", "1 minute"),
+                "device_id",
+                "sensor_type"
+            ) \
+            .agg(
+                avg("value").alias("avg_value"),
+                max("value").alias("max_value"),
+                min("value").alias("min_value"),
+                stddev("value").alias("std_value")
+            )
+        
+        # Anomaly detection
+        anomalies = self.detect<em>anomalies(processed</em>stream)
+        
+        # Send alerts for critical anomalies
+        for anomaly in anomalies:
+            if anomaly.severity == 'critical':
+                self.alert<em>engine.send</em>alert(anomaly)
+        
+        # Store aggregated data
+        self.store<em>aggregated</em>data(aggregated)
+        
+        return processed_stream
+</code></pre>
+
+<h4>3. Time-Series Storage</h4>
+<pre><code class="language-python">class TimeSeriesStorage:
+    def <strong>init</strong>(self):
+        self.ts_db = TimeSeriesDB()  # Azure Time Series Insights or InfluxDB
+        self.data_lake = DataLakeStorage()
+    
+    def store<em>time</em>series<em>data(self, sensor</em>data):
+        """Store time-series sensor data"""
+        # Store in time-series database for fast queries
+        self.ts<em>db.write</em>points(
+            measurement='sensor_readings',
+            tags={
+                'device<em>id': sensor</em>data.device_id,
+                'sensor<em>type': sensor</em>data.sensor_type,
+                'location': sensor_data.location
+            },
+            fields={
+                'value': sensor_data.value,
+                'unit': sensor_data.unit
+            },
+            time=sensor_data.timestamp
+        )
+        
+        # Store in data lake for long-term retention
+        self.data_lake.store(
+            path=f"sensor<em>data/{sensor</em>data.device<em>id}/{sensor</em>data.timestamp.date()}/",
+            data=sensor_data
+        )
+    
+    def query<em>time</em>series(self, device<em>id, sensor</em>type, start<em>time, end</em>time):
+        """Query time-series data"""
+        return self.ts_db.query(
+            f"SELECT * FROM sensor_readings "
+            f"WHERE device<em>id='{device</em>id}' "
+            f"AND sensor<em>type='{sensor</em>type}' "
+            f"AND time >= '{start<em>time}' AND time <= '{end</em>time}'"
+        )
+</code></pre>
+
+<h4>4. Predictive Maintenance</h4>
+<pre><code class="language-python">class PredictiveMaintenance:
+    def <strong>init</strong>(self):
+        self.ml_models = MLModelRegistry()
+        self.alert_engine = AlertEngine()
+    
+    def predict<em>failure(self, device</em>id, sensor_data):
+        """Predict device failure using ML models"""
+        # Get historical data for device
+        historical<em>data = self.get</em>device<em>history(device</em>id, days=30)
+        
+        # Extract features
+        features = self.extract<em>features(sensor</em>data, historical_data)
+        
+        # Predict using ML model
+        failure<em>probability = self.ml</em>models.predict(
+            model<em>name='device</em>failure_prediction',
+            features=features
+        )
+        
+        # Calculate time to failure
+        if failure_probability > 0.7:
+            time<em>to</em>failure = self.ml<em>models.predict</em>time<em>to</em>failure(
+                model<em>name='time</em>to_failure',
+                features=features
+            )
+            
+            # Send maintenance alert
+            self.alert<em>engine.send</em>maintenance_alert({
+                'device<em>id': device</em>id,
+                'failure<em>probability': failure</em>probability,
+                'estimated<em>time</em>to<em>failure': time</em>to_failure,
+                'recommended<em>maintenance': self.get</em>maintenance<em>recommendations(device</em>id)
+            })
+        
+        return failure_probability
+</code></pre>
+
+<strong>Results:</strong>
+<ul>
+<li><strong>1M+ events/minute</strong> processed</li>
+<li><strong>Sub-second</strong> latency for alerts</li>
+<li><strong>60% reduction</strong> in unplanned downtime</li>
+<li><strong>80% improvement</strong> in predictive maintenance accuracy</li>
+</ol>
+
+<h2>Use Case 2: IoT Fleet Management Platform</h2>
+
+<h3>Business Requirements</h3>
+<p>A logistics company needed a platform to track 5,000+ vehicles with:</p>
+<ul>
+<li>Real-time GPS tracking</li>
+<li>Fuel consumption monitoring</li>
+<li>Driver behavior analysis</li>
+<li>Route optimization</li>
+<li>Predictive maintenance</li>
+</ol>
+
+<h3>Implementation</h3>
+
+<strong>Fleet Data Pipeline:</strong>
+<pre><code class="language-">Vehicles → GPS Trackers → IoT Hub → Stream Analytics → Storage
+                             ↓              ↓              ↓
+                      Device Mgmt     Real-Time      Time-Series DB
+                                      Processing     Data Lake
+</code></pre>
+
+<strong>Real-Time Vehicle Tracking:</strong>
+<pre><code class="language-python">class FleetTrackingPlatform:
+    def <strong>init</strong>(self):
+        self.stream_processor = StreamProcessor()
+        self.route_optimizer = RouteOptimizer()
+        self.driver_analytics = DriverAnalytics()
+    
+    def process<em>vehicle</em>telemetry(self, vehicle_data):
+        """Process vehicle telemetry in real-time"""
+        # Extract GPS coordinates
+        location = {
+            'latitude': vehicle<em>data.gps</em>latitude,
+            'longitude': vehicle<em>data.gps</em>longitude,
+            'timestamp': vehicle_data.timestamp
+        }
+        
+        # Update vehicle location
+        self.update<em>vehicle</em>location(vehicle<em>data.vehicle</em>id, location)
+        
+        # Monitor fuel consumption
+        fuel_data = {
+            'vehicle<em>id': vehicle</em>data.vehicle_id,
+            'fuel<em>level': vehicle</em>data.fuel_level,
+            'fuel<em>consumption</em>rate': self.calculate<em>fuel</em>consumption(vehicle_data),
+            'estimated<em>range': self.calculate</em>range(vehicle_data)
+        }
+        
+        # Alert on low fuel
+        if fuel<em>data['fuel</em>level'] < 0.2:
+            self.send<em>alert(f"Vehicle {vehicle</em>data.vehicle_id} low fuel")
+        
+        # Analyze driver behavior
+        driver<em>metrics = self.driver</em>analytics.analyze(
+            vehicle<em>id=vehicle</em>data.vehicle_id,
+            speed=vehicle_data.speed,
+            acceleration=vehicle_data.acceleration,
+            braking=vehicle_data.braking,
+            location=location
+        )
+        
+        # Alert on unsafe driving
+        if driver<em>metrics['risk</em>score'] > 0.8:
+            self.send<em>driver</em>alert(vehicle<em>data.vehicle</em>id, driver_metrics)
+        
+        # Optimize route if needed
+        if vehicle<em>data.route</em>optimization_requested:
+            optimized<em>route = self.route</em>optimizer.optimize(
+                current_location=location,
+                destination=vehicle_data.destination,
+                vehicle<em>constraints=vehicle</em>data.constraints
+            )
+            self.send<em>route</em>update(vehicle<em>data.vehicle</em>id, optimized_route)
+        
+        return {
+            'location': location,
+            'fuel': fuel_data,
+            'driver<em>metrics': driver</em>metrics
+        }
+</code></pre>
+
+<strong>Results:</strong>
+<ul>
+<li><strong>Real-time tracking</strong> of 5,000+ vehicles</li>
+<li><strong>25% reduction</strong> in fuel costs</li>
+<li><strong>20% improvement</strong> in route efficiency</li>
+<li><strong>30% reduction</strong> in accidents</li>
+</ol>
+
+<h2>Use Case 3: Smart Building IoT Platform</h2>
+
+<h3>Business Requirements</h3>
+<p>A property management company needed to monitor 100+ buildings with:</p>
+<ul>
+<li>Energy consumption tracking</li>
+<li>HVAC system monitoring</li>
+<li>Occupancy analytics</li>
+<li>Predictive maintenance</li>
+<li>Cost optimization</li>
+</ol>
+
+<h3>Implementation</h3>
+
+<strong>Building IoT Platform:</strong>
+<pre><code class="language-">Smart Sensors → IoT Hub → Stream Analytics → Analytics → Dashboards
+     ↓             ↓            ↓                ↓            ↓
+ Temperature   Ingestion   Processing      ML Models    Power BI
+ Humidity      Device Mgmt  Aggregation   Anomaly Det   Reports
+ Occupancy     Security     Storage       Optimization  Alerts
+</code></pre>
+
+<strong>Energy Optimization:</strong>
+<pre><code class="language-python">class SmartBuildingPlatform:
+    def <strong>init</strong>(self):
+        self.energy_analytics = EnergyAnalytics()
+        self.hvac_optimizer = HVACOptimizer()
+        self.occupancy_analytics = OccupancyAnalytics()
+    
+    def optimize<em>energy</em>consumption(self, building<em>id, sensor</em>data):
+        """Optimize energy consumption based on sensor data"""
+        # Analyze current consumption
+        current<em>consumption = self.energy</em>analytics.calculate_consumption(
+            building<em>id=building</em>id,
+            sensor<em>data=sensor</em>data
+        )
+        
+        # Get occupancy data
+        occupancy = self.occupancy<em>analytics.get</em>occupancy(
+            building<em>id=building</em>id,
+            timestamp=sensor_data.timestamp
+        )
+        
+        # Optimize HVAC settings
+        optimal<em>hvac</em>settings = self.hvac_optimizer.optimize(
+            current<em>temp=sensor</em>data.temperature,
+            target<em>temp=self.get</em>target_temperature(occupancy),
+            occupancy=occupancy,
+            weather<em>forecast=self.get</em>weather_forecast()
+        )
+        
+        # Calculate potential savings
+        potential<em>savings = self.energy</em>analytics.calculate_savings(
+            current<em>settings=sensor</em>data.hvac_settings,
+            optimal<em>settings=optimal</em>hvac_settings
+        )
+        
+        # Apply optimizations if savings > threshold
+        if potential_savings > 0.1:  # 10% savings
+            self.apply<em>hvac</em>settings(building<em>id, optimal</em>hvac_settings)
+        
+        return {
+            'current<em>consumption': current</em>consumption,
+            'optimal<em>settings': optimal</em>hvac_settings,
+            'potential<em>savings': potential</em>savings
+        }
+</code></pre>
+
+<strong>Results:</strong>
+<ul>
+<li><strong>30% reduction</strong> in energy costs</li>
+<li><strong>Real-time</strong> building monitoring</li>
+<li><strong>Predictive</strong> maintenance alerts</li>
+<li><strong>Automated</strong> HVAC optimization</li>
+</ol>
+
+<h2>Technical Best Practices</h2>
+
+<h3>1. Device Management</h3>
+
+<pre><code class="language-python">class IoTDeviceManager:
+    def register<em>device(self, device</em>metadata):
+        """Register new IoT device"""
+        device = {
+            'device<em>id': device</em>metadata.device_id,
+            'device<em>type': device</em>metadata.device_type,
+            'location': device_metadata.location,
+            'sensors': device_metadata.sensors,
+            'credentials': self.generate_credentials(),
+            'status': 'active',
+            'registered_at': datetime.utcnow()
+        }
+        
+        self.device_registry.save(device)
+        return device
+    
+    def update<em>device</em>status(self, device_id, status):
+        """Update device status"""
+        device = self.device<em>registry.get(device</em>id)
+        device['status'] = status
+        device['last_update'] = datetime.utcnow()
+        self.device_registry.update(device)
+    
+    def handle<em>device</em>disconnect(self, device_id):
+        """Handle device disconnection"""
+        self.update<em>device</em>status(device_id, 'offline')
+        self.alert<em>engine.send</em>alert({
+            'type': 'device_offline',
+            'device<em>id': device</em>id,
+            'timestamp': datetime.utcnow()
+        })
+</code></pre>
+
+<h3>2. Data Compression & Retention</h3>
+
+<pre><code class="language-python">class IoTDataRetention:
+    def <strong>init</strong>(self):
+        self.hot_storage = TimeSeriesDB()  # Last 30 days
+        self.warm_storage = ParquetFiles()  # 30-365 days
+        self.cold_storage = ArchiveStorage()  # 1+ years
+    
+    def archive<em>data(self, data, age</em>days):
+        """Archive data based on age"""
+        if age_days <= 30:
+            # Keep in hot storage
+            return self.hot_storage
+        elif age_days <= 365:
+            # Move to warm storage (compressed)
+            compressed<em>data = self.compress</em>data(data)
+            return self.warm<em>storage.store(compressed</em>data)
+        else:
+            # Archive to cold storage
+            return self.cold_storage.archive(data)
+</code></pre>
+
+<h3>3. Scalability Patterns</h3>
+
+<pre><code class="language-python">class ScalableIoTProcessing:
+    def <strong>init</strong>(self):
+        self.partition_strategy = DevicePartitionStrategy()
+        self.auto_scaler = AutoScaler()
+    
+    def partition<em>by</em>device(self, device<em>id, total</em>partitions):
+        """Partition data by device for parallel processing"""
+        partition<em>key = hash(device</em>id) % total_partitions
+        return partition_key
+    
+    def auto<em>scale</em>processing(self, current<em>load, target</em>latency):
+        """Auto-scale processing based on load"""
+        if current<em>load > self.get</em>threshold():
+            additional<em>workers = self.calculate</em>workers_needed(
+                current<em>load, target</em>latency
+            )
+            self.auto<em>scaler.scale</em>up(additional_workers)
+</code></pre>
+
+<h2>Related Projects</h2>
+
+<ul>
+<li><a href="../projects/iot<em>sensor</em>platform/">IoT Sensor Platform</a></li>
+<li><a href="../projects/iot-fleet-management/">IoT Fleet Management</a></li>
+<li><a href="../projects/realtime-iot-streaming/">Real-time IoT Streaming</a></li>
+</ol>
+
+<h2>Conclusion</h2>
+
+<p>IoT and sensor data platforms require specialized architectures to handle high volume, high velocity data while enabling real-time processing and long-term analytics. Key success factors include scalable ingestion, efficient storage, real-time processing, and predictive capabilities.</p>
+
+<strong>Key Takeaways:</strong>
+<ol>
+<li>Scalable ingestion is critical for high-volume IoT data</li>
+<li>Time-series databases optimize for sensor data queries</li>
+<li>Real-time processing enables immediate alerts and actions</li>
+<li>Predictive maintenance reduces downtime and costs</li>
+<li>Device management ensures reliable operations</li>
+</ol>
+
+<p>---</p>
+
+<strong>Next Steps:</strong>
+<ul>
+<li><a href="./real-time-streaming-analytics.html">Real-Time Streaming Analytics</a></li>
+<li><a href="./data-pipeline-optimization.html">Data Pipeline Performance Optimization</a></li>
+</ol>
+
+
+        </div>
+        
+        <a href="../index.html" class="back-link">← Back to Blog</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p><strong>Muhammad Siddique</strong> | Data Engineering Professional</p>
+                <p>Phone: <a href="tel:+923315868725">+92 331 5868725</a> | 
+                   Email: <a href="mailto:siddique.dea@gmail.com">siddique.dea@gmail.com</a> | 
+                   <a href="https://www.linkedin.com/in/siddique-datalover" target="_blank">LinkedIn</a></p>
+                <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                    &copy; 2025 Muhammad Siddique | Data Engineering Blog & Portfolio
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

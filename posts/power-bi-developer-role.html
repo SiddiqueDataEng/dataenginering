@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Power BI Developer Role: Complete Guide to Development & Best Practices - Muhammad Siddique Data Engineering Blog">
+    <meta name="keywords" content="data engineering, Power BI, Azure, data analytics, Power BI Developer Role: Complete Guide to Development & Best Practices">
+    <meta name="author" content="Muhammad Siddique">
+    <title>Power BI Developer Role: Complete Guide to Development & Best Practices | Muhammad Siddique - Data Engineering Blog</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #1abc9c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #7f8c8d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent);
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .article {
+            background: white;
+            padding: 3rem;
+            margin: 3rem auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            max-width: 1000px;
+        }
+        
+        .article-header {
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .article-header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        
+        .article-meta {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+        
+        .article-content {
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+        
+        .article-content h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin: 2.5rem 0 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        .article-content h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem 0;
+            padding-top: 1rem;
+        }
+        
+        .article-content h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin: 1.5rem 0 0.8rem 0;
+        }
+        
+        .article-content h4 {
+            color: var(--dark);
+            font-size: 1.3rem;
+            margin: 1.2rem 0 0.6rem 0;
+        }
+        
+        .article-content p {
+            margin-bottom: 1.2rem;
+            color: #444;
+        }
+        
+        .article-content ul, .article-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+        
+        .article-content li {
+            margin-bottom: 0.8rem;
+            color: #444;
+        }
+        
+        .article-content code {
+            background-color: #f4f4f4;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e83e8c;
+        }
+        
+        .article-content pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .article-content pre code {
+            background-color: transparent;
+            color: #ecf0f1;
+            padding: 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .article-content a {
+            color: var(--secondary);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .article-content a:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        
+        .article-content strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        .article-content em {
+            font-style: italic;
+            color: #555;
+        }
+        
+        .article-content hr {
+            border: none;
+            border-top: 2px solid var(--light);
+            margin: 2rem 0;
+        }
+        
+        .article-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .back-link:hover {
+            background-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            text-align: center;
+            padding: 2rem 0;
+        }
+        
+        .footer-content p {
+            margin-bottom: 1rem;
+            color: #bdc3c7;
+        }
+        
+        .footer-content a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .footer-content a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .article {
+                padding: 2rem 1.5rem;
+                margin: 2rem auto;
+            }
+            
+            .article-header h1 {
+                font-size: 2rem;
+            }
+            
+            .article-content {
+                font-size: 1rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">Muhammad Siddique | Data<span>Engineering</span>.Blog</a>
+                <nav>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../index.html#blog">Blog</a></li>
+                        <li><a href="about-author.html">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="article">
+        <div class="article-header">
+            <h1>Power BI Developer Role: Complete Guide to Development & Best Practices</h1>
+            <div class="article-meta">
+                <strong>Muhammad Siddique</strong> | Data Engineering Professional | 
+                <a href="../index.html" style="color: var(--secondary);">Back to Blog</a>
+            </div>
+        </div>
+        
+        <div class="article-content">
+<h1>Power BI Developer Role: Complete Guide to Development & Best Practices</h1>
+
+<em>Published: January 2025 | By: Data Engineering Professional</em>
+
+<h2>Overview</h2>
+
+<p>The Power BI Developer role focuses on building, optimizing, and maintaining Power BI solutions. This comprehensive guide covers everything from data connectivity patterns to advanced development techniques based on production experience.</p>
+
+<h2>Core Responsibilities</h2>
+
+<ul>
+<li><strong>Data Modeling</strong>: Design efficient star schema and dimensional models</li>
+<li><strong>ETL Development</strong>: Build data transformation pipelines using Power Query</li>
+<li><strong>DAX Development</strong>: Create optimized measures and calculated columns</li>
+<li><strong>Report Development</strong>: Build interactive, performant reports</li>
+<li><strong>Performance Optimization</strong>: Ensure fast query performance and refresh times</li>
+<li><strong>Code Management</strong>: Implement best practices and maintainability</li>
+</ol>
+
+<p>---</p>
+
+<h2>Part I: Data Connectivity & Architecture Patterns</h2>
+
+<h3>Import Mode: Foundation for Fast Analytics</h3>
+
+<strong>When to Use Import Mode:</strong>
+<ul>
+<li>Large datasets that benefit from compression (xVelocity engine)</li>
+<li>Complex calculations requiring DAX</li>
+<li>Need for offline access</li>
+<li>Best query performance requirements</li>
+</ol>
+
+<strong>Key Features:</strong>
+<ul>
+<li>Data compression with xVelocity in-memory engine</li>
+<li>Scheduled refresh capabilities</li>
+<li>Supports multiple data source combinations</li>
+<li>Full DAX functionality</li>
+</ol>
+
+<strong>Implementation:</strong>
+<pre><code class="language-dax">// Import mode enables complex calculations
+Total Sales YTD = 
+CALCULATE(
+    SUM(Sales[Amount]),
+    DATESYTD('Date'[Date])
+)
+</code></pre>
+
+<strong>Best Practices:</strong>
+<ul>
+<li>Use incremental refresh for large datasets</li>
+<li>Optimize Power Query transformations</li>
+<li>Remove unnecessary columns before import</li>
+<li>Implement proper date tables</li>
+</ol>
+
+<h3>DirectQuery: Real-Time Data Access</h3>
+
+<strong>When to Use DirectQuery:</strong>
+<ul>
+<li>Very large datasets that don't fit in memory</li>
+<li>Real-time data requirements</li>
+<li>Data warehouse with optimized queries</li>
+<li>Minimal data latency acceptable</li>
+</ol>
+
+<strong>Performance Optimization:</strong>
+<ul>
+<li>Optimize source database queries</li>
+<li>Use query reduction techniques</li>
+<li>Implement aggregations where possible</li>
+<li>Limit cross-filtering complexity</li>
+</ol>
+
+<strong>Limitations:</strong>
+<ul>
+<li>No calculated columns (use measures)</li>
+<li>Limited DAX functionality</li>
+<li>Performance depends on source system</li>
+<li>No offline access</li>
+</ol>
+
+<h3>Live Connection: Leveraging Existing Models</h3>
+
+<strong>When to Use Live Connection:</strong>
+<ul>
+<li>Connect to existing SSAS Tabular models</li>
+<li>Connect to published Power BI datasets</li>
+<li>Reuse enterprise semantic models</li>
+<li>Centralized data modeling</li>
+</ol>
+
+<strong>Key Considerations:</strong>
+<ul>
+<li>No Power Query transformations</li>
+<li>Report-level measures only</li>
+<li>Requires gateway for on-premises sources</li>
+<li>Performance depends on source model</li>
+</ol>
+
+<h3>Composite Models: Best of Both Worlds</h3>
+
+<strong>Hybrid Approach:</strong>
+<ul>
+<li>Blend Import and DirectQuery tables</li>
+<li>Dual storage mode for flexibility</li>
+<li>Combine hot and cold data efficiently</li>
+<li>Optimal for diverse data sources</li>
+</ol>
+
+<strong>Use Cases:</strong>
+<ul>
+<li>Historical data (Import) + Real-time data (DirectQuery)</li>
+<li>Large fact tables (DirectQuery) + Small dimensions (Import)</li>
+<li>Different refresh requirements</li>
+</ol>
+
+<p>---</p>
+
+<h2>Part II: Advanced Development Techniques</h2>
+
+<h3>Dataflows: The ETL Powerhouse</h3>
+
+<strong>Standard Dataflows:</strong>
+<ul>
+<li>Self-service ETL in Power BI Service</li>
+<li>Power Query Online transformations</li>
+<li>Reusable across multiple reports</li>
+<li>Scheduled refresh capabilities</li>
+</ol>
+
+<strong>Analytical Dataflows:</strong>
+<ul>
+<li>Enhanced compute engine</li>
+<li>DirectQuery support</li>
+<li>Better performance for large datasets</li>
+<li>Advanced transformation capabilities</li>
+</ol>
+
+<strong>Best Practices:</strong>
+<pre><code class="language-m">// Power Query M - Optimized transformation
+let
+    Source = Sql.Database("server", "database"),
+    FilteredRows = Table.SelectRows(Source, each [Date] >= #date(2024, 1, 1)),
+    RemovedColumns = Table.RemoveColumns(FilteredRows, {"UnnecessaryColumn"}),
+    ChangedType = Table.TransformColumnTypes(RemovedColumns, {{"Amount", type number}})
+in
+    ChangedType
+</code></pre>
+
+<h3>Shared Datasets: Enterprise Architecture</h3>
+
+<strong>Benefits:</strong>
+<ul>
+<li>Single source of truth</li>
+<li>Reusable semantic models</li>
+<li>Centralized maintenance</li>
+<li>Endorsement system (Certified/Promoted)</li>
+</ol>
+
+<strong>Architecture Pattern:</strong>
+<ol>
+<li><strong>Dataflows</strong> → ETL and data preparation</li>
+<li><strong>Shared Dataset</strong> → Centralized data model</li>
+<li><strong>Thin Reports</strong> → Visualization layer</li>
+</ol>
+
+<h3>Datamarts: No-Code Data Warehouse</h3>
+
+<strong>Key Features:</strong>
+<ul>
+<li>Auto-generated Synapse database</li>
+<li>SQL queryable datasets</li>
+<li>Citizen data analyst empowerment</li>
+<li>Built-in governance</li>
+</ol>
+
+<strong>When to Use:</strong>
+<ul>
+<li>Self-service analytics needs</li>
+<li>SQL-based reporting requirements</li>
+<li>Datamart as a service approach</li>
+</ol>
+
+<h3>Performance Tuning with Aggregations</h3>
+
+<strong>Aggregation Strategy:</strong>
+<pre><code class="language-dax">// Create aggregation table
+Sales<em>Agg</em>Daily = 
+SUMMARIZE(
+    Fact_Sales,
+    Dim_Date[Date],
+    Dim<em>Product[Product</em>ID],
+    Dim<em>Customer[Customer</em>ID],
+    "Total<em>Sales", SUM(Fact</em>Sales[Amount]),
+    "Total<em>Quantity", SUM(Fact</em>Sales[Quantity]),
+    "Order<em>Count", COUNTROWS(Fact</em>Sales)
+)
+</code></pre>
+
+<strong>Dual Storage Mode:</strong>
+<ul>
+<li>Import for fast queries</li>
+<li>DirectQuery for detailed data</li>
+<li>Automatic aggregation selection</li>
+<li>Optimized query performance</li>
+</ol>
+
+<h3>Incremental Refresh & Hybrid Tables</h3>
+
+<strong>Incremental Refresh Configuration:</strong>
+<ul>
+<li>Historical data: Full refresh (monthly/yearly)</li>
+<li>Recent data: Incremental refresh (daily/hourly)</li>
+<li>Partition management</li>
+<li>Reduced refresh time</li>
+</ol>
+
+<strong>Hybrid Tables:</strong>
+<ul>
+<li>Import mode for historical partitions</li>
+<li>DirectQuery for recent data</li>
+<li>Seamless query experience</li>
+<li>Optimal for time-based analytics</li>
+</ol>
+
+<p>---</p>
+
+<h2>Part III: DAX Development Best Practices</h2>
+
+<h3>Measure vs Calculated Column</h3>
+
+<strong>Use Measures When:</strong>
+<ul>
+<li>Aggregations are needed</li>
+<li>Context-dependent calculations</li>
+<li>Memory optimization is critical</li>
+<li>Dynamic calculations required</li>
+</ol>
+
+<pre><code class="language-dax">// ✅ Good: Measure
+Total Sales = SUM(Sales[Amount])
+
+// ❌ Avoid: Calculated Column for aggregations
+// Total Sales = SUM(Sales[Amount]) // Wrong - doesn't work in columns
+</code></pre>
+
+<strong>Use Calculated Columns When:</strong>
+<ul>
+<li>Filtering or sorting needed</li>
+<li>Static transformations</li>
+<li>Relationship keys</li>
+<li>Performance-critical lookups</li>
+</ol>
+
+<h3>DAX Optimization Techniques</h3>
+
+<strong>1. Use CALCULATE Efficiently:</strong>
+<pre><code class="language-dax">// ✅ Good: Filter before aggregation
+Sales Last Year = 
+CALCULATE(
+    SUM(Sales[Amount]),
+    SAMEPERIODLASTYEAR('Date'[Date])
+)
+
+// ❌ Avoid: Multiple CALCULATE calls
+</code></pre>
+
+<strong>2. Avoid Iterators When Possible:</strong>
+<pre><code class="language-dax">// ✅ Good: Direct aggregation
+Total Sales = SUM(Sales[Amount])
+
+// ⚠️ Use when necessary: Iterator with context
+Total Sales with Tax = 
+SUMX(
+    Sales,
+    Sales[Amount] * (1 + Sales[TaxRate])
+)
+</code></pre>
+
+<strong>3. Optimize Relationship Usage:</strong>
+<pre><code class="language-dax">// ✅ Good: Use relationships
+Sales Amount = SUM(Sales[Amount])
+
+// ❌ Avoid: Manual lookups
+Sales Amount = SUMX(Sales, RELATED(Products[Price]) * Sales[Quantity])
+</code></pre>
+
+<h3>Star Schema Design</h3>
+
+<strong>Best Practices:</strong>
+<ul>
+<li>Separate fact and dimension tables</li>
+<li>One-to-many relationships</li>
+<li>Proper date tables</li>
+<li>Avoid bi-directional relationships</li>
+<li>Use integer keys for relationships</li>
+</ol>
+
+<strong>Model Structure:</strong>
+<pre><code class="language-">Fact_Sales (Fact Table)
+├── Dim_Date (Dimension)
+├── Dim_Product (Dimension)
+├── Dim_Customer (Dimension)
+└── Dim_Store (Dimension)
+</code></pre>
+
+<p>---</p>
+
+<h2>Part IV: Development Best Practices</h2>
+
+<h3>Power Query Optimization</h3>
+
+<strong>1. Query Folding:</strong>
+<ul>
+<li>Push transformations to source</li>
+<li>Reduce data transfer</li>
+<li>Leverage source system capabilities</li>
+</ol>
+
+<strong>2. Data Type Optimization:</strong>
+<ul>
+<li>Use appropriate data types</li>
+<li>Remove unnecessary columns early</li>
+<li>Optimize text vs numeric types</li>
+</ol>
+
+<strong>3. Incremental Data Loading:</strong>
+<ul>
+<li>Filter at source when possible</li>
+<li>Use incremental refresh</li>
+<li>Minimize data transfer</li>
+</ol>
+
+<h3>Model Optimization</h3>
+
+<strong>1. Remove Unused Columns:</strong>
+<ul>
+<li>Reduce model size</li>
+<li>Improve performance</li>
+<li>Faster refresh times</li>
+</ol>
+
+<strong>2. Optimize Relationships:</strong>
+<ul>
+<li>Use integer keys</li>
+<li>Avoid bi-directional relationships</li>
+<li>Proper cardinality settings</li>
+</ol>
+
+<strong>3. Hidden vs Visible:</strong>
+<ul>
+<li>Hide columns not needed in reports</li>
+<li>Keep only essential columns visible</li>
+<li>Improve user experience</li>
+</ol>
+
+<h3>Mobile Reporting Considerations</h3>
+
+<ul>
+<li>Responsive visuals</li>
+<li>Optimized layouts</li>
+<li>Touch-friendly interactions</li>
+<li>Performance for mobile devices</li>
+</ol>
+
+<p>---</p>
+
+<h2>Part V: Real-World Development Patterns</h2>
+
+<h3>Multi-Layer Architecture</h3>
+
+<strong>Enterprise Pattern:</strong>
+<pre><code class="language-">┌─────────────────┐
+│   Dataflows     │  ← ETL Layer
+│  (Data Prep)    │
+└────────┬────────┘
+         │
+┌────────▼────────┐
+│ Shared Datasets │  ← Semantic Layer
+│  (Data Model)   │
+└────────┬────────┘
+         │
+┌────────▼────────┐
+│  Thin Reports   │  ← Visualization Layer
+│  (Dashboards)   │
+└─────────────────┘
+</code></pre>
+
+<strong>Benefits:</strong>
+<ul>
+<li>Separation of concerns</li>
+<li>Reusability</li>
+<li>Maintainability</li>
+<li>Scalability</li>
+</ol>
+
+<h3>Real-Time Streaming Datasets</h3>
+
+<strong>Push Datasets:</strong>
+<ul>
+<li>Real-time data streaming</li>
+<li>Power Automate integration</li>
+<li>Live dashboards</li>
+<li>IoT scenarios</li>
+</ol>
+
+<strong>Streaming Datasets:</strong>
+<ul>
+<li>Near real-time updates</li>
+<li>Automatic refresh</li>
+<li>Dashboard tiles</li>
+<li>Real-time analytics</li>
+</ol>
+
+<p>---</p>
+
+<h2>Performance Optimization Checklist</h2>
+
+<h3>Data Model</h3>
+<ul>
+<li>[ ] Star schema design implemented</li>
+<li>[ ] Proper date table created</li>
+<li>[ ] Relationships optimized</li>
+<li>[ ] Unused columns removed</li>
+<li>[ ] Data types optimized</li>
+</ol>
+
+<h3>DAX</h3>
+<ul>
+<li>[ ] Measures used instead of calculated columns where appropriate</li>
+<li>[ ] CALCULATE used efficiently</li>
+<li>[ ] Iterators minimized</li>
+<li>[ ] Relationships leveraged</li>
+</ol>
+
+<h3>Power Query</h3>
+<ul>
+<li>[ ] Query folding enabled</li>
+<li>[ ] Filter at source</li>
+<li>[ ] Incremental refresh configured</li>
+<li>[ ] Transformations optimized</li>
+</ol>
+
+<h3>Refresh</h3>
+<ul>
+<li>[ ] Incremental refresh for large tables</li>
+<li>[ ] Refresh schedule optimized</li>
+<li>[ ] Gateway configured properly</li>
+<li>[ ] Parallel refresh enabled</li>
+</ol>
+
+<p>---</p>
+
+<h2>Development Tools & Resources</h2>
+
+<h3>Essential Tools</h3>
+<ul>
+<li><strong>Power BI Desktop</strong>: Primary development tool</li>
+<li><strong>DAX Studio</strong>: Performance analysis</li>
+<li><strong>Tabular Editor</strong>: Advanced modeling</li>
+<li><strong>ALM Toolkit</strong>: Version control</li>
+<li><strong>Power BI Helper</strong>: Optimization utilities</li>
+</ol>
+
+<h3>Learning Resources</h3>
+<ul>
+<li>DAX Guide (dax.guide)</li>
+<li>Power BI Community</li>
+<li>Microsoft Learn</li>
+<li>SQLBI resources</li>
+</ol>
+
+<p>---</p>
+
+<h2>Conclusion</h2>
+
+<p>Becoming an effective Power BI Developer requires:</p>
+<ul>
+<li>Strong understanding of data modeling principles</li>
+<li>Proficiency in DAX and Power Query</li>
+<li>Knowledge of performance optimization</li>
+<li>Understanding of enterprise architecture patterns</li>
+<li>Continuous learning and adaptation</li>
+</ol>
+
+<strong>Key Takeaways:</strong>
+<ol>
+<li>Choose the right connectivity pattern for your scenario</li>
+<li>Implement proper star schema design</li>
+<li>Optimize DAX and Power Query</li>
+<li>Use enterprise architecture patterns</li>
+<li>Continuously monitor and optimize performance</li>
+</ol>
+
+<p>---</p>
+
+<em>This guide is based on production Power BI implementations and industry best practices. For more Power BI content, see the <a href="./power-bi-architect-role.html">Power BI Architecture Guide</a> and <a href="./power-bi-administrator-role.html">Power BI Administration Guide</a>.</em>
+
+
+        </div>
+        
+        <a href="../index.html" class="back-link">← Back to Blog</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p><strong>Muhammad Siddique</strong> | Data Engineering Professional</p>
+                <p>Phone: <a href="tel:+923315868725">+92 331 5868725</a> | 
+                   Email: <a href="mailto:siddique.dea@gmail.com">siddique.dea@gmail.com</a> | 
+                   <a href="https://www.linkedin.com/in/siddique-datalover" target="_blank">LinkedIn</a></p>
+                <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                    &copy; 2025 Muhammad Siddique | Data Engineering Blog & Portfolio
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

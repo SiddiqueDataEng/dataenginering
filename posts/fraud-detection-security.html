@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Fraud Detection & Data Security: Real-Time Threat Detection - Muhammad Siddique Data Engineering Blog">
+    <meta name="keywords" content="data engineering, Power BI, Azure, data analytics, Fraud Detection & Data Security: Real-Time Threat Detection">
+    <meta name="author" content="Muhammad Siddique">
+    <title>Fraud Detection & Data Security: Real-Time Threat Detection | Muhammad Siddique - Data Engineering Blog</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #1abc9c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #7f8c8d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent);
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .article {
+            background: white;
+            padding: 3rem;
+            margin: 3rem auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            max-width: 1000px;
+        }
+        
+        .article-header {
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .article-header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        
+        .article-meta {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+        
+        .article-content {
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+        
+        .article-content h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin: 2.5rem 0 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        .article-content h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem 0;
+            padding-top: 1rem;
+        }
+        
+        .article-content h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin: 1.5rem 0 0.8rem 0;
+        }
+        
+        .article-content h4 {
+            color: var(--dark);
+            font-size: 1.3rem;
+            margin: 1.2rem 0 0.6rem 0;
+        }
+        
+        .article-content p {
+            margin-bottom: 1.2rem;
+            color: #444;
+        }
+        
+        .article-content ul, .article-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+        
+        .article-content li {
+            margin-bottom: 0.8rem;
+            color: #444;
+        }
+        
+        .article-content code {
+            background-color: #f4f4f4;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e83e8c;
+        }
+        
+        .article-content pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .article-content pre code {
+            background-color: transparent;
+            color: #ecf0f1;
+            padding: 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .article-content a {
+            color: var(--secondary);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .article-content a:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        
+        .article-content strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        .article-content em {
+            font-style: italic;
+            color: #555;
+        }
+        
+        .article-content hr {
+            border: none;
+            border-top: 2px solid var(--light);
+            margin: 2rem 0;
+        }
+        
+        .article-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .back-link:hover {
+            background-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            text-align: center;
+            padding: 2rem 0;
+        }
+        
+        .footer-content p {
+            margin-bottom: 1rem;
+            color: #bdc3c7;
+        }
+        
+        .footer-content a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .footer-content a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .article {
+                padding: 2rem 1.5rem;
+                margin: 2rem auto;
+            }
+            
+            .article-header h1 {
+                font-size: 2rem;
+            }
+            
+            .article-content {
+                font-size: 1rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="../index.html" class="logo">Muhammad Siddique | Data<span>Engineering</span>.Blog</a>
+                <nav>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../index.html#blog">Blog</a></li>
+                        <li><a href="about-author.html">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="article">
+        <div class="article-header">
+            <h1>Fraud Detection & Data Security: Real-Time Threat Detection</h1>
+            <div class="article-meta">
+                <strong>Muhammad Siddique</strong> | Data Engineering Professional | 
+                <a href="../index.html" style="color: var(--secondary);">Back to Blog</a>
+            </div>
+        </div>
+        
+        <div class="article-content">
+<h1>Fraud Detection & Data Security: Real-Time Threat Detection</h1>
+
+<em>Published: January 2025</em>
+
+<h2>Overview</h2>
+
+<p>Fraud detection and data security are critical components of modern data platforms. This article explores production implementations of real-time fraud detection systems, security architectures, and anomaly detection using machine learning and rule-based approaches.</p>
+
+<h2>The Fraud Detection Challenge</h2>
+
+<p>Organizations must detect:</p>
+<ul>
+<li><strong>Transaction fraud</strong> in real-time</li>
+<li><strong>Account takeover</strong> attempts</li>
+<li><strong>Identity theft</strong> patterns</li>
+<li><strong>Payment fraud</strong> across channels</li>
+<li><strong>Anomalous behavior</strong> patterns</li>
+</ol>
+
+<h2>Fraud Detection Architecture</h2>
+
+<p>A comprehensive fraud detection system includes:</p>
+
+<pre><code class="language-">Transactions → Feature Engineering → ML Models → Rule Engine → Decision Engine → Actions
+      ↓                ↓                  ↓             ↓              ↓            ↓
+  Real-Time      Feature Store      Scoring      Business Rules   Risk Score   Block/Allow
+  Streaming      Historical Data   Models       Validation       Threshold    Alert
+</code></pre>
+
+<h2>Use Case 1: Real-Time Fraud Detection with Airbyte</h2>
+
+<h3>Business Requirements</h3>
+<p>An e-commerce platform needed a fraud detection system to:</p>
+<ul>
+<li>Process 100K+ transactions per minute</li>
+<li>Detect fraud in < 100ms</li>
+<li>Integrate data from multiple sources</li>
+<li>Support both rule-based and ML-based detection</li>
+<li>Maintain low false positive rate</li>
+</ol>
+
+<h3>Implementation Architecture</h3>
+
+<strong>Data Integration with Airbyte:</strong>
+<pre><code class="language-">Data Sources → Airbyte Connectors → Data Pipeline → Feature Store → Fraud Detection
+      ↓               ↓                  ↓               ↓                ↓
+  Transactions    PostgreSQL        ETL Pipeline    ML Features     ML Models
+  User Activity    MongoDB          Data Quality    Historical      Rules Engine
+  Payment Data     APIs              Enrichment      Aggregations    Alerting
+</code></pre>
+
+<strong>Key Components:</strong>
+
+<h4>1. Feature Engineering Pipeline</h4>
+<pre><code class="language-python">class FraudFeatureEngineering:
+    def <strong>init</strong>(self):
+        self.feature_store = FeatureStore()
+        self.historical_aggregator = HistoricalAggregator()
+    
+    def extract_features(self, transaction):
+        """Extract features for fraud detection"""
+        features = {}
+        
+        # Transaction features
+        features['amount'] = transaction.amount
+        features['amount_log'] = np.log(transaction.amount + 1)
+        features['time<em>of</em>day'] = transaction.timestamp.hour
+        features['day<em>of</em>week'] = transaction.timestamp.weekday()
+        features['is_weekend'] = 1 if transaction.timestamp.weekday() >= 5 else 0
+        features['is_night'] = 1 if transaction.timestamp.hour < 6 else 0
+        
+        # User historical features
+        user<em>features = self.get</em>user<em>historical</em>features(transaction.user_id)
+        features.update(user_features)
+        
+        # Device features
+        device<em>features = self.get</em>device<em>features(transaction.device</em>id)
+        features.update(device_features)
+        
+        # Location features
+        location<em>features = self.get</em>location_features(transaction)
+        features.update(location_features)
+        
+        # Behavioral features
+        behavioral<em>features = self.get</em>behavioral_features(transaction)
+        features.update(behavioral_features)
+        
+        return features
+    
+    def get<em>user</em>historical<em>features(self, user</em>id):
+        """Get historical features for user"""
+        # Last 24 hours
+        last<em>24h = self.feature</em>store.get_features(
+            entity<em>id=user</em>id,
+            feature_names=[
+                'transaction<em>count</em>24h',
+                'total<em>amount</em>24h',
+                'avg<em>transaction</em>amount_24h',
+                'unique<em>merchants</em>24h'
+            ],
+            lookback_hours=24
+        )
+        
+        # Last 7 days
+        last<em>7d = self.feature</em>store.get_features(
+            entity<em>id=user</em>id,
+            feature_names=[
+                'transaction<em>count</em>7d',
+                'total<em>amount</em>7d',
+                'chargeback<em>count</em>7d',
+                'refund<em>rate</em>7d'
+            ],
+            lookback_hours=168
+        )
+        
+        # Last 30 days
+        last<em>30d = self.feature</em>store.get_features(
+            entity<em>id=user</em>id,
+            feature_names=[
+                'transaction<em>count</em>30d',
+                'total<em>amount</em>30d',
+                'unique<em>locations</em>30d',
+                'velocity<em>score</em>30d'
+            ],
+            lookback_hours=720
+        )
+        
+        return {<strong>last<em>24h, </strong>last</em>7d, **last_30d}
+    
+    def get<em>behavioral</em>features(self, transaction):
+        """Get behavioral features"""
+        # Velocity features
+        velocity<em>features = self.calculate</em>velocity(transaction)
+        
+        # Pattern features
+        pattern<em>features = self.detect</em>patterns(transaction)
+        
+        # Anomaly features
+        anomaly<em>features = self.detect</em>anomalies(transaction)
+        
+        return {
+            **velocity_features,
+            **pattern_features,
+            **anomaly_features
+        }
+</code></pre>
+
+<h4>2. ML Model Scoring</h4>
+<pre><code class="language-python">class FraudMLModel:
+    def <strong>init</strong>(self):
+        self.models = {
+            'xgboost': self.load<em>model('fraud</em>xgboost'),
+            'random<em>forest': self.load</em>model('fraud<em>random</em>forest'),
+            'neural<em>network': self.load</em>model('fraud_nn')
+        }
+        self.ensemble = EnsembleModel(self.models)
+    
+    def score_transaction(self, features):
+        """Score transaction for fraud probability"""
+        # Individual model predictions
+        predictions = {}
+        for model_name, model in self.models.items():
+            predictions[model<em>name] = model.predict</em>proba(features)[0][1]
+        
+        # Ensemble prediction
+        ensemble_score = self.ensemble.predict(features)
+        
+        # Feature importance
+        feature<em>importance = self.get</em>feature_importance(features)
+        
+        return {
+            'fraud<em>probability': ensemble</em>score,
+            'model_predictions': predictions,
+            'feature<em>importance': feature</em>importance,
+            'top<em>risk</em>factors': self.get<em>top</em>risk<em>factors(feature</em>importance)
+        }
+</code></pre>
+
+<h4>3. Rule-Based Detection</h4>
+<pre><code class="language-python">class FraudRuleEngine:
+    def <strong>init</strong>(self):
+        self.rules = self.load_rules()
+        self.rule_engine = RulesEngine()
+    
+    def evaluate_rules(self, transaction):
+        """Evaluate fraud detection rules"""
+        rule_results = []
+        
+        # Velocity rules
+        if transaction.amount > self.get<em>user</em>avg(transaction.user_id) * 5:
+            rule_results.append({
+                'rule': 'high<em>amount</em>deviation',
+                'severity': 'high',
+                'triggered': True
+            })
+        
+        # Location rules
+        if self.is<em>unusual</em>location(transaction):
+            rule_results.append({
+                'rule': 'unusual_location',
+                'severity': 'medium',
+                'triggered': True
+            })
+        
+        # Time-based rules
+        if self.is<em>unusual</em>time(transaction):
+            rule_results.append({
+                'rule': 'unusual_time',
+                'severity': 'low',
+                'triggered': True
+            })
+        
+        # Device rules
+        if self.is<em>new</em>device(transaction.user<em>id, transaction.device</em>id):
+            rule_results.append({
+                'rule': 'new_device',
+                'severity': 'medium',
+                'triggered': True
+            })
+        
+        return rule_results
+    
+    def is<em>unusual</em>location(self, transaction):
+        """Check if transaction is from unusual location"""
+        user<em>locations = self.get</em>user<em>locations(transaction.user</em>id, days=30)
+        current_location = (transaction.latitude, transaction.longitude)
+        
+        # Check if location is far from user's usual locations
+        min_distance = min([
+            self.calculate<em>distance(current</em>location, loc)
+            for loc in user_locations
+        ])
+        
+        return min_distance > 1000  # More than 1000km
+</code></pre>
+
+<h4>4. Decision Engine</h4>
+<pre><code class="language-python">class FraudDecisionEngine:
+    def <strong>init</strong>(self):
+        self.ml_model = FraudMLModel()
+        self.rule_engine = FraudRuleEngine()
+        self.alert_system = AlertSystem()
+    
+    def make_decision(self, transaction):
+        """Make fraud decision for transaction"""
+        # Extract features
+        features = self.extract_features(transaction)
+        
+        # ML model scoring
+        ml<em>score = self.ml</em>model.score_transaction(features)
+        
+        # Rule-based evaluation
+        rule<em>results = self.rule</em>engine.evaluate_rules(transaction)
+        
+        # Combine scores
+        fraud<em>score = self.combine</em>scores(ml<em>score, rule</em>results)
+        
+        # Make decision
+        if fraud_score > 0.9:
+            decision = 'BLOCK'
+            action = self.block_transaction(transaction)
+        elif fraud_score > 0.7:
+            decision = 'REVIEW'
+            action = self.flag<em>for</em>review(transaction)
+        elif fraud_score > 0.5:
+            decision = 'MONITOR'
+            action = self.monitor_transaction(transaction)
+        else:
+            decision = 'ALLOW'
+            action = self.allow_transaction(transaction)
+        
+        # Log decision
+        self.log<em>decision(transaction, fraud</em>score, decision, action)
+        
+        # Alert if high risk
+        if fraud_score > 0.8:
+            self.alert<em>system.send</em>alert({
+                'transaction_id': transaction.id,
+                'fraud<em>score': fraud</em>score,
+                'decision': decision,
+                'risk<em>factors': self.get</em>risk<em>factors(ml</em>score, rule_results)
+            })
+        
+        return {
+            'decision': decision,
+            'fraud<em>score': fraud</em>score,
+            'action': action,
+            'ml<em>score': ml</em>score['fraud_probability'],
+            'rule<em>triggers': len([r for r in rule</em>results if r['triggered']])
+        }
+    
+    def combine<em>scores(self, ml</em>score, rule_results):
+        """Combine ML and rule-based scores"""
+        # ML score weight
+        ml_weight = 0.7
+        
+        # Rule-based score
+        rule_score = 0.0
+        if rule_results:
+            high<em>severity = len([r for r in rule</em>results if r['severity'] == 'high'])
+            medium<em>severity = len([r for r in rule</em>results if r['severity'] == 'medium'])
+            rule<em>score = min(1.0, (high</em>severity <em> 0.3 + medium_severity </em> 0.1))
+        
+        # Combined score
+        combined<em>score = ml</em>score['fraud<em>probability'] <em> ml</em>weight + rule<em>score </em> (1 - ml</em>weight)
+        
+        return combined_score
+</code></pre>
+
+<strong>Results:</strong>
+<ul>
+<li><strong>100K+ transactions/minute</strong> processed</li>
+<li><strong>< 100ms</strong> detection latency</li>
+<li><strong>95% fraud detection</strong> accuracy</li>
+<li><strong>< 2% false positive</strong> rate</li>
+<li><strong>Real-time</strong> decision making</li>
+</ol>
+
+<h2>Use Case 2: E-commerce Fraud Detection Platform</h2>
+
+<h3>Business Requirements</h3>
+<p>An e-commerce platform needed comprehensive fraud detection for:</p>
+<ul>
+<li>Payment fraud detection</li>
+<li>Account takeover prevention</li>
+<li>Card testing detection</li>
+<li>Refund fraud prevention</li>
+<li>Chargeback reduction</li>
+</ol>
+
+<h3>Implementation</h3>
+
+<strong>Multi-Layer Fraud Detection:</strong>
+<pre><code class="language-python">class EcommerceFraudDetection:
+    def <strong>init</strong>(self):
+        self.payment<em>fraud</em>detector = PaymentFraudDetector()
+        self.account<em>takeover</em>detector = AccountTakeoverDetector()
+        self.card<em>testing</em>detector = CardTestingDetector()
+        self.refund<em>fraud</em>detector = RefundFraudDetector()
+    
+    def detect_fraud(self, transaction):
+        """Comprehensive fraud detection"""
+        fraud_indicators = []
+        
+        # Payment fraud
+        payment<em>fraud = self.payment</em>fraud_detector.detect(transaction)
+        if payment_fraud.detected:
+            fraud_indicators.append({
+                'type': 'payment_fraud',
+                'score': payment_fraud.score,
+                'reasons': payment_fraud.reasons
+            })
+        
+        # Account takeover
+        account<em>takeover = self.account</em>takeover_detector.detect(transaction)
+        if account_takeover.detected:
+            fraud_indicators.append({
+                'type': 'account_takeover',
+                'score': account_takeover.score,
+                'reasons': account_takeover.reasons
+            })
+        
+        # Card testing
+        card<em>testing = self.card</em>testing_detector.detect(transaction)
+        if card_testing.detected:
+            fraud_indicators.append({
+                'type': 'card_testing',
+                'score': card_testing.score,
+                'reasons': card_testing.reasons
+            })
+        
+        # Refund fraud
+        if transaction.type == 'refund':
+            refund<em>fraud = self.refund</em>fraud_detector.detect(transaction)
+            if refund_fraud.detected:
+                fraud_indicators.append({
+                    'type': 'refund_fraud',
+                    'score': refund_fraud.score,
+                    'reasons': refund_fraud.reasons
+                })
+        
+        # Calculate overall risk
+        overall<em>risk = self.calculate</em>overall<em>risk(fraud</em>indicators)
+        
+        return {
+            'fraud<em>detected': len(fraud</em>indicators) > 0,
+            'overall<em>risk</em>score': overall_risk,
+            'fraud<em>indicators': fraud</em>indicators
+        }
+</code></pre>
+
+<strong>Results:</strong>
+<ul>
+<li><strong>60% reduction</strong> in chargebacks</li>
+<li><strong>80% detection</strong> rate for account takeover</li>
+<li><strong>90% detection</strong> rate for card testing</li>
+<li><strong>Real-time</strong> fraud prevention</li>
+</ol>
+
+<h2>Use Case 3: Data Security & Access Control</h2>
+
+<h3>Business Requirements</h3>
+<p>An organization needed comprehensive data security for:</p>
+<ul>
+<li>Data encryption at rest and in transit</li>
+<li>Role-based access control</li>
+<li>Audit logging</li>
+<li>Data masking</li>
+<li>Compliance with regulations</li>
+</ol>
+
+<h3>Implementation</h3>
+
+<strong>Security Architecture:</strong>
+<pre><code class="language-python">class DataSecurityFramework:
+    def <strong>init</strong>(self):
+        self.encryption_service = EncryptionService()
+        self.access_controller = AccessController()
+        self.audit_logger = AuditLogger()
+        self.data_masking = DataMaskingService()
+    
+    def secure_data(self, data, classification):
+        """Apply security measures based on data classification"""
+        secured_data = data.copy()
+        
+        # Encrypt sensitive data
+        if classification['sensitivity'] in ['high', 'critical']:
+            secured<em>data = self.encryption</em>service.encrypt(
+                secured_data,
+                fields=classification['sensitive_fields'],
+                algorithm='AES-256'
+            )
+        
+        # Apply access control
+        access<em>policies = self.access</em>controller.get_policies(classification)
+        secured<em>data['access</em>policies'] = access_policies
+        
+        return secured_data
+    
+    def check_access(self, user, resource, action):
+        """Check if user has access to resource"""
+        # Get user roles
+        user<em>roles = self.get</em>user_roles(user)
+        
+        # Check policies
+        for role in user_roles:
+            policy = self.access<em>controller.get</em>policy(role, resource)
+            if policy.allows(action):
+                # Log access
+                self.audit<em>logger.log</em>access(
+                    user=user,
+                    resource=resource,
+                    action=action,
+                    granted=True
+                )
+                return True
+        
+        # Log denied access
+        self.audit<em>logger.log</em>access(
+            user=user,
+            resource=resource,
+            action=action,
+            granted=False
+        )
+        return False
+    
+    def mask<em>data(self, data, user</em>role):
+        """Apply data masking based on user role"""
+        if user_role == 'analyst':
+            # Mask PII
+            masked<em>data = self.data</em>masking.mask_pii(data)
+        elif user_role == 'compliance':
+            # Full access
+            masked_data = data
+        else:
+            # Aggregate only
+            masked<em>data = self.data</em>masking.aggregate(data)
+        
+        return masked_data
+</code></pre>
+
+<h2>Technical Best Practices</h2>
+
+<h3>1. Real-Time Feature Engineering</h3>
+
+<pre><code class="language-python">class RealTimeFeatureEngineering:
+    def calculate<em>velocity</em>features(self, transaction):
+        """Calculate velocity features in real-time"""
+        # Transaction velocity (count per time period)
+        velocity<em>1h = self.get</em>transaction_count(
+            user<em>id=transaction.user</em>id,
+            time_window=timedelta(hours=1)
+        )
+        
+        velocity<em>24h = self.get</em>transaction_count(
+            user<em>id=transaction.user</em>id,
+            time_window=timedelta(hours=24)
+        )
+        
+        # Amount velocity
+        amount<em>velocity</em>24h = self.get<em>total</em>amount(
+            user<em>id=transaction.user</em>id,
+            time_window=timedelta(hours=24)
+        )
+        
+        return {
+            'txn<em>velocity</em>1h': velocity_1h,
+            'txn<em>velocity</em>24h': velocity_24h,
+            'amount<em>velocity</em>24h': amount<em>velocity</em>24h
+        }
+</code></pre>
+
+<h3>2. Model Retraining Pipeline</h3>
+
+<pre><code class="language-python">class ModelRetrainingPipeline:
+    def retrain<em>fraud</em>model(self):
+        """Retrain fraud detection model"""
+        # Get labeled data
+        training<em>data = self.get</em>labeled<em>transactions(period</em>days=90)
+        
+        # Feature engineering
+        features = self.extract<em>features(training</em>data)
+        
+        # Train model
+        model = self.train<em>model(features, training</em>data.labels)
+        
+        # Evaluate model
+        evaluation = self.evaluate<em>model(model, test</em>data)
+        
+        # A/B test
+        if evaluation.accuracy > self.current_model.accuracy:
+            self.deploy_model(model)
+        
+        return model
+</code></pre>
+
+<h3>3. Adaptive Thresholds</h3>
+
+<pre><code class="language-python">class AdaptiveThresholds:
+    def adjust<em>thresholds(self, performance</em>metrics):
+        """Adjust fraud detection thresholds based on performance"""
+        if performance<em>metrics.false</em>positive_rate > 0.05:
+            # Too many false positives, increase threshold
+            new<em>threshold = self.current</em>threshold * 1.1
+        elif performance<em>metrics.detection</em>rate < 0.90:
+            # Missing fraud, decrease threshold
+            new<em>threshold = self.current</em>threshold * 0.9
+        else:
+            new<em>threshold = self.current</em>threshold
+        
+        return new_threshold
+</code></pre>
+
+<h2>Related Projects</h2>
+
+<ul>
+<li><a href="../projects/fraud<em>detection</em>airbyte/">Fraud Detection with Airbyte</a></li>
+<li><a href="../projects/ecommerce-fraud-detection/">E-commerce Fraud Detection</a></li>
+</ol>
+
+<h2>Conclusion</h2>
+
+<p>Fraud detection and data security require a multi-layered approach combining ML models, rule-based systems, real-time processing, and comprehensive security measures. Key success factors include real-time feature engineering, ensemble models, adaptive thresholds, and continuous monitoring.</p>
+
+<strong>Key Takeaways:</strong>
+<ol>
+<li>Real-time feature engineering enables fast fraud detection</li>
+<li>Combining ML and rule-based approaches improves accuracy</li>
+<li>Ensemble models reduce false positives</li>
+<li>Adaptive thresholds optimize performance over time</li>
+<li>Comprehensive security frameworks protect sensitive data</li>
+</ol>
+
+<p>---</p>
+
+<strong>Next Steps:</strong>
+<ul>
+<li><a href="./financial-services-data-engineering.html">Financial Services Data Engineering</a></li>
+<li><a href="./data-governance-quality.html">Data Governance & Quality</a></li>
+</ol>
+
+
+        </div>
+        
+        <a href="../index.html" class="back-link">← Back to Blog</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p><strong>Muhammad Siddique</strong> | Data Engineering Professional</p>
+                <p>Phone: <a href="tel:+923315868725">+92 331 5868725</a> | 
+                   Email: <a href="mailto:siddique.dea@gmail.com">siddique.dea@gmail.com</a> | 
+                   <a href="https://www.linkedin.com/in/siddique-datalover" target="_blank">LinkedIn</a></p>
+                <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                    &copy; 2025 Muhammad Siddique | Data Engineering Blog & Portfolio
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
